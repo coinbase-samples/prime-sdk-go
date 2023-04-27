@@ -30,14 +30,6 @@ type apiResponse struct {
 	errorMessage   *ErrorMessage
 }
 
-func (r apiResponse) isHttpOk() bool {
-	return r.httpStatusCode == http.StatusOK
-}
-
-func (r apiResponse) unmarshal(v interface{}) error {
-	return json.Unmarshal(r.body, v)
-}
-
 func primePost(
 	ctx context.Context,
 	client Client,
@@ -92,7 +84,7 @@ func primeCall(
 		return err
 	}
 
-	if err := resp.unmarshal(response); err != nil {
+	if err := json.Unmarshal(resp.body, response); err != nil {
 		return err
 	}
 
@@ -107,7 +99,7 @@ func makeCall(ctx context.Context, request *apiRequest) *apiResponse {
 
 	parsedUrl, err := url.Parse(request.url)
 	if err != nil {
-		response.err = fmt.Errorf("cannot parse prime URL: %s - err: %w", request.url, err)
+		response.err = fmt.Errorf("URL: %s - %w", request.url, err)
 		return response
 	}
 
