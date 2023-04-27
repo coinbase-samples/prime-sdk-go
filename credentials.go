@@ -33,18 +33,22 @@ type Credentials struct {
 	SvcAccountId string `json:"svcAccountId"`
 }
 
+func UnmarshalCredentials(b []byte) (*Credentials, error) {
+
+	credentials := &Credentials{}
+	if err := json.Unmarshal(b, credentials); err != nil {
+		return nil, fmt.Errorf("unable unarmshal PRIME_CREDENTIALS %w", err)
+	}
+
+	return credentials, nil
+}
+
 func ReadEnvCredentials() (*Credentials, error) {
 
 	v := os.Getenv("PRIME_CREDENTIALS")
-
 	if len(v) == 0 {
 		return nil, errors.New("PRIME_CREDENTIALS not set as environment variable")
 	}
 
-	credentials := &Credentials{}
-	if err := json.Unmarshal([]byte(v), &credentials); err != nil {
-		return nil, fmt.Errorf("unable unarmshal PRIME_CREDENTIALS to JSON: %w", err)
-	}
-
-	return credentials, nil
+	return UnmarshalCredentials([]byte(v))
 }
