@@ -18,13 +18,16 @@ package prime
 
 import (
 	"net/http"
-	"time"
 )
 
-var DefaultClient = &Client{Credentials: DefaultCredentials}
-
 type Client struct {
-	Transport   http.RoundTripper
-	Timeout     time.Duration
+	HttpClient  http.Client
 	Credentials *Credentials
+}
+
+func NewClient(credentials *Credentials, httpClient http.Client) *Client {
+	return &Client{
+		Credentials: credentials,
+		HttpClient:  httpClient,
+	}
 }

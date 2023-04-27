@@ -18,12 +18,9 @@ package prime
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 )
-
-var DefaultCredentials *Credentials
 
 type Credentials struct {
 	AccessKey    string `json:"accessKey"`
@@ -35,19 +32,19 @@ type Credentials struct {
 
 func UnmarshalCredentials(b []byte) (*Credentials, error) {
 
-	credentials := &Credentials{}
-	if err := json.Unmarshal(b, credentials); err != nil {
-		return nil, fmt.Errorf("unable unarmshal PRIME_CREDENTIALS %w", err)
+	c := &Credentials{}
+	if err := json.Unmarshal(b, c); err != nil {
+		return nil, err
 	}
 
-	return credentials, nil
+	return c, nil
 }
 
-func ReadEnvCredentials() (*Credentials, error) {
+func ReadEnvCredentials(variableName string) (*Credentials, error) {
 
-	v := os.Getenv("PRIME_CREDENTIALS")
+	v := os.Getenv(variableName)
 	if len(v) == 0 {
-		return nil, errors.New("PRIME_CREDENTIALS not set as environment variable")
+		return nil, fmt.Errorf("%s not set as environment variable", variableName)
 	}
 
 	return UnmarshalCredentials([]byte(v))

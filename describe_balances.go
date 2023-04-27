@@ -35,13 +35,6 @@ type DescribeBalancesResponse struct {
 	Request         *DescribeBalancesRequest `json:"request"`
 }
 
-func DescribeBalances(
-	ctx context.Context,
-	request *DescribeBalancesRequest,
-) (*DescribeBalancesResponse, error) {
-	return DefaultClient.DescribeBalances(ctx, request)
-}
-
 func (c Client) DescribeBalances(
 	ctx context.Context,
 	request *DescribeBalancesRequest,

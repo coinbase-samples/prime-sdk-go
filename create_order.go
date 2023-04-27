@@ -44,10 +44,6 @@ type CreateOrderResponse struct {
 	Request *CreateOrderRequest `json:"request"`
 }
 
-func CreateOrder(ctx context.Context, request *CreateOrderRequest) (*CreateOrderResponse, error) {
-	return DefaultClient.CreateOrder(ctx, request)
-}
-
 func (c Client) CreateOrder(ctx context.Context, request *CreateOrderRequest) (*CreateOrderResponse, error) {
 
 	url := fmt.Sprintf("%s/portfolios/%s/order", primeV1ApiBaseUrl, request.PortfolioId)

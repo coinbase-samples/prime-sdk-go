@@ -41,13 +41,6 @@ type CreateConversionResponse struct {
 	Request             *CreateConversionRequest `json:"request"`
 }
 
-func CreateConversion(
-	ctx context.Context,
-	request *CreateConversionRequest,
-) (*CreateConversionResponse, error) {
-	return DefaultClient.CreateConversion(ctx, request)
-}
-
 func (c Client) CreateConversion(
 	ctx context.Context,
 	request *CreateConversionRequest,

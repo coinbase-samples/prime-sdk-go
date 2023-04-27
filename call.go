@@ -117,25 +117,20 @@ func makeCall(ctx context.Context, request *apiRequest) *apiResponse {
 	req.Header.Add("X-CB-ACCESS-SIGNATURE", sign(parsedUrl.Path, string(request.body), request.httpMethod, request.client.Credentials.SigningKey, t))
 	req.Header.Add("X-CB-ACCESS-TIMESTAMP", fmt.Sprintf("%d", t))
 
-	client := http.Client{
-		Transport: request.client.Transport,
-		Timeout:   request.client.Timeout,
-	}
-
-	res, err := client.Do(req)
+	res, err := request.client.HttpClient.Do(req)
 	if err != nil {
 		response.err = err
 		return response
 	}
 
 	defer res.Body.Close()
-	resBody, err := ioutil.ReadAll(res.Body)
+	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		response.err = err
 		return response
 	}
 
-	response.body = resBody
+	response.body = body
 	response.httpStatusCode = res.StatusCode
 	response.httpStatusMsg = res.Status
 
@@ -149,7 +144,7 @@ func makeCall(ctx context.Context, request *apiRequest) *apiResponse {
 			response.errorMessage = &errMsg
 		}
 
-		responseMsg := string(resBody)
+		responseMsg := string(body)
 
 		if response.errorMessage != nil && len(response.errorMessage.Value) > 0 {
 			responseMsg = response.errorMessage.Value

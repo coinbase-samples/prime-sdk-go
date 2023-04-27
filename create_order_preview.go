@@ -46,14 +46,6 @@ type CreateOrderPreviewResponse struct {
 	Request          *CreateOrderRequest `json:"request"`
 }
 
-func CreateOrderPreview(
-	ctx context.Context,
-	request *CreateOrderRequest,
-) (*CreateOrderPreviewResponse, error) {
-	return CreateOrderPreview(ctx, request)
-
-}
-
 func (c Client) CreateOrderPreview(
 	ctx context.Context,
 	request *CreateOrderRequest,

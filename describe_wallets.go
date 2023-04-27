@@ -34,13 +34,6 @@ type DescribeWalletsResponse struct {
 	Pagination *Pagination             `json:"pagination"`
 }
 
-func DescribeWallets(
-	ctx context.Context,
-	request *DescribeWalletsRequest,
-) (*DescribeWalletsResponse, error) {
-	return DefaultClient.DescribeWallets(ctx, request)
-}
-
 func (c Client) DescribeWallets(
 	ctx context.Context,
 	request *DescribeWalletsRequest,

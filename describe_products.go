@@ -32,18 +32,7 @@ type DescribeProductsResponse struct {
 	Request    *DescribeProductsRequest `json:"request"`
 }
 
-func (r DescribeProductsResponse) HasNext() bool {
-	return r.Pagination != nil && r.Pagination.HasNext
-}
-
 // TODO: Add an interator version as well
-func DescribeProducts(
-	ctx context.Context,
-	request *DescribeProductsRequest,
-) (*DescribeProductsResponse, error) {
-	return DefaultClient.DescribeProducts(ctx, request)
-}
-
 func (c Client) DescribeProducts(
 	ctx context.Context,
 	request *DescribeProductsRequest,
