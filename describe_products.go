@@ -38,13 +38,13 @@ func (c Client) DescribeProducts(
 	request *DescribeProductsRequest,
 ) (*DescribeProductsResponse, error) {
 
-	url := fmt.Sprintf("%s/portfolios/%s/products", primeV1ApiBaseUrl, request.PortfolioId)
+	path := fmt.Sprintf("/portfolios/%s/products", request.PortfolioId)
 
-	url = urlIteratorParams(url, request.IteratorParams)
+	queryParams := iteratorParams("", request.IteratorParams)
 
 	response := &DescribeProductsResponse{Request: request}
 
-	if err := get(ctx, c, url, request, response); err != nil {
+	if err := get(ctx, c, path, queryParams, request, response); err != nil {
 		return response, fmt.Errorf("unable to DescribeProducts: %w", err)
 	}
 

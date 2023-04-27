@@ -51,11 +51,11 @@ func (c Client) CreateOrderPreview(
 	request *CreateOrderRequest,
 ) (*CreateOrderPreviewResponse, error) {
 
-	url := fmt.Sprintf("%s/portfolios/%s/order_preview", primeV1ApiBaseUrl, request.PortfolioId)
+	path := fmt.Sprintf("/portfolios/%s/order_preview", request.PortfolioId)
 
 	response := &CreateOrderPreviewResponse{Request: request}
 
-	if err := post(ctx, c, url, request, response); err != nil {
+	if err := post(ctx, c, path, emptyQueryParams, request, response); err != nil {
 		return nil, fmt.Errorf("unable to CreateOrderPreview: %w", err)
 	}
 

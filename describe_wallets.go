@@ -39,21 +39,19 @@ func (c Client) DescribeWallets(
 	request *DescribeWalletsRequest,
 ) (*DescribeWalletsResponse, error) {
 
-	url := fmt.Sprintf("%s/portfolios/%s/wallets?type=%s",
-		primeV1ApiBaseUrl,
-		request.PortfolioId,
-		request.Type,
-	)
+	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId, request.Type)
 
-	url = urlIteratorParams(url, request.IteratorParams)
+	queryParams := fmt.Sprintf("?type=%s", request.Type)
+
+	queryParams = iteratorParams(queryParams, request.IteratorParams)
 
 	for _, v := range request.Symbols {
-		url += fmt.Sprintf("&symbols=%s", v)
+		queryParams += fmt.Sprintf("&symbols=%s", v)
 	}
 
 	response := &DescribeWalletsResponse{Request: request}
 
-	if err := get(ctx, c, url, request, response); err != nil {
+	if err := get(ctx, c, path, queryParams, request, response); err != nil {
 		return nil, err
 	}
 

@@ -46,11 +46,11 @@ type CreateOrderResponse struct {
 
 func (c Client) CreateOrder(ctx context.Context, request *CreateOrderRequest) (*CreateOrderResponse, error) {
 
-	url := fmt.Sprintf("%s/portfolios/%s/order", primeV1ApiBaseUrl, request.PortfolioId)
+	path := fmt.Sprintf("/portfolios/%s/order", request.PortfolioId)
 
 	response := &CreateOrderResponse{Request: request}
 
-	if err := post(ctx, c, url, request, response); err != nil {
+	if err := post(ctx, c, path, emptyQueryParams, request, response); err != nil {
 		return nil, err
 	}
 

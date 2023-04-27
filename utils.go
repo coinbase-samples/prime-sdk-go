@@ -30,29 +30,29 @@ func sign(path, body, method, signingKey string, t int64) string {
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
 
-func urlIteratorParams(url string, p *IteratorParams) string {
+func iteratorParams(v string, p *IteratorParams) string {
 
-	appended := strings.Contains(url, "?")
+	appended := strings.Contains(v, "?")
 
 	if len(p.Cursor) > 0 {
-		url += fmt.Sprintf("%scursor=%s", urlParamSep(appended), p.Cursor)
+		v += fmt.Sprintf("%scursor=%s", queryParamSep(appended), p.Cursor)
 		appended = true
 	}
 
 	if len(p.Limit) > 0 {
-		url += fmt.Sprintf("%slimit=%s", urlParamSep(appended), p.Limit)
+		v += fmt.Sprintf("%slimit=%s", queryParamSep(appended), p.Limit)
 		appended = true
 	}
 
 	if len(p.SortDirection) > 0 {
-		url += fmt.Sprintf("%sort_direction=%s", urlParamSep(appended), p.SortDirection)
+		v += fmt.Sprintf("%sort_direction=%s", queryParamSep(appended), p.SortDirection)
 		appended = true
 	}
 
-	return url
+	return v
 }
 
-func urlParamSep(appended bool) string {
+func queryParamSep(appended bool) string {
 	if appended {
 		return "&"
 	}

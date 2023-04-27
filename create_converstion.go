@@ -46,15 +46,14 @@ func (c Client) CreateConversion(
 	request *CreateConversionRequest,
 ) (*CreateConversionResponse, error) {
 
-	url := fmt.Sprintf("%s/portfolios/%s/wallets/%s/conversion",
-		primeV1ApiBaseUrl,
+	path := fmt.Sprintf("/portfolios/%s/wallets/%s/conversion",
 		request.PortfolioId,
 		request.SourceWalletId,
 	)
 
 	response := &CreateConversionResponse{Request: request}
 
-	if err := post(ctx, c, url, request, response); err != nil {
+	if err := post(ctx, c, path, emptyQueryParams, request, response); err != nil {
 		return nil, err
 	}
 

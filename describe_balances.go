@@ -40,22 +40,23 @@ func (c Client) DescribeBalances(
 	request *DescribeBalancesRequest,
 ) (*DescribeBalancesResponse, error) {
 
-	url := fmt.Sprintf("%s/portfolios/%s/balances", primeV1ApiBaseUrl, request.PortfolioId)
+	path := fmt.Sprintf("/portfolios/%s/balances", request.PortfolioId)
 
 	var appended bool
+	var queryParams string
 	if len(request.Type) > 0 {
-		url += fmt.Sprintf("?balance_type=%s", request.Type)
+		queryParams += fmt.Sprintf("?balance_type=%s", request.Type)
 		appended = true
 	}
 
 	for _, v := range request.Symbols {
-		url += fmt.Sprintf("%ssymbols=%s", urlParamSep(appended), v)
+		queryParams += fmt.Sprintf("%ssymbols=%s", queryParamSep(appended), v)
 		appended = true
 	}
 
 	response := &DescribeBalancesResponse{Request: request}
 
-	if err := get(ctx, c, url, request, response); err != nil {
+	if err := get(ctx, c, path, queryParams, request, response); err != nil {
 		return nil, err
 	}
 

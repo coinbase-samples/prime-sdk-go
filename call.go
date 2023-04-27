@@ -13,8 +13,11 @@ import (
 	"time"
 )
 
+const emptyQueryParams = ""
+
 type apiRequest struct {
-	url                    string
+	path                   string
+	query                  string
 	httpMethod             string
 	body                   []byte
 	expectedHttpStatusCode int
@@ -33,27 +36,30 @@ type apiResponse struct {
 func post(
 	ctx context.Context,
 	client Client,
-	url string,
+	path,
+	query string,
 	request,
 	response interface{},
 ) error {
-	return call(ctx, client, url, http.MethodPost, http.StatusOK, request, response)
+	return call(ctx, client, path, query, http.MethodPost, http.StatusOK, request, response)
 }
 
 func get(
 	ctx context.Context,
 	client Client,
-	url string,
+	path,
+	query string,
 	request,
 	response interface{},
 ) error {
-	return call(ctx, client, url, http.MethodGet, http.StatusOK, request, response)
+	return call(ctx, client, path, query, http.MethodGet, http.StatusOK, request, response)
 }
 
 func call(
 	ctx context.Context,
 	client Client,
-	url,
+	path,
+	query,
 	httpMethod string,
 	expectedHttpStatusCode int,
 	request,
@@ -72,7 +78,8 @@ func call(
 	resp := makeCall(
 		ctx,
 		&apiRequest{
-			url:                    url,
+			path:                   path,
+			query:                  query,
 			httpMethod:             httpMethod,
 			body:                   body,
 			expectedHttpStatusCode: expectedHttpStatusCode,
@@ -97,15 +104,17 @@ func makeCall(ctx context.Context, request *apiRequest) *apiResponse {
 		request: request,
 	}
 
-	parsedUrl, err := url.Parse(request.url)
+	callUrl := fmt.Sprintf("%s%s%s", request.client.HttpBaseUrl, request.path, request.query)
+
+	parsedUrl, err := url.Parse(callUrl)
 	if err != nil {
-		response.err = fmt.Errorf("URL: %s - %w", request.url, err)
+		response.err = fmt.Errorf("invalid URL: %s - %w", callUrl, err)
 		return response
 	}
 
 	t := time.Now().Unix()
 
-	req, err := http.NewRequestWithContext(ctx, request.httpMethod, request.url, bytes.NewReader(request.body))
+	req, err := http.NewRequestWithContext(ctx, request.httpMethod, callUrl, bytes.NewReader(request.body))
 	if err != nil {
 		response.err = err
 		return response
@@ -155,7 +164,7 @@ func makeCall(ctx context.Context, request *apiRequest) *apiResponse {
 			request.expectedHttpStatusCode,
 			res.StatusCode,
 			res.Status,
-			request.url,
+			callUrl,
 			responseMsg,
 		)
 	}
