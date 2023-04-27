@@ -27,7 +27,7 @@ type CreateConversionRequest struct {
 	SourceSymbol        string `json:"source_symbol"`
 	DestinationWalletId string `json:"destination"`
 	DestinationSymbol   string `json:"destination_symbol"`
-	IdempotencyId       string `json:"idempotency_key"`
+	IdempotencyKey      string `json:"idempotency_key"`
 	Amount              string `json:"amount"`
 }
 
