@@ -54,7 +54,7 @@ func (c Client) CreateOrder(ctx context.Context, request *CreateOrderRequest) (*
 
 	response := &CreateOrderResponse{Request: request}
 
-	if err := primePost(ctx, c, url, request, response); err != nil {
+	if err := post(ctx, c, url, request, response); err != nil {
 		return nil, err
 	}
 

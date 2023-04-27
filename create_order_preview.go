@@ -63,7 +63,7 @@ func (c Client) CreateOrderPreview(
 
 	response := &CreateOrderPreviewResponse{Request: request}
 
-	if err := primePost(ctx, c, url, request, response); err != nil {
+	if err := post(ctx, c, url, request, response); err != nil {
 		return nil, fmt.Errorf("unable to CreateOrderPreview: %w", err)
 	}
 

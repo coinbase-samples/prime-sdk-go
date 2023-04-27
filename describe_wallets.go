@@ -60,7 +60,7 @@ func (c Client) DescribeWallets(
 
 	response := &DescribeWalletsResponse{Request: request}
 
-	if err := primeGet(ctx, c, url, request, response); err != nil {
+	if err := get(ctx, c, url, request, response); err != nil {
 		return nil, err
 	}
 

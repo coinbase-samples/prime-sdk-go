@@ -55,7 +55,7 @@ func (c Client) DescribeProducts(
 
 	response := &DescribeProductsResponse{Request: request}
 
-	if err := primeGet(ctx, c, url, request, response); err != nil {
+	if err := get(ctx, c, url, request, response); err != nil {
 		return response, fmt.Errorf("unable to DescribeProducts: %w", err)
 	}
 

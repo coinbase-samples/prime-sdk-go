@@ -61,7 +61,7 @@ func (c Client) CreateConversion(
 
 	response := &CreateConversionResponse{Request: request}
 
-	if err := primePost(ctx, c, url, request, response); err != nil {
+	if err := post(ctx, c, url, request, response); err != nil {
 		return nil, err
 	}
 

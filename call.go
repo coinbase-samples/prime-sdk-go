@@ -30,27 +30,27 @@ type apiResponse struct {
 	errorMessage   *ErrorMessage
 }
 
-func primePost(
+func post(
 	ctx context.Context,
 	client Client,
 	url string,
 	request,
 	response interface{},
 ) error {
-	return primeCall(ctx, client, url, http.MethodPost, http.StatusOK, request, response)
+	return call(ctx, client, url, http.MethodPost, http.StatusOK, request, response)
 }
 
-func primeGet(
+func get(
 	ctx context.Context,
 	client Client,
 	url string,
 	request,
 	response interface{},
 ) error {
-	return primeCall(ctx, client, url, http.MethodGet, http.StatusOK, request, response)
+	return call(ctx, client, url, http.MethodGet, http.StatusOK, request, response)
 }
 
-func primeCall(
+func call(
 	ctx context.Context,
 	client Client,
 	url,
