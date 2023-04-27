@@ -18,7 +18,6 @@ package prime
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -76,13 +75,6 @@ func (b AssetBalances) HoldsNum() (holds decimal.Decimal, err error) {
 	holds, err = strToNum(b.Holds)
 	if err != nil {
 		err = fmt.Errorf("Invalid asset holds: %s - symbol: %s - msg: %v", b.Holds, b.Symbol, err)
-	}
-	return
-}
-
-func (b AssetBalances) IsFiat() (f bool) {
-	if strings.ToLower(b.Symbol) == "usd" {
-		f = true
 	}
 	return
 }
