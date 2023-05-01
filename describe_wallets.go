@@ -39,7 +39,7 @@ func (c Client) DescribeWallets(
 	request *DescribeWalletsRequest,
 ) (*DescribeWalletsResponse, error) {
 
-	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId, request.Type)
+	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId)
 
 	queryParams := fmt.Sprintf("?type=%s", request.Type)
 
