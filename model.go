@@ -98,6 +98,15 @@ func (r DescribeWalletsResponse) HasNext() bool {
 	return r.Pagination != nil && r.Pagination.HasNext
 }
 
+type User struct {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Email       string `json:"email"`
+	EntityId    string `json:"entity_id"`
+	PortfolioId string `json:"portfolio_id,omitempty"`
+	Role        string `json:"role"`
+}
+
 type Wallet struct {
 	Id        string    `json:"id"`
 	Type      string    `json:"type"`

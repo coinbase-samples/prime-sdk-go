@@ -27,6 +27,7 @@ type Credentials struct {
 	Passphrase   string `json:"passphrase"`
 	SigningKey   string `json:"signingKey"`
 	PortfolioId  string `json:"portfolioId"`
+	EntityId     string `json:"entityId"`
 	SvcAccountId string `json:"svcAccountId"`
 }
 
