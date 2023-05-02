@@ -88,7 +88,7 @@ func call(
 	)
 
 	if resp.err != nil {
-		return err
+		return resp.err
 	}
 
 	if err := json.Unmarshal(resp.body, response); err != nil {
