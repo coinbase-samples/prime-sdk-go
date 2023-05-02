@@ -34,27 +34,22 @@ func appendQueryParam(queryParams, key, value string) string {
 	return fmt.Sprintf("%s%s%s=%s", queryParams, queryParamSep(strings.Contains(queryParams, "?")), key, value)
 }
 
-func iteratorParams(v string, p *IteratorParams) string {
-
-	appended := strings.Contains(v, "?")
+func paginationParams(v string, p *PaginationParams) string {
 
 	if p == nil {
 		return v
 	}
 
 	if len(p.Cursor) > 0 {
-		v += fmt.Sprintf("%scursor=%s", queryParamSep(appended), p.Cursor)
-		appended = true
+		v += appendQueryParam(v, "cursor", p.Cursor)
 	}
 
 	if len(p.Limit) > 0 {
-		v += fmt.Sprintf("%slimit=%s", queryParamSep(appended), p.Limit)
-		appended = true
+		v += appendQueryParam(v, "limit", p.Limit)
 	}
 
 	if len(p.SortDirection) > 0 {
-		v += fmt.Sprintf("%sort_direction=%s", queryParamSep(appended), p.SortDirection)
-		appended = true
+		v += appendQueryParam(v, "sort_direction", p.SortDirection)
 	}
 
 	return v

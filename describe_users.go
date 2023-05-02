@@ -23,7 +23,7 @@ import (
 
 type DescribePortfolioUsersRequest struct {
 	PortfolioId    string          `json:"portfolio_id"`
-	IteratorParams *IteratorParams `json:"iteratorParams"`
+	PaginationParams *PaginationParams `json:"pagination_params"`
 }
 
 type DescribePortfolioUsersResponse struct {
@@ -34,7 +34,7 @@ type DescribePortfolioUsersResponse struct {
 
 type DescribeUsersRequest struct {
 	EntityId       string          `json:"entity_id"`
-	IteratorParams *IteratorParams `json:"iteratorParams"`
+	PaginationParams *PaginationParams `json:"paginationParams"`
 }
 
 type DescribeUsersResponse struct {
@@ -50,7 +50,7 @@ func (c Client) DescribeUsers(
 
 	path := fmt.Sprintf("/entities/%s/users", request.EntityId)
 
-	queryParams := iteratorParams(emptyQueryParams, request.IteratorParams)
+	queryParams := paginationParams(emptyQueryParams, request.PaginationParams)
 
 	response := &DescribeUsersResponse{Request: request}
 
@@ -68,7 +68,7 @@ func (c Client) DescribePortfolioUsers(
 
 	path := fmt.Sprintf("/portfolios/%s/users", request.PortfolioId)
 
-	queryParams := iteratorParams(emptyQueryParams, request.IteratorParams)
+	queryParams := paginationParams(emptyQueryParams, request.PaginationParams)
 
 	response := &DescribePortfolioUsersResponse{Request: request}
 

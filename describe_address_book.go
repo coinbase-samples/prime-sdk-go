@@ -43,10 +43,10 @@ type AddressBookEntryAddedBy struct {
 }
 
 type DescribeAddressBookRequest struct {
-	PortfolioId    string          `json:"portfolio_id"`
-	Symbol         string          `json:"currency_symbol"`
-	Search         string          `json:"search"`
-	IteratorParams *IteratorParams `json:"iteratorParams"`
+	PortfolioId      string            `json:"portfolio_id"`
+	Symbol           string            `json:"currency_symbol"`
+	Search           string            `json:"search"`
+	PaginationParams *PaginationParams `json:"pagination_params"`
 }
 
 type DescribeAddressBookResponse struct {
@@ -71,7 +71,7 @@ func (c Client) DescribeAddressBook(
 		queryParams = appendQueryParam(queryParams, "search", request.Search)
 	}
 
-	queryParams = iteratorParams(queryParams, request.IteratorParams)
+	queryParams = paginationParams(queryParams, request.PaginationParams)
 
 	response := &DescribeAddressBookResponse{Request: request}
 

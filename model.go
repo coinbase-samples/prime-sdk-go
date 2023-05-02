@@ -95,7 +95,7 @@ type BalanceWithHolds struct {
 	Holds string `json:"holds"`
 }
 
-type IteratorParams struct {
+type PaginationParams struct {
 	Cursor        string `json:"cursor"`
 	Limit         string `json:"limit"`
 	SortDirection string `json:"sort_direction"`

@@ -2,6 +2,7 @@ package test
 
 import (
 	"context"
+	"log"
 	"testing"
 	"time"
 
@@ -36,7 +37,19 @@ func TestDescribePortfolios(t *testing.T) {
 		t.Fatal("expected portfoliio id to be set")
 	}
 
-	testDescribePortfolio(t, client, response.Portfolios[0].Id)
+	var portfolio *prime.Portfolio
+	for _, v := range response.Portfolios {
+		if v.Id == client.Credentials.PortfolioId {
+			portfolio = v
+			break
+		}
+	}
+
+	if portfolio == nil {
+		t.Fatal("expected describe to include credentials portfolio")
+	}
+
+	testDescribePortfolio(t, client, portfolio.Id)
 
 	//testDescribePortfolioCredit(t, client, response.Portfolios[0].Id)
 }
@@ -64,6 +77,10 @@ func testDescribePortfolio(t *testing.T, client *prime.Client, portfolioId strin
 
 	if response.Portfolio.Id != portfolioId {
 		t.Fatalf("expected portfolio id: %s - received portfolio id: %s", portfolioId, response.Portfolio.Id)
+	}
+
+	if len(response.Portfolio.EntityId) == 0 {
+		log.Fatal("expected entity id to be set")
 	}
 
 }

@@ -27,7 +27,7 @@ type DescribeInvoicesRequest struct {
 	States         []string        `json:"states"`
 	BillingYear    int32           `json:"billing_year"`
 	BillingMonth   int32           `json:"billing_month"`
-	IteratorParams *IteratorParams `json:"iteratorParams"`
+	PaginationParams *PaginationParams `json:"pagination_params"`
 }
 
 type Invoice struct {
@@ -65,7 +65,7 @@ func (c Client) DescribeInvoices(
 	request *DescribeInvoicesRequest,
 ) (*DescribeInvoicesResponse, error) {
 
-	path := fmt.Sprintf("/enitities/%s/invoices", request.EntityId)
+	path := fmt.Sprintf("/entities/%s/invoices", request.EntityId)
 
 	var queryParams string
 	if request.BillingYear > 0 {
@@ -80,7 +80,7 @@ func (c Client) DescribeInvoices(
 		queryParams = appendQueryParam(queryParams, "states", v)
 	}
 
-	queryParams = iteratorParams(queryParams, request.IteratorParams)
+	queryParams = paginationParams(queryParams, request.PaginationParams)
 
 	response := &DescribeInvoicesResponse{Request: request}
 
