@@ -20,7 +20,7 @@ import (
 	"net/http"
 )
 
-var primeV1ApiBaseUrl = "https://api.prime.coinbase.com/v1"
+var defaultV1ApiBaseUrl = "https://api.prime.coinbase.com/v1"
 
 type Client struct {
 	HttpClient  http.Client
@@ -37,6 +37,6 @@ func NewClient(credentials *Credentials, httpClient http.Client) *Client {
 	return &Client{
 		Credentials: credentials,
 		HttpClient:  httpClient,
-		HttpBaseUrl: primeV1ApiBaseUrl,
+		HttpBaseUrl: defaultV1ApiBaseUrl,
 	}
 }
