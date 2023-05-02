@@ -22,7 +22,7 @@ import (
 )
 
 type DescribeWalletsRequest struct {
-	PortfolioId    string          `json:"string"`
+	PortfolioId    string          `json:"portfolio_id"`
 	Type           string          `json:"type"`
 	Symbols        []string        `json:"symbols"`
 	IteratorParams *IteratorParams `json:"iteratorParams"`
