@@ -37,6 +37,8 @@ func TestDescribePortfolios(t *testing.T) {
 	}
 
 	testDescribePortfolio(t, client, response.Portfolios[0].Id)
+
+	//testDescribePortfolioCredit(t, client, response.Portfolios[0].Id)
 }
 
 func testDescribePortfolio(t *testing.T, client *prime.Client, portfolioId string) {
@@ -62,6 +64,33 @@ func testDescribePortfolio(t *testing.T, client *prime.Client, portfolioId strin
 
 	if response.Portfolio.Id != portfolioId {
 		t.Fatalf("expected portfolio id: %s - received portfolio id: %s", portfolioId, response.Portfolio.Id)
+	}
+
+}
+
+func testDescribePortfolioCredit(t *testing.T, client *prime.Client, portfolioId string) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	response, err := client.DescribePortfolioCredit(ctx, &prime.DescribePortfolioCreditRequest{
+		PortfolioId: portfolioId,
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if response == nil {
+		t.Fatal("expected portfolio credit response to not be nil")
+	}
+
+	if response.PostTradeCredit == nil {
+		t.Fatal("expected portfolio post trade credit to not be nil")
+	}
+
+	if response.PostTradeCredit.Id != portfolioId {
+		t.Fatalf("expected portfolio id: %s - received portfolio id: %s", portfolioId, response.PostTradeCredit.Id)
 	}
 
 }
