@@ -53,6 +53,13 @@ type ErrorMessage struct {
 	Value string `json:"message"`
 }
 
+type Portfolio struct {
+	Id             string `json:"id"`
+	Name           string `json:"name"`
+	EntityId       string `json:"entity_id"`
+	OrganizationId string `json:"organization_id"`
+}
+
 type AssetBalances struct {
 	Symbol               string `json:"symbol"`
 	Amount               string `json:"amount"`

@@ -20,15 +20,7 @@ import (
 	"context"
 )
 
-type Portfolio struct {
-	Id             string `json:"id"`
-	Name           string `json:"name"`
-	EntityId       string `json:"entity_id"`
-	OrganizationId string `json:"organization_id"`
-}
-
-type DescribePortfoliosRequest struct {
-}
+type DescribePortfoliosRequest struct{}
 
 type DescribePortfoliosResponse struct {
 	Portfolios []*Portfolio               `json:"portfolios"`
