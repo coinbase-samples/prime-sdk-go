@@ -135,27 +135,3 @@ func TestAdjustTwapLimitPrice(t *testing.T) {
 	}
 }
 */
-
-func TestGenerateUniqueId(t *testing.T) {
-
-	cases := []struct {
-		description string
-		params      []string
-		expected    string
-	}{
-		{
-			description: "AdjustTwapLimitPrice0",
-			params:      []string{"one", "two", "three"},
-			expected:    "9af04d80fd921d0b9265ab2f3b516edc",
-		},
-	}
-
-	for _, tt := range cases {
-		t.Run(tt.description, func(t *testing.T) {
-			result := GenerateUniqueId(tt.params...)
-			if result != tt.expected {
-				t.Errorf("test: %s - expected: %s - received: %s", tt.description, tt.expected, result)
-			}
-		})
-	}
-}

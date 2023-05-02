@@ -41,13 +41,13 @@ func (c Client) DescribeWallets(
 
 	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId)
 
-	queryParams := fmt.Sprintf("?type=%s", request.Type)
-
-	queryParams = iteratorParams(queryParams, request.IteratorParams)
+	queryParams := appendQueryParam(emptyQueryParams, "type", request.Type)
 
 	for _, v := range request.Symbols {
-		queryParams += fmt.Sprintf("&symbols=%s", v)
+		queryParams = appendQueryParam(queryParams, "symbols", v)
 	}
+
+	queryParams = iteratorParams(queryParams, request.IteratorParams)
 
 	response := &DescribeWalletsResponse{Request: request}
 

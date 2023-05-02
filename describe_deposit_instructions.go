@@ -57,7 +57,7 @@ func (c Client) DescribeWalletDepositInstructions(
 
 	path := fmt.Sprintf("/portfolios/%s/wallets/%s/deposit_instructions", request.PortfolioId, request.Id)
 
-	queryParams := fmt.Sprintf("?deposit_type=%s", request.Type)
+	queryParams := appendQueryParam(emptyQueryParams, "deposit_type", request.Type)
 
 	response := &DescribeWalletDepositInstructionsResponse{Request: request}
 

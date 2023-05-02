@@ -30,6 +30,10 @@ func sign(path, body, method, signingKey string, t int64) string {
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
 
+func appendQueryParam(queryParams, key, value string) string {
+	return fmt.Sprintf("%s%s%s=%s", queryParams, queryParamSep(strings.Contains(queryParams, "?")), key, value)
+}
+
 func iteratorParams(v string, p *IteratorParams) string {
 
 	appended := strings.Contains(v, "?")

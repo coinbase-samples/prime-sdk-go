@@ -40,7 +40,7 @@ func (c Client) DescribeProducts(
 
 	path := fmt.Sprintf("/portfolios/%s/products", request.PortfolioId)
 
-	queryParams := iteratorParams("", request.IteratorParams)
+	queryParams := iteratorParams(emptyQueryParams, request.IteratorParams)
 
 	response := &DescribeProductsResponse{Request: request}
 

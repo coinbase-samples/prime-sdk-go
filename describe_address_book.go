@@ -62,15 +62,13 @@ func (c Client) DescribeAddressBook(
 
 	path := fmt.Sprintf("/portfolios/%s/address_book", request.PortfolioId)
 
-	var appended bool
 	var queryParams string
 	if len(request.Symbol) > 0 {
-		queryParams = fmt.Sprintf("?currency_symbol=", request.Symbol)
-		appended = true
+		queryParams = appendQueryParam(queryParams, "currency_symbol", request.Symbol)
 	}
 
 	if len(request.Search) > 0 {
-		queryParams += fmt.Sprintf("%ssymbols=%s", queryParamSep(appended), request.Search)
+		queryParams = appendQueryParam(queryParams, "search", request.Search)
 	}
 
 	queryParams = iteratorParams(queryParams, request.IteratorParams)

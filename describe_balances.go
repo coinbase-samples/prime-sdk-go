@@ -42,16 +42,13 @@ func (c Client) DescribeBalances(
 
 	path := fmt.Sprintf("/portfolios/%s/balances", request.PortfolioId)
 
-	var appended bool
 	var queryParams string
 	if len(request.Type) > 0 {
-		queryParams += fmt.Sprintf("?balance_type=%s", request.Type)
-		appended = true
+		queryParams = appendQueryParam(queryParams, "balance_type", request.Type)
 	}
 
 	for _, v := range request.Symbols {
-		queryParams += fmt.Sprintf("%ssymbols=%s", queryParamSep(appended), v)
-		appended = true
+		queryParams = appendQueryParam(queryParams, "symbols", v)
 	}
 
 	response := &DescribeBalancesResponse{Request: request}
