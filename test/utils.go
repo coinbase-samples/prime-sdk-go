@@ -1,13 +1,34 @@
 package test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	prime "github.com/coinbase-samples/prime-sdk-go"
 )
+
+func loadEntityId(client *prime.Client) (string, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	response, err := client.DescribePortfolio(
+		ctx,
+		&prime.DescribePortfolioRequest{
+			PortfolioId: client.Credentials.PortfolioId,
+		},
+	)
+
+	if err != nil {
+		return "", err
+	}
+
+	return response.Portfolio.EntityId, nil
+}
 
 func newLiveTestClient() (*prime.Client, error) {
 
