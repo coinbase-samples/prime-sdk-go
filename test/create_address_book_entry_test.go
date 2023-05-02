@@ -39,7 +39,4 @@ func TestCreateAddressBookEntry(t *testing.T) {
 	if len(response.ActivityId) == 0 {
 		t.Fatal("expected an activity id")
 	}
-
-	fmt.Println(response.ActivityId)
-
 }
