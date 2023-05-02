@@ -112,9 +112,14 @@ func makeCall(ctx context.Context, request *apiRequest) *apiResponse {
 		return response
 	}
 
+	var requestBody []byte
+	if request.httpMethod == http.MethodPost {
+		requestBody = request.body
+	}
+
 	t := time.Now().Unix()
 
-	req, err := http.NewRequestWithContext(ctx, request.httpMethod, callUrl, bytes.NewReader(request.body))
+	req, err := http.NewRequestWithContext(ctx, request.httpMethod, callUrl, bytes.NewReader(requestBody))
 	if err != nil {
 		response.err = err
 		return response
@@ -123,7 +128,7 @@ func makeCall(ctx context.Context, request *apiRequest) *apiResponse {
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("X-CB-ACCESS-KEY", request.client.Credentials.AccessKey)
 	req.Header.Add("X-CB-ACCESS-PASSPHRASE", request.client.Credentials.Passphrase)
-	req.Header.Add("X-CB-ACCESS-SIGNATURE", sign(parsedUrl.Path, string(request.body), request.httpMethod, request.client.Credentials.SigningKey, t))
+	req.Header.Add("X-CB-ACCESS-SIGNATURE", sign(parsedUrl.Path, string(requestBody), request.httpMethod, request.client.Credentials.SigningKey, t))
 	req.Header.Add("X-CB-ACCESS-TIMESTAMP", fmt.Sprintf("%d", t))
 
 	res, err := request.client.HttpClient.Do(req)
