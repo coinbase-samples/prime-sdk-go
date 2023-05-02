@@ -80,7 +80,7 @@ func (c Client) DescribeInvoices(
 		queryParams = appendQueryParam(queryParams, "states", v)
 	}
 
-	queryParams = paginationParams(queryParams, request.PaginationParams)
+	queryParams = appendPaginationParams(queryParams, request.PaginationParams)
 
 	response := &DescribeInvoicesResponse{Request: request}
 

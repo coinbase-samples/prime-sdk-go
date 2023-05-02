@@ -47,7 +47,7 @@ func (c Client) DescribeWallets(
 		queryParams = appendQueryParam(queryParams, "symbols", v)
 	}
 
-	queryParams = paginationParams(queryParams, request.PaginationParams)
+	queryParams = appendPaginationParams(queryParams, request.PaginationParams)
 
 	response := &DescribeWalletsResponse{Request: request}
 

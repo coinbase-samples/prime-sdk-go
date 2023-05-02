@@ -71,7 +71,7 @@ func (c Client) DescribeAddressBook(
 		queryParams = appendQueryParam(queryParams, "search", request.Search)
 	}
 
-	queryParams = paginationParams(queryParams, request.PaginationParams)
+	queryParams = appendPaginationParams(queryParams, request.PaginationParams)
 
 	response := &DescribeAddressBookResponse{Request: request}
 

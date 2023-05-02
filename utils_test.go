@@ -20,6 +20,45 @@ import (
 	"testing"
 )
 
+func TestPaginationParams(t *testing.T) {
+
+	cases := []struct {
+		description string
+		params      *PaginationParams
+		query       string
+		expected    string
+	}{
+		{
+			description: "TestPaginationParams0",
+			params:      &PaginationParams{Cursor: "test"},
+			query:       "",
+			expected:    "?cursor=test",
+		},
+		{
+			description: "TestPaginationParams1",
+			params:      &PaginationParams{Cursor: "test"},
+			query:       "?test=new",
+			expected:    "?test=new&cursor=test",
+		},
+		{
+			description: "TestPaginationParams1",
+			params:      &PaginationParams{Cursor: "test", Limit: "10", SortDirection: "ASC"},
+			query:       "?test=new",
+			expected:    "?test=new&cursor=test&limit=10&sort_direction=ASC",
+		},
+	}
+
+	for _, tt := range cases {
+		t.Run(tt.description, func(t *testing.T) {
+			result := appendPaginationParams(tt.query, tt.params)
+			if result != tt.expected {
+				t.Errorf("test: %s - expected: %s - received: %s", tt.description, tt.expected, result)
+			}
+		})
+	}
+
+}
+
 func TestAppendQueryParam(t *testing.T) {
 
 	cases := []struct {
