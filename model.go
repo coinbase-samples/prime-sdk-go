@@ -28,6 +28,10 @@ const (
 	WalletTypeTrading = "TRADING"
 	WalletTypeOther   = "WALLET_TYPE_OTHER"
 
+	WalletDepositTypeWire   = "WIRE"
+	WalletDepositTypeSwift  = "SWIFT"
+	WalletDepositTypeCrypto = "CRYPTO"
+
 	BalanceTypeTrading = "TRADING_BALANCES"
 	BalanceTypeVault   = "VAULT_BALANCES"
 	BalanceTypeTotal   = "TOTAL_BALANCES"
