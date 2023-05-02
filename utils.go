@@ -34,6 +34,10 @@ func iteratorParams(v string, p *IteratorParams) string {
 
 	appended := strings.Contains(v, "?")
 
+	if p == nil {
+		return v
+	}
+
 	if len(p.Cursor) > 0 {
 		v += fmt.Sprintf("%scursor=%s", queryParamSep(appended), p.Cursor)
 		appended = true
