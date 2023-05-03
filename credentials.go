@@ -23,11 +23,13 @@ import (
 )
 
 type Credentials struct {
-	AccessKey    string `json:"accessKey"`
-	Passphrase   string `json:"passphrase"`
-	SigningKey   string `json:"signingKey"`
-	PortfolioId  string `json:"portfolioId"`
-	EntityId     string `json:"entityId"`
+	AccessKey   string `json:"accessKey"`
+	Passphrase  string `json:"passphrase"`
+	SigningKey  string `json:"signingKey"`
+	PortfolioId string `json:"portfolioId"`
+	EntityId    string `json:"entityId"`
+
+	// The Servie Account ID is the API key's user id equivalent when looking at activities
 	SvcAccountId string `json:"svcAccountId"`
 }
 

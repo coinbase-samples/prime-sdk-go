@@ -22,8 +22,8 @@ import (
 )
 
 type DescribeProductsRequest struct {
-	PortfolioId      string            `json:"portfolio_id"`
-	PaginationParams *PaginationParams `json:"pagination_params"`
+	PortfolioId string            `json:"portfolio_id"`
+	Pagination  *PaginationParams `json:"pagination_params"`
 }
 
 type DescribeProductsResponse struct {
@@ -40,7 +40,7 @@ func (c Client) DescribeProducts(
 
 	path := fmt.Sprintf("/portfolios/%s/products", request.PortfolioId)
 
-	queryParams := appendPaginationParams(emptyQueryParams, request.PaginationParams)
+	queryParams := appendPaginationParams(emptyQueryParams, request.Pagination)
 
 	response := &DescribeProductsResponse{Request: request}
 

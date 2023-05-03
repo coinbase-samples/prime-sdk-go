@@ -23,11 +23,11 @@ import (
 )
 
 type DescribeInvoicesRequest struct {
-	EntityId       string          `json:"entity_id"`
-	States         []string        `json:"states"`
-	BillingYear    int32           `json:"billing_year"`
-	BillingMonth   int32           `json:"billing_month"`
-	PaginationParams *PaginationParams `json:"pagination_params"`
+	EntityId     string            `json:"entity_id"`
+	States       []string          `json:"states"`
+	BillingYear  int32             `json:"billing_year"`
+	BillingMonth int32             `json:"billing_month"`
+	Pagination   *PaginationParams `json:"pagination_params"`
 }
 
 type Invoice struct {
@@ -80,7 +80,7 @@ func (c Client) DescribeInvoices(
 		queryParams = appendQueryParam(queryParams, "states", v)
 	}
 
-	queryParams = appendPaginationParams(queryParams, request.PaginationParams)
+	queryParams = appendPaginationParams(queryParams, request.Pagination)
 
 	response := &DescribeInvoicesResponse{Request: request}
 
