@@ -124,13 +124,13 @@ type Pagination struct {
 	HasNext       bool   `json:"has_next"`
 }
 
-type PortfolioCommission struct {
+type Commission struct {
 	Type          string `json:"type"`
 	Rate          string `json:"rate"`
 	TradingVolume string `json:"trading_volume"`
 }
 
-func (p PortfolioCommission) RateNum() (rate decimal.Decimal, err error) {
+func (p Commission) RateNum() (rate decimal.Decimal, err error) {
 	rate, err = strToNum(p.Rate)
 	if err != nil {
 		err = fmt.Errorf("Invalid commission rate: %s - err: %w", p.Rate, err)
@@ -375,22 +375,22 @@ type InvoiceItem struct {
 	Total          float64 `json:"total"`
 }
 
-type PortfolioPostTradeCreditAmountDue struct {
+type PostTradeCreditAmountDue struct {
 	Currency string    `json:"currency"`
 	Amount   string    `json:"amount"`
 	DueDate  time.Time `json:"due_date"`
 }
 
-type PortfolioPostTradeCredit struct {
-	Id                      string                               `json:"portfolio_id"`
-	Currency                string                               `json:"currency"`
-	Limit                   string                               `json:"limit"`
-	Utilized                string                               `json:"utilized"`
-	Available               string                               `json:"available"`
-	Frozen                  bool                                 `json:"frozen"`
-	AmountsDue              []*PortfolioPostTradeCreditAmountDue `json:"amounts_due"`
-	FrozenReason            string                               `json:"frozen_reason"`
-	Enabled                 bool                                 `json:"enabled"`
-	AdjustedCreditUtilized  string                               `json:"adjusted_credit_utilized"`
-	AdjustedPortfolioEquity string                               `json:"adjusted_portfolio_equity"`
+type PostTradeCredit struct {
+	Id                     string                      `json:"portfolio_id"`
+	Currency               string                      `json:"currency"`
+	Limit                  string                      `json:"limit"`
+	Utilized               string                      `json:"utilized"`
+	Available              string                      `json:"available"`
+	Frozen                 bool                        `json:"frozen"`
+	AmountsDue             []*PostTradeCreditAmountDue `json:"amounts_due"`
+	FrozenReason           string                      `json:"frozen_reason"`
+	Enabled                bool                        `json:"enabled"`
+	AdjustedCreditUtilized string                      `json:"adjusted_credit_utilized"`
+	AdjustedEquity         string                      `json:"adjusted_portfolio_equity"`
 }
