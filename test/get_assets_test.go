@@ -36,6 +36,6 @@ func TestGetAssets(t *testing.T) {
 	}
 
 	if len(response.Assets) == 0 {
-		t.Fatal("expected assets in describe")
+		t.Fatal("expected assets in get")
 	}
 }

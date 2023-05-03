@@ -32,7 +32,7 @@ func TestGetWallets(t *testing.T) {
 	}
 
 	if len(walletsResponse.Wallets) == 0 {
-		t.Fatal("expected trading wallets in describe")
+		t.Fatal("expected trading wallets in get")
 	}
 
 	testGetWallet(t, client, walletsResponse.Wallets[0].Id)

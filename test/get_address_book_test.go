@@ -32,7 +32,7 @@ func TestGetAddressBook(t *testing.T) {
 	}
 
 	if len(response.Addresses) == 0 {
-		t.Fatal("expected addresses in describe")
+		t.Fatal("expected addresses in get")
 	}
 
 	if len(response.Addresses[0].Id) == 0 {

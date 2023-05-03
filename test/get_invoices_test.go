@@ -37,7 +37,7 @@ func TestGetInvoices(t *testing.T) {
 	}
 
 	if len(response.Invoices) == 0 {
-		t.Fatal("expected invoices in describe")
+		t.Fatal("expected invoices in get")
 	}
 }
 */

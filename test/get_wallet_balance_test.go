@@ -32,7 +32,7 @@ func TestGetWalletBalance(t *testing.T) {
 	}
 
 	if len(response.Wallets) == 0 {
-		t.Fatal("expected wallets in describe")
+		t.Fatal("expected wallets in get")
 	}
 
 	for _, w := range response.Wallets {

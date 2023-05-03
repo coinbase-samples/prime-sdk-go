@@ -30,7 +30,7 @@ func TestGetPortfolios(t *testing.T) {
 	}
 
 	if len(response.Portfolios) == 0 {
-		t.Fatal("expected portfolios in describe")
+		t.Fatal("expected portfolios in get")
 	}
 
 	if len(response.Portfolios[0].Id) == 0 {
@@ -46,7 +46,7 @@ func TestGetPortfolios(t *testing.T) {
 	}
 
 	if portfolio == nil {
-		t.Fatal("expected describe to include credentials portfolio")
+		t.Fatal("expected get to include credentials portfolio")
 	}
 
 	testGetPortfolio(t, client, portfolio.Id)

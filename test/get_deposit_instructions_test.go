@@ -32,7 +32,7 @@ func TestGetWalletDepositInstructions(t *testing.T) {
 	}
 
 	if len(walletsResponse.Wallets) == 0 {
-		t.Fatal("expected crypto wallets in describe")
+		t.Fatal("expected crypto wallets in get")
 	}
 
 	testGetDepositInstructions(t, client, walletsResponse.Wallets[0].Id)

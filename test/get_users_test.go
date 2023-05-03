@@ -33,7 +33,7 @@ func TestGetPortfolioUsers(t *testing.T) {
 	}
 
 	if len(response.Users) == 0 {
-		t.Fatal("expected users in describe")
+		t.Fatal("expected users in get")
 	}
 
 	if len(response.Users[0].Id) == 0 {

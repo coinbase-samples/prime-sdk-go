@@ -32,7 +32,7 @@ func TestGetActivities(t *testing.T) {
 	}
 
 	if len(response.Activities) == 0 {
-		t.Fatal("expected activities in describe")
+		t.Fatal("expected activities in get")
 	}
 
 	if len(response.Activities[0].Id) == 0 {
