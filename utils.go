@@ -22,7 +22,14 @@ import (
 	"encoding/base64"
 	"fmt"
 	"strings"
+
+	"github.com/shopspring/decimal"
 )
+
+func strToNum(v string) (amount decimal.Decimal, err error) {
+	amount, err = decimal.NewFromString(v)
+	return
+}
 
 func sign(path, body, method, signingKey string, t int64) string {
 	h := hmac.New(sha256.New, []byte(signingKey))

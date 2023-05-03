@@ -31,8 +31,8 @@ type AddressBookEntry struct {
 	AccountIdentifierName string                   `json:"account_identifier_name"`
 	State                 string                   `json:"state"`
 	ExplorerLink          string                   `json:"explorer_link"`
-	LastUsedAt            time.Time                `json:"last_used_at"`
-	AddedAt               time.Time                `json:"added_at"`
+	LastUsed              time.Time                `json:"last_used_at"`
+	Added                 time.Time                `json:"added_at"`
 	AddedBy               *AddressBookEntryAddedBy `json:"added_by"`
 }
 
@@ -43,10 +43,10 @@ type AddressBookEntryAddedBy struct {
 }
 
 type DescribeAddressBookRequest struct {
-	PortfolioId      string            `json:"portfolio_id"`
-	Symbol           string            `json:"currency_symbol"`
-	Search           string            `json:"search"`
-	Pagination *PaginationParams `json:"pagination_params"`
+	PortfolioId string            `json:"portfolio_id"`
+	Symbol      string            `json:"currency_symbol"`
+	Search      string            `json:"search"`
+	Pagination  *PaginationParams `json:"pagination_params"`
 }
 
 type DescribeAddressBookResponse struct {

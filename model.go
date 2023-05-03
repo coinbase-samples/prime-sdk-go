@@ -115,11 +115,11 @@ type User struct {
 }
 
 type Wallet struct {
-	Id        string    `json:"id"`
-	Type      string    `json:"type"`
-	Name      string    `json:"name"`
-	Symbol    string    `json:"symbol"`
-	CreatedAt time.Time `json:"created_at"`
+	Id      string    `json:"id"`
+	Type    string    `json:"type"`
+	Name    string    `json:"name"`
+	Symbol  string    `json:"symbol"`
+	Created time.Time `json:"created_at"`
 }
 
 type Pagination struct {
@@ -201,7 +201,43 @@ func (p Product) QuoteIncrementNum() (amount decimal.Decimal, err error) {
 	return
 }
 
-func strToNum(v string) (amount decimal.Decimal, err error) {
-	amount, err = decimal.NewFromString(v)
-	return
+type Activity struct {
+	Id              string           `json:"id"`
+	ReferenceId     string           `json:"reference_id"`
+	Category        string           `json:"category"`
+	PrimaryType     string           `json:"type"`
+	SecondaryType   string           `json:"secondary_type"`
+	Status          string           `json:"status"`
+	CreatedBy       string           `json:"created_by"`
+	Title           string           `json:"title"`
+	Description     string           `json:"description"`
+	UserActions     []*UserAction    `json:"user_actions"`
+	AccountMetadata *AccountMetadata `json:"account_metadata"`
+	OrdersMetadata  *OrdersMetadata  `json:"orders_metadata"`
+	Symbols         []string         `json:"symbols"`
+	Created         string           `json:"created_at"`
+	Updated         string           `json:"updated_at"`
+}
+
+type TransactionsMetadata struct {
+	Consensus *Consensus `json:"consensus"`
+}
+
+type AccountMetadata struct {
+	Consensus *Consensus `json:"consensus"`
+}
+
+// An empty/unimplemented/placeholder object in Prime
+type OrdersMetadata struct{}
+
+type Consensus struct {
+	ApprovalDeadline string `json:"approval_deadline"`
+	PassedConsensus  bool   `json:"has_passed_consensus"`
+}
+
+type UserAction struct {
+	Action               string                `json:"action"`
+	UserId               string                `json:"user_id"`
+	Timestamp            string                `json:"timestamp"`
+	TransactionsMetadata *TransactionsMetadata `json:"transactions_metadata"`
 }
