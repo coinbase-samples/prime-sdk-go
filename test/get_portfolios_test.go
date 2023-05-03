@@ -51,7 +51,7 @@ func TestGetPortfolios(t *testing.T) {
 
 	testGetPortfolio(t, client, portfolio.Id)
 
-	//testGetPortfolioCredit(t, client, response.Portfolios[0].Id)
+	//testGetCredit(t, client, response.Portfolios[0].Id)
 }
 
 func testGetPortfolio(t *testing.T, client *prime.Client, portfolioId string) {
@@ -85,13 +85,13 @@ func testGetPortfolio(t *testing.T, client *prime.Client, portfolioId string) {
 
 }
 
-func testGetPortfolioCredit(t *testing.T, client *prime.Client, portfolioId string) {
+func testGetCredit(t *testing.T, client *prime.Client, portfolioId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.GetPortfolioCredit(ctx, &prime.GetPortfolioCreditRequest{
-		PortfolioId: portfolioId,
+	response, err := client.GetCredit(ctx, &prime.GetCreditRequest{
+		Id: portfolioId,
 	})
 
 	if err != nil {

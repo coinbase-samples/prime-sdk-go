@@ -18,7 +18,7 @@ func TestCommission(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	response, err := client.GetCommission(ctx, &prime.GetommissionRequest{
+	response, err := client.GetCommission(ctx, &prime.GetCommissionRequest{
 		PortfolioId: client.Credentials.PortfolioId,
 	})
 
