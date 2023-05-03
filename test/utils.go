@@ -16,9 +16,9 @@ func loadEntityId(client *prime.Client) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.DescribePortfolio(
+	response, err := client.GetPortfolio(
 		ctx,
-		&prime.DescribePortfolioRequest{
+		&prime.GetPortfolioRequest{
 			PortfolioId: client.Credentials.PortfolioId,
 		},
 	)

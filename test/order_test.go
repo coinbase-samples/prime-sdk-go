@@ -53,21 +53,21 @@ func TestOrders(t *testing.T) {
 
 	orderId := testCreateOrder(t, client, order)
 
-	testDescribeOrder(t, client, orderId)
+	testGetOrder(t, client, orderId)
 
-	testDescribeOpenOrders(t, client, testProductId, orderId)
+	testGetOpenOrders(t, client, testProductId, orderId)
 
 	testCancelOrder(t, client, orderId)
 }
 
-func testDescribeOpenOrders(t *testing.T, client *prime.Client, productId, orderId string) {
+func testGetOpenOrders(t *testing.T, client *prime.Client, productId, orderId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.DescribeOpenOrders(
+	response, err := client.GetOpenOrders(
 		ctx,
-		&prime.DescribeOpenOrdersRequest{
+		&prime.GetOpenOrdersRequest{
 			PortfolioId: client.Credentials.PortfolioId,
 			ProductId:   productId,
 		},
@@ -122,14 +122,14 @@ func testCreateOrder(t *testing.T, client *prime.Client, order *prime.Order) str
 	return response.OrderId
 }
 
-func testDescribeOrder(t *testing.T, client *prime.Client, orderId string) {
+func testGetOrder(t *testing.T, client *prime.Client, orderId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.DescribeOrder(
+	response, err := client.GetOrder(
 		ctx,
-		&prime.DescribeOrderRequest{
+		&prime.GetOrderRequest{
 			PortfolioId: client.Credentials.PortfolioId,
 			OrderId:     orderId,
 		},

@@ -101,10 +101,6 @@ type PaginationParams struct {
 	SortDirection string `json:"sort_direction"`
 }
 
-func (r DescribeWalletsResponse) HasNext() bool {
-	return r.Pagination != nil && r.Pagination.HasNext
-}
-
 type User struct {
 	Id          string `json:"id"`
 	Name        string `json:"name"`
