@@ -32,7 +32,6 @@ type DescribeProductsResponse struct {
 	Request    *DescribeProductsRequest `json:"request"`
 }
 
-// TODO: Add an interator version as well
 func (c Client) DescribeProducts(
 	ctx context.Context,
 	request *DescribeProductsRequest,

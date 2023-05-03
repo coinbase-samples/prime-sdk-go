@@ -33,23 +33,6 @@ type DescribeWalletDepositInstructionsResponse struct {
 	Request *DescribeWalletDepositInstructionsRequest
 }
 
-type CryptoDepositInstructions struct {
-	Id                string `json:"id"`
-	Name              string `json:"name"`
-	Type              string `json:"type"`
-	Address           string `json:"address"`
-	AccountIdentifier string `json:"account_identifier"`
-}
-
-type FiatDepositInstructions struct {
-	Id            string `json:"id"`
-	Name          string `json:"name"`
-	Type          string `json:"type"`
-	AccountNumber string `json:"account_number"`
-	RoutingNumber string `json:"routing_number"`
-	ReferenceCode string `json:"reference_code"`
-}
-
 func (c Client) DescribeWalletDepositInstructions(
 	ctx context.Context,
 	request *DescribeWalletDepositInstructionsRequest,

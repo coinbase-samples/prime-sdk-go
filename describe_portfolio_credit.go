@@ -19,7 +19,6 @@ package prime
 import (
 	"context"
 	"fmt"
-	"time"
 )
 
 type DescribePortfolioCreditRequest struct {
@@ -29,26 +28,6 @@ type DescribePortfolioCreditRequest struct {
 type DescribePortfolioCreditResponse struct {
 	PostTradeCredit *PortfolioPostTradeCredit       `json:"post_trade_credit"`
 	Request         *DescribePortfolioCreditRequest `json:"request"`
-}
-
-type PortfolioPostTradeCreditAmountDue struct {
-	Currency string    `json:"currency"`
-	Amount   string    `json:"amount"`
-	DueDate  time.Time `json:"due_date"`
-}
-
-type PortfolioPostTradeCredit struct {
-	Id                      string                               `json:"portfolio_id"`
-	Currency                string                               `json:"currency"`
-	Limit                   string                               `json:"limit"`
-	Utilized                string                               `json:"utilized"`
-	Available               string                               `json:"available"`
-	Frozen                  bool                                 `json:"frozen"`
-	AmountsDue              []*PortfolioPostTradeCreditAmountDue `json:"amounts_due"`
-	FrozenReason            string                               `json:"frozen_reason"`
-	Enabled                 bool                                 `json:"enabled"`
-	AdjustedCreditUtilized  string                               `json:"adjusted_credit_utilized"`
-	AdjustedPortfolioEquity string                               `json:"adjusted_portfolio_equity"`
 }
 
 func (c Client) DescribePortfolioCredit(

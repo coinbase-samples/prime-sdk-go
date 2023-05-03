@@ -25,14 +25,6 @@ type DescribeAssetsRequest struct {
 	EntityId string `json:"entity_id"`
 }
 
-type Asset struct {
-	Name             string `json:"name"`
-	Symbol           string `json:"symbol"`
-	DecimalPrecision string `json:"decial_precision"`
-	TradingSupported bool   `json:"trading_supported"`
-	ExplorerUrl      string `json:"explorer_url"`
-}
-
 type DescribeAssetsResponse struct {
 	Assets  []*Asset               `json:"assets"`
 	Request *DescribeAssetsRequest `json:"request"`

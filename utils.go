@@ -22,9 +22,14 @@ import (
 	"encoding/base64"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/shopspring/decimal"
 )
+
+func TimeToStr(t time.Time) string {
+	return t.Format("2006-01-02T15:04:05Z")
+}
 
 func strToNum(v string) (amount decimal.Decimal, err error) {
 	amount, err = decimal.NewFromString(v)

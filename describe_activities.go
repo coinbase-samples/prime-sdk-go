@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"time"
 )
 
 type DescribeActivitiesRequest struct {
@@ -26,8 +27,8 @@ type DescribeActivitiesRequest struct {
 	Symbols     []string          `json:"symbols"`
 	Categories  []string          `json:"categories"`
 	Statuses    []string          `json:"statuses"`
-	StartTime   string            `json:"start_time"`
-	EndTime     string            `json:"end_time"`
+	Start       time.Time         `json:"start_time"`
+	End         time.Time         `json:"end_time"`
 	Pagination  *PaginationParams `json:"pagination_params"`
 }
 
@@ -44,9 +45,14 @@ func (c Client) DescribeActivities(
 
 	path := fmt.Sprintf("/portfolios/%s/activities", request.PortfolioId)
 
-	queryParams := appendQueryParam(emptyQueryParams, "start_time", request.StartTime)
+	var queryParams string
+	if !request.Start.IsZero() {
+		queryParams = appendQueryParam(queryParams, "start_time", TimeToStr(request.Start))
+	}
 
-	queryParams = appendQueryParam(emptyQueryParams, "end_time", request.EndTime)
+	if !request.End.IsZero() {
+		queryParams = appendQueryParam(queryParams, "end_time", TimeToStr(request.End))
+	}
 
 	for _, v := range request.Symbols {
 		queryParams = appendQueryParam(queryParams, "symbols", v)

@@ -30,30 +30,6 @@ type DescribeInvoicesRequest struct {
 	Pagination   *PaginationParams `json:"pagination_params"`
 }
 
-type Invoice struct {
-	Id            string         `json:"id"`
-	BillingYear   int32          `json:"billing_year"`
-	BillingMonth  int32          `json:"billing_month"`
-	DueDate       string         `json:"due_date"`
-	InvoiceNumber string         `json:"invoice_number"`
-	State         string         `json:"state"`
-	UsdAmountPaid float64        `json:"usd_amount_paid"`
-	UsdAmountOwed float64        `json:"usd_amount_owed"`
-	Items         []*InvoiceItem `json:"invoice_items"`
-}
-
-type InvoiceItem struct {
-	Description    string  `json:"description"`
-	CurrencySymbol string  `json:"currency_symbol"`
-	InvoiceType    string  `json:"invoice_type"`
-	Type           string  `json:"invoice_type"`
-	Rate           float64 `json:"rate"`
-	Quantity       float64 `json:"quantity"`
-	Price          float64 `json:"price"`
-	AverageAuc     float64 `json:"average_auc"`
-	Total          float64 `json:"total"`
-}
-
 type DescribeInvoicesResponse struct {
 	Invoices   []*Invoice               `json:"invoices"`
 	Request    *DescribeInvoicesRequest `json:"request"`

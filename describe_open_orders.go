@@ -21,11 +21,6 @@ import (
 	"fmt"
 )
 
-// This API endpoint is currently being adjusted by Coinbase
-// https://docs.cloud.coinbase.com/prime/reference/primerestapi_getopenorders
-// This function will change once the Prime endpoint desing is finalized
-// This will not return more than 1k open orders and pagination is not supported
-
 type DescribeOpenOrdersRequest struct {
 	PortfolioId string `json:"portfolio_id"`
 	ProductId   string `json:"product_id"`
@@ -36,6 +31,11 @@ type DescribeOpenOrdersResponse struct {
 	Request *DescribeOpenOrdersRequest `json:"request"`
 }
 
+// DescribeOpenOrders enables searching for open orders by product id.
+// This API endpoint is currently being adjusted by Coinbase.
+// This function will change once the Prime endpoint design is finalized.
+// This will not return more than 1k open orders and pagination is not supported.
+// https://docs.cloud.coinbase.com/prime/reference/primerestapi_getopenorders
 func (c Client) DescribeOpenOrders(
 	ctx context.Context,
 	request *DescribeOpenOrdersRequest,
@@ -43,7 +43,7 @@ func (c Client) DescribeOpenOrders(
 
 	path := fmt.Sprintf("/portfolios/%s/open_orders", request.PortfolioId)
 
-	queryParams := fmt.Sprintf("?product_ids=%s", request.ProductId)
+	queryParams := appendQueryParam(emptyQueryParams, "product_ids", request.ProductId)
 
 	response := &DescribeOpenOrdersResponse{Request: request}
 
