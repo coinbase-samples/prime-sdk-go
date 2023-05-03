@@ -22,10 +22,10 @@ import (
 )
 
 type DescribeWalletsRequest struct {
-	PortfolioId      string            `json:"portfolio_id"`
-	Type             string            `json:"type"`
-	Symbols          []string          `json:"symbols"`
-	PaginationParams *PaginationParams `json:"pagination_params"`
+	PortfolioId string            `json:"portfolio_id"`
+	Type        string            `json:"type"`
+	Symbols     []string          `json:"symbols"`
+	Pagination  *PaginationParams `json:"pagination_params"`
 }
 
 type DescribeWalletsResponse struct {
@@ -47,7 +47,7 @@ func (c Client) DescribeWallets(
 		queryParams = appendQueryParam(queryParams, "symbols", v)
 	}
 
-	queryParams = appendPaginationParams(queryParams, request.PaginationParams)
+	queryParams = appendPaginationParams(queryParams, request.Pagination)
 
 	response := &DescribeWalletsResponse{Request: request}
 

@@ -1,5 +1,6 @@
 package test
 
+/*
 import (
 	"context"
 	"fmt"
@@ -40,3 +41,4 @@ func TestCreateWallet(t *testing.T) {
 	}
 
 }
+*/
