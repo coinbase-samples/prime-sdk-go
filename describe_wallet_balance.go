@@ -23,7 +23,7 @@ import (
 
 type DescribeWalletBalanceRequest struct {
 	PortfolioId string `json:"portfolio_id"`
-	WalletId    string `json:"wallet_id"`
+	Id          string `json:"wallet_id"`
 }
 
 type DescribeWalletBalanceResponse struct {
@@ -36,7 +36,7 @@ func (c Client) DescribeWalletBalance(
 	request *DescribeWalletBalanceRequest,
 ) (*DescribeWalletBalanceResponse, error) {
 
-	path := fmt.Sprintf("/portfolios/%s/wallets/%s/balance", request.PortfolioId, request.WalletId)
+	path := fmt.Sprintf("/portfolios/%s/wallets/%s/balance", request.PortfolioId, request.Id)
 
 	response := &DescribeWalletBalanceResponse{Request: request}
 
