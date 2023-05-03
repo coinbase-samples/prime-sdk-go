@@ -8,7 +8,7 @@ import (
 	prime "github.com/coinbase-samples/prime-sdk-go"
 )
 
-func TestOrder(t *testing.T) {
+func TestOrders(t *testing.T) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -17,6 +17,8 @@ func TestOrder(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	testProductId := "ADA-USD"
 
 	order := &prime.Order{
 		PortfolioId:   client.Credentials.PortfolioId,
@@ -53,18 +55,51 @@ func TestOrder(t *testing.T) {
 
 	testDescribeOrder(t, client, orderId)
 
+	testDescribeOpenOrders(t, client, testProductId, orderId)
+
 	testCancelOrder(t, client, orderId)
+}
+
+func testDescribeOpenOrders(t *testing.T, client *prime.Client, productId, orderId string) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	response, err := client.DescribeOpenOrders(
+		ctx,
+		&prime.DescribeOpenOrdersRequest{
+			PortfolioId: client.Credentials.PortfolioId,
+			ProductId:   productId,
+		},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(response.Orders) == 0 {
+		t.Error("expected open orders to have > 0")
+	}
+
+	var found bool
+
+	for _, o := range response.Orders {
+
+		if o.Id == orderId {
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		t.Error("expected to find an existing open order")
+	}
+
 }
 
 func testCreateOrder(t *testing.T, client *prime.Client, order *prime.Order) string {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-
-	client, err := newLiveTestClient()
-	if err != nil {
-		t.Fatal(err)
-	}
 
 	response, err := client.CreateOrder(
 		ctx,
