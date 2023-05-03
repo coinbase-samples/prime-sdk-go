@@ -18,35 +18,31 @@ package prime
 
 import (
 	"context"
-	"errors"
 	"fmt"
 )
 
-type CreateOrderPreviewResponse struct {
-	Order   *Order              `json:"order"`
-	Request *CreateOrderRequest `json:"request"`
+type DescribeOrderRequest struct {
+	PortfolioId string `json:"portfolio_id"`
+	OrderId     string `json:"order_id"`
 }
 
-func (c Client) CreateOrderPreview(
+type DescribeOrderResponse struct {
+	Order   *Order                `json:"order"`
+	Request *DescribeOrderRequest `json:"request"`
+}
+
+func (c Client) DescribeOrder(
 	ctx context.Context,
-	request *CreateOrderRequest,
-) (*CreateOrderPreviewResponse, error) {
+	request *DescribeOrderRequest,
+) (*DescribeOrderResponse, error) {
 
-	if request.Order == nil {
-		return nil, errors.New("order not set on request")
-	}
+	path := fmt.Sprintf("/portfolios/%s/orders/%s", request.PortfolioId, request.OrderId)
 
-	path := fmt.Sprintf("/portfolios/%s/order_preview", request.Order.PortfolioId)
+	response := &DescribeOrderResponse{Request: request}
 
-	response := &CreateOrderPreviewResponse{Request: request}
-
-	responseOrder := &Order{}
-
-	if err := post(ctx, c, path, emptyQueryParams, request.Order, responseOrder); err != nil {
+	if err := get(ctx, c, path, emptyQueryParams, request, response); err != nil {
 		return nil, err
 	}
-
-	response.Order = responseOrder
 
 	return response, nil
 }
