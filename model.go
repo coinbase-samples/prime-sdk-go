@@ -265,6 +265,39 @@ type Order struct {
 	Slippage           string `json:"slippage,omitempty"`
 }
 
+type Transaction struct {
+	Id                string    `json:"id"`
+	WalletId          string    `json:"wallet_id"`
+	PortfolioId       string    `json:"portfolio_id"`
+	Type              string    `json:"type"`
+	Status            string    `json:"status"`
+	Symbol            string    `json:"symbol"`
+	Created           time.Time `json:"created_at"`
+	Completed         time.Time `json:"completed_at"`
+	Amount            string    `json:"amount"`
+	TransferFrom      *Transfer `json:"transfer_from"`
+	TransferTo        *Transfer `json:"transfer_to"`
+	NetworkFees       string    `json:"network_fees"`
+	Fees              string    `json:"fees"`
+	FeeSymbol         string    `json:"fee_symbol"`
+	BlockchainIds     []string  `json:"blockchain_ids"`
+	TransactionId     string    `json:"transaction_id"`
+	DestinationSymbol string    `json:"destination_symbol"`
+}
+
+type Transfer struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
+}
+
+func (tr Transfer) ValueNum() (amount decimal.Decimal, err error) {
+	amount, err = strToNum(tr.Value)
+	if err != nil {
+		err = fmt.Errorf("invalid transfer value: %s - type: %s - msg: %v", tr.Value, tr.Type, err)
+	}
+	return
+}
+
 type Activity struct {
 	Id              string           `json:"id"`
 	ReferenceId     string           `json:"reference_id"`
