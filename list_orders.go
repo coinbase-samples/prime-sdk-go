@@ -22,7 +22,7 @@ import (
 	"time"
 )
 
-type GetOrdersRequest struct {
+type ListOrdersRequest struct {
 	PortfolioId string            `json:"portfolio_id"` // required
 	Statuses    []string          `json:"order_statuses"`
 	ProductIds  []string          `json:"product_ids"`
@@ -33,20 +33,20 @@ type GetOrdersRequest struct {
 	Pagination  *PaginationParams `json:"pagination_params"`
 }
 
-type GetOrdersResponse struct {
-	Orders     []*Order               `json:"orders"`
-	Pagination *Pagination            `json:"pagination"`
-	Request    *GetOrdersRequest `json:"request"`
+type ListOrdersResponse struct {
+	Orders     []*Order           `json:"orders"`
+	Pagination *Pagination        `json:"pagination"`
+	Request    *ListOrdersRequest `json:"request"`
 }
 
-// GetOrders returns orders based on query params. Start time is requred.
+// ListOrders returns orders based on query params. Start time is requred.
 // This API endpoint cannot list open orders, so do not add an OPEN status
 // to the status param.
 // https://docs.cloud.coinbase.com/prime/reference/primerestapi_getorders
-func (c Client) GetOrders(
+func (c Client) ListOrders(
 	ctx context.Context,
-	request *GetOrdersRequest,
-) (*GetOrdersResponse, error) {
+	request *ListOrdersRequest,
+) (*ListOrdersResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/orders", request.PortfolioId)
 
@@ -76,7 +76,7 @@ func (c Client) GetOrders(
 
 	queryParams = appendPaginationParams(queryParams, request.Pagination)
 
-	response := &GetOrdersResponse{Request: request}
+	response := &ListOrdersResponse{Request: request}
 	if err := get(ctx, c, path, queryParams, request, response); err != nil {
 		return response, err
 	}
