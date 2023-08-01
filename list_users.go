@@ -45,8 +45,8 @@ type ListUsersResponse struct {
 
 func (c Client) ListUsers(
 	ctx context.Context,
-	request *GetUsersRequest,
-) (*GetUsersResponse, error) {
+	request *ListUsersRequest,
+) (*ListUsersResponse, error) {
 
 	path := fmt.Sprintf("/entities/%s/users", request.EntityId)
 
