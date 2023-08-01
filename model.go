@@ -118,6 +118,11 @@ type Wallet struct {
 	Created time.Time `json:"created_at"`
 }
 
+type BlockchainAddress struct {
+	Address           string `json:"address"`
+	AccountIdentifier string `json:"account_identifier"`
+}
+
 type Pagination struct {
 	NextCursor    string `json:"next_cursor"`
 	SortDirection string `json:"sort_direction"`

@@ -37,7 +37,7 @@ func (c Client) ListPortfolios(
 	response := &ListPortfoliosResponse{Request: request}
 
 	if err := get(ctx, c, path, emptyQueryParams, request, response); err != nil {
-		return response, err
+		return nil, err
 	}
 
 	return response, nil

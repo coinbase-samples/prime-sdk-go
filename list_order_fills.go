@@ -44,7 +44,7 @@ func (c Client) ListOrderFills(
 
 	response := &ListOrderFillsResponse{Request: request}
 	if err := get(ctx, c, path, queryParams, request, response); err != nil {
-		return response, err
+		return nil, err
 	}
 
 	return response, nil

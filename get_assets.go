@@ -40,7 +40,7 @@ func (c Client) GetAssets(
 	response := &GetAssetsResponse{Request: request}
 
 	if err := get(ctx, c, path, emptyQueryParams, request, response); err != nil {
-		return response, fmt.Errorf("unable to GetAssets: %w", err)
+		return nil, fmt.Errorf("unable to GetAssets: %w", err)
 	}
 
 	return response, nil

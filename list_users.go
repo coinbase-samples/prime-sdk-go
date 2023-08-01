@@ -55,7 +55,7 @@ func (c Client) ListUsers(
 	response := &ListUsersResponse{Request: request}
 
 	if err := get(ctx, c, path, queryParams, request, response); err != nil {
-		return response, err
+		return nil, err
 	}
 
 	return response, nil
@@ -73,7 +73,7 @@ func (c Client) ListPortfolioUsers(
 	response := &ListPortfolioUsersResponse{Request: request}
 
 	if err := get(ctx, c, path, queryParams, request, response); err != nil {
-		return response, err
+		return nil, err
 	}
 
 	return response, nil

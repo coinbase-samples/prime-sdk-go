@@ -77,8 +77,9 @@ func (c Client) ListOrders(
 	queryParams = appendPaginationParams(queryParams, request.Pagination)
 
 	response := &ListOrdersResponse{Request: request}
+
 	if err := get(ctx, c, path, queryParams, request, response); err != nil {
-		return response, err
+		return nil, err
 	}
 
 	return response, nil
