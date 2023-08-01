@@ -55,19 +55,19 @@ func TestOrders(t *testing.T) {
 
 	testGetOrder(t, client, orderId)
 
-	testGetOpenOrders(t, client, testProductId, orderId)
+	testListOpenOrders(t, client, testProductId, orderId)
 
 	testCancelOrder(t, client, orderId)
 }
 
-func testGetOpenOrders(t *testing.T, client *prime.Client, productId, orderId string) {
+func testListOpenOrders(t *testing.T, client *prime.Client, productId, orderId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.GetOpenOrders(
+	response, err := client.ListOpenOrders(
 		ctx,
-		&prime.GetOpenOrdersRequest{
+		&prime.ListOpenOrdersRequest{
 			PortfolioId: client.Credentials.PortfolioId,
 			ProductId:   productId,
 		},
@@ -174,5 +174,4 @@ func testCancelOrder(t *testing.T, client *prime.Client, orderId string) {
 	if response.OrderId != orderId {
 		t.Error("expected order id in response to match passed order id")
 	}
-
 }
