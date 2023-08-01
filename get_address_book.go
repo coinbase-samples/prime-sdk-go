@@ -29,9 +29,9 @@ type GetAddressBookRequest struct {
 }
 
 type GetAddressBookResponse struct {
-	Addresses  []*AddressBookEntry         `json:"addresses"`
+	Addresses  []*AddressBookEntry    `json:"addresses"`
 	Request    *GetAddressBookRequest `json:"request"`
-	Pagination *Pagination                 `json:"pagination"`
+	Pagination *Pagination            `json:"pagination"`
 }
 
 func (c Client) GetAddressBook(
