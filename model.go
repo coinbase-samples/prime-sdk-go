@@ -118,6 +118,30 @@ type Wallet struct {
 	Created time.Time `json:"created_at"`
 }
 
+type AllocationDestination struct {
+	LegId             string `json:"leg_id"`
+	SourcePortfolioId string `json:"portfolio_id"`
+	AllocationBase    string `json:"allocation_base"`
+	AllocationQuote   string `json:"allocation_quote"`
+	FeesAllocatedLeg  string `json:"fees_allocated_leg"`
+}
+
+type Allocation struct {
+	RootId        string                   `json:"root_id"`
+	ReversalId    string                   `json:"reversal_id"`
+	Completed     string                   `json:"allocation_completed_at"`
+	UserId        string                   `json:"user_id"`
+	ProductId     string                   `json:"product_id"`
+	AvgPrice      string                   `json:"avg_price"`
+	BaseQuantity  string                   `json:"base_quantity"`
+	QuoteValue    string                   `json:"quote_value"`
+	FeesAllocated string                   `json:"fees_allocated"`
+	Status        string                   `json:"status"`
+	Source        string                   `json:"source"`
+	OrderIds      []string                 `json:"order_ids"`
+	Destinations  []*AllocationDestination `json:"destinations"`
+}
+
 type BlockchainAddress struct {
 	Address           string `json:"address"`
 	AccountIdentifier string `json:"account_identifier"`
