@@ -8,7 +8,7 @@ import (
 	prime "github.com/coinbase-samples/prime-sdk-go"
 )
 
-func TestGetWalletBalance(t *testing.T) {
+func TestListWallets(t *testing.T) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -18,7 +18,7 @@ func TestGetWalletBalance(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	response, err := client.ListWallets(ctx, &prime.ListWalletsRequest{
+	walletsResponse, err := client.ListWallets(ctx, &prime.ListWalletsRequest{
 		PortfolioId: client.Credentials.PortfolioId,
 		Type:        prime.WalletTypeTrading,
 	})
@@ -27,27 +27,23 @@ func TestGetWalletBalance(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if response == nil {
+	if walletsResponse == nil {
 		t.Fatal(err)
 	}
 
-	if len(response.Wallets) == 0 {
-		t.Fatal("expected wallets in get")
+	if len(walletsResponse.Wallets) == 0 {
+		t.Fatal("expected trading wallets in get")
 	}
 
-	for _, w := range response.Wallets {
-
-		testGetWalletBalance(t, client, w.Id)
-
-	}
+	testGetWallet(t, client, walletsResponse.Wallets[0].Id)
 }
 
-func testGetWalletBalance(t *testing.T, client *prime.Client, walletId string) {
+func testGetWallet(t *testing.T, client *prime.Client, walletId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.GetWalletBalance(ctx, &prime.GetWalletBalanceRequest{
+	response, err := client.GetWallet(ctx, &prime.GetWalletRequest{
 		PortfolioId: client.Credentials.PortfolioId,
 		Id:          walletId,
 	})
@@ -60,8 +56,12 @@ func testGetWalletBalance(t *testing.T, client *prime.Client, walletId string) {
 		t.Fatal("expected wallet response to not be nil")
 	}
 
-	if response.Balance == nil {
+	if response.Wallet == nil {
 		t.Fatal("expected wallet to not be nil")
+	}
+
+	if response.Wallet.Id != walletId {
+		t.Fatalf("expected wallet id: %s - received wallet id: %s", walletId, response.Wallet.Id)
 	}
 
 }

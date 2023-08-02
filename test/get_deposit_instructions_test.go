@@ -18,7 +18,7 @@ func TestGetWalletDepositInstructions(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	walletsResponse, err := client.GetWallets(ctx, &prime.GetWalletsRequest{
+	walletsResponse, err := client.ListWallets(ctx, &prime.ListWalletsRequest{
 		PortfolioId: client.Credentials.PortfolioId,
 		Type:        prime.WalletTypeVault,
 	})
