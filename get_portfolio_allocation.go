@@ -44,7 +44,7 @@ func (c Client) GetPortfolioAllocation(
 
 	response := &GetPortfolioAllocationResponse{Request: request}
 
-	if err := post(ctx, c, path, emptyQueryParams, request, response); err != nil {
+	if err := get(ctx, c, path, emptyQueryParams, request, response); err != nil {
 		return nil, err
 	}
 

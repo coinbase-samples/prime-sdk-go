@@ -43,6 +43,7 @@ func (c Client) ListOrderFills(
 	queryParams := appendPaginationParams(emptyQueryParams, request.Pagination)
 
 	response := &ListOrderFillsResponse{Request: request}
+
 	if err := get(ctx, c, path, queryParams, request, response); err != nil {
 		return nil, err
 	}

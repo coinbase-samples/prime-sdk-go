@@ -63,7 +63,7 @@ func (c Client) ListPortfolioAllocations(
 
 	response := &ListPortfolioAllocationsResponse{Request: request}
 
-	if err := post(ctx, c, path, queryParams, request, response); err != nil {
+	if err := get(ctx, c, path, queryParams, request, response); err != nil {
 		return nil, err
 	}
 
