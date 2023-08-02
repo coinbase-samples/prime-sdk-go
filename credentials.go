@@ -29,7 +29,7 @@ type Credentials struct {
 	PortfolioId string `json:"portfolioId"`
 	EntityId    string `json:"entityId"`
 
-	// The Servie Account ID is the API key's user id equivalent when looking at activities
+	// The Service Account ID is the API key's user id equivalent when looking at activities
 	SvcAccountId string `json:"svcAccountId"`
 }
 
