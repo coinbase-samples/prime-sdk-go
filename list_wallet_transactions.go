@@ -71,7 +71,7 @@ func (c Client) ListWalletTransactions(
 
 	response := &ListWalletTransactionsResponse{Request: request}
 
-	if err := get(ctx, c, path, emptyQueryParams, request, response); err != nil {
+	if err := get(ctx, c, path, queryParams, request, response); err != nil {
 		return nil, err
 	}
 
