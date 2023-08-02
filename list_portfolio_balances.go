@@ -21,24 +21,24 @@ import (
 	"fmt"
 )
 
-type ListWalletBalancesRequest struct {
+type ListPortfolioBalancesRequest struct {
 	PortfolioId string   `json:"portfolio_id"`
 	Type        string   `json:"balance_type"`
 	Symbols     []string `json:"symbols"`
 }
 
-type ListWalletBalancesResponse struct {
-	Balances              []*Balance                 `json:"balances"`
-	Type                  string                     `json:"type"`
-	TradingWalletBalances *BalanceWithHolds          `json:"trading_balances"`
-	VaultWalletBalances   *BalanceWithHolds          `json:"vault_balances"`
-	Request               *ListWalletBalancesRequest `json:"request"`
+type ListPortfolioBalancesResponse struct {
+	Balances              []*Balance                    `json:"balances"`
+	Type                  string                        `json:"type"`
+	TradingWalletBalances *BalanceWithHolds             `json:"trading_balances"`
+	VaultWalletBalances   *BalanceWithHolds             `json:"vault_balances"`
+	Request               *ListPortfolioBalancesRequest `json:"request"`
 }
 
-func (c Client) ListWalletBalances(
+func (c Client) ListPortfolioBalances(
 	ctx context.Context,
-	request *ListWalletBalancesRequest,
-) (*ListWalletBalancesResponse, error) {
+	request *ListPortfolioBalancesRequest,
+) (*ListPortfolioBalancesResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/balances", request.PortfolioId)
 
@@ -51,7 +51,7 @@ func (c Client) ListWalletBalances(
 		queryParams = appendQueryParam(queryParams, "symbols", v)
 	}
 
-	response := &ListWalletBalancesResponse{Request: request}
+	response := &ListPortfolioBalancesResponse{Request: request}
 
 	if err := get(ctx, c, path, queryParams, request, response); err != nil {
 		return nil, err
