@@ -28,7 +28,7 @@ type CreateWalletWithdrawalRequest struct {
 	DestinationType   string                               `json:"destination_type"`
 	IdempotencyKey    string                               `json:"idempotency_key"`
 	Symbol            string                               `json:"currency_symbol"`
-	PaymentMethod     *CreateWalletWithdrawalPaymentMethod `json:""payment_method`
+	PaymentMethod     *CreateWalletWithdrawalPaymentMethod `json:"payment_method"`
 	BlockchainAddress *BlockchainAddress                   `json:"blockchain_address"`
 }
 
