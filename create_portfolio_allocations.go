@@ -31,7 +31,7 @@ type CreatePortfolioAllocationsRequest struct {
 }
 
 type AllocationLeg struct {
-	AllocationLegId        string `json:"allocation_leg_id"`
+	LegId                  string `json:"allocation_leg_id"`
 	DestinationPortfolioId string `json:"destination_portfolio_id"`
 	Amount                 string `json:"amount"`
 }
