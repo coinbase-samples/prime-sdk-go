@@ -21,27 +21,27 @@ import (
 	"fmt"
 )
 
-type GetWalletsRequest struct {
+type ListWalletsRequest struct {
 	PortfolioId string            `json:"portfolio_id"`
 	Type        string            `json:"type"`
 	Symbols     []string          `json:"symbols"`
 	Pagination  *PaginationParams `json:"pagination_params"`
 }
 
-type GetWalletsResponse struct {
-	Wallets    []*Wallet          `json:"wallets"`
-	Request    *GetWalletsRequest `json:"request"`
-	Pagination *Pagination        `json:"pagination"`
+type ListWalletsResponse struct {
+	Wallets    []*Wallet           `json:"wallets"`
+	Request    *ListWalletsRequest `json:"request"`
+	Pagination *Pagination         `json:"pagination"`
 }
 
-func (r GetWalletsResponse) HasNext() bool {
+func (r ListWalletsResponse) HasNext() bool {
 	return r.Pagination != nil && r.Pagination.HasNext
 }
 
-func (c Client) GetWallets(
+func (c Client) ListWallets(
 	ctx context.Context,
-	request *GetWalletsRequest,
-) (*GetWalletsResponse, error) {
+	request *ListWalletsRequest,
+) (*ListWalletsResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId)
 
@@ -53,7 +53,7 @@ func (c Client) GetWallets(
 
 	queryParams = appendPaginationParams(queryParams, request.Pagination)
 
-	response := &GetWalletsResponse{Request: request}
+	response := &ListWalletsResponse{Request: request}
 
 	if err := get(ctx, c, path, queryParams, request, response); err != nil {
 		return nil, err
