@@ -8,7 +8,7 @@ import (
 	prime "github.com/coinbase-samples/prime-sdk-go"
 )
 
-func TestCommission(t *testing.T) {
+func TestPortfolioCommission(t *testing.T) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -18,7 +18,7 @@ func TestCommission(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	response, err := client.GetCommission(ctx, &prime.GetCommissionRequest{
+	response, err := client.GetPortfolioCommission(ctx, &prime.GetPortfolioCommissionRequest{
 		PortfolioId: client.Credentials.PortfolioId,
 	})
 
