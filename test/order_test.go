@@ -127,27 +127,41 @@ func testGetOrder(t *testing.T, client *prime.Client, orderId string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.GetOrder(
-		ctx,
-		&prime.GetOrderRequest{
-			PortfolioId: client.Credentials.PortfolioId,
-			OrderId:     orderId,
-		},
-	)
+	var err error
+	for idx := 0; idx < 3; idx++ {
+
+		var response *prime.GetOrderResponse
+
+		response, err = client.GetOrder(
+			ctx,
+			&prime.GetOrderRequest{
+				PortfolioId: client.Credentials.PortfolioId,
+				OrderId:     orderId,
+			},
+		)
+
+		if err != nil {
+
+			time.Sleep(time.Duration(idx) * time.Second)
+			continue
+		}
+
+		if response.Order == nil {
+			t.Fatal("expected order to be set in response")
+		}
+
+		if len(response.Order.Id) == 0 {
+			t.Error("expected order id to be set in response")
+		}
+
+		if response.Order.Id != orderId {
+			t.Error("expected order id in response to match passed order id")
+		}
+		break
+	}
+
 	if err != nil {
 		t.Fatal(err)
-	}
-
-	if response.Order == nil {
-		t.Fatal("expected order to be set in response")
-	}
-
-	if len(response.Order.Id) == 0 {
-		t.Error("expected order id to be set in response")
-	}
-
-	if response.Order.Id != orderId {
-		t.Error("expected order id in response to match passed order id")
 	}
 }
 
