@@ -26,7 +26,7 @@ type GetPortfolioRequest struct {
 }
 
 type GetPortfolioResponse struct {
-	Portfolio *Portfolio                `json:"portfolio"`
+	Portfolio *Portfolio           `json:"portfolio"`
 	Request   *GetPortfolioRequest `json:"request"`
 }
 
