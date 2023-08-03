@@ -27,7 +27,7 @@ type GetOrderRequest struct {
 }
 
 type GetOrderResponse struct {
-	Order   *Order                `json:"order"`
+	Order   *Order           `json:"order"`
 	Request *GetOrderRequest `json:"request"`
 }
 
