@@ -1,6 +1,5 @@
 package test
 
-/*
 import (
 	"context"
 	"testing"
@@ -40,4 +39,3 @@ func TestListInvoices(t *testing.T) {
 		t.Fatal("expected invoices in get")
 	}
 }
-*/

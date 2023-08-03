@@ -40,7 +40,6 @@ func TestListActivities(t *testing.T) {
 	}
 
 	for _, a := range response.Activities {
-		//fmt.Println(fmt.Sprintf("id: %s - category: %s - primary type: %s - secondary type: %s - symbols: %v - created by: %s - created at: %s - update: %s", a.Id, a.Category, a.PrimaryType, a.SecondaryType, a.Symbols, a.CreatedBy, a.Created, a.Updated))
 
 		if len(a.Id) == 0 {
 			t.Error("expected id to be set")
@@ -73,8 +72,6 @@ func TestListActivities(t *testing.T) {
 			if len(u.Timestamp) == 0 {
 				t.Error("expected timestamp to be set")
 			}
-
-			//fmt.Println(fmt.Sprintf("    user action: %s - user id: %s - timestamp: %s", u.Action, u.UserId, u.Timestamp))
 		}
 
 		if a.AccountMetadata != nil && a.AccountMetadata.Consensus != nil {

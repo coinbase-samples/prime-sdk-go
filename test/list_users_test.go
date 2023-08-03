@@ -2,7 +2,6 @@ package test
 
 import (
 	"context"
-	"fmt"
 	"testing"
 	"time"
 
@@ -42,15 +41,6 @@ func TestListPortfolioUsers(t *testing.T) {
 
 	if len(response.Users[0].PortfolioId) == 0 {
 		t.Fatal("expected user portfolio id to be set")
-	}
-
-	for _, u := range response.Users {
-
-		if u.Id == "367345e1-b77c-5441-8fcc-b68f0bb1cd6e" {
-
-			fmt.Println(fmt.Sprintf("name: %s - email: %s", u.Name, u.Email))
-		}
-
 	}
 
 }

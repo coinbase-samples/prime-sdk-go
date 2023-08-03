@@ -1,9 +1,9 @@
 package test
 
-/*
 import (
 	"context"
 	"fmt"
+	"os"
 	"testing"
 	"time"
 
@@ -11,6 +11,10 @@ import (
 )
 
 func TestCreateAddressBookEntry(t *testing.T) {
+
+	if os.Getenv("PRIME_SDK_FULL_TESTS") != "enabled" {
+		t.Skip()
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -41,4 +45,3 @@ func TestCreateAddressBookEntry(t *testing.T) {
 		t.Fatal("expected an activity id")
 	}
 }
-*/

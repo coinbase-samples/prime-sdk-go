@@ -1,16 +1,20 @@
 package test
 
-/*
 import (
 	"context"
 	"fmt"
 	"testing"
 	"time"
+	"os"
 
 	prime "github.com/coinbase-samples/prime-sdk-go"
 )
 
 func TestCreateWallet(t *testing.T) {
+
+	if os.Getenv("PRIME_SDK_FULL_TESTS") != "enabled" {
+		t.Skip()
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -41,4 +45,5 @@ func TestCreateWallet(t *testing.T) {
 	}
 
 }
-*/
+
+

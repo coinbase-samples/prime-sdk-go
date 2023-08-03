@@ -51,7 +51,6 @@ func TestListPortfolios(t *testing.T) {
 
 	testGetPortfolio(t, client, portfolio.Id)
 
-	//testGetPortfolioCredit(t, client, response.Portfolios[0].Id)
 }
 
 func testGetPortfolio(t *testing.T, client *prime.Client, portfolioId string) {
@@ -85,29 +84,3 @@ func testGetPortfolio(t *testing.T, client *prime.Client, portfolioId string) {
 
 }
 
-func testGetPortfolioCredit(t *testing.T, client *prime.Client, portfolioId string) {
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	response, err := client.GetPortfolioCredit(ctx, &prime.GetPortfolioCreditRequest{
-		Id: portfolioId,
-	})
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if response == nil {
-		t.Fatal("expected portfolio credit response to not be nil")
-	}
-
-	if response.PostTradeCredit == nil {
-		t.Fatal("expected portfolio post trade credit to not be nil")
-	}
-
-	if response.PostTradeCredit.Id != portfolioId {
-		t.Fatalf("expected portfolio id: %s - received portfolio id: %s", portfolioId, response.PostTradeCredit.Id)
-	}
-
-}
