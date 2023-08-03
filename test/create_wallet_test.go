@@ -3,9 +3,9 @@ package test
 import (
 	"context"
 	"fmt"
+	"os"
 	"testing"
 	"time"
-	"os"
 
 	prime "github.com/coinbase-samples/prime-sdk-go"
 )
@@ -45,5 +45,3 @@ func TestCreateWallet(t *testing.T) {
 	}
 
 }
-
-

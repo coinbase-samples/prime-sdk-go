@@ -31,7 +31,7 @@ func TestPortfolioCommission(t *testing.T) {
 	}
 
 	if response.Commission == nil {
-		t.Fatal("expected commision in get")
+		t.Fatal("expected commission in get")
 	}
 
 }
