@@ -33,9 +33,12 @@ There are convenience functions to read the credentials as an environment variab
   "passphrase": "",
   "signingKey": "",
   "portfolioId": "",
-  "svcAccountId": ""
+  "svcAccountId": "",
+  "entityId": ""
 }
 ```
+
+Coinbase Prime API credentials can be created in the Prime web console under Settings -> APIs. Entity ID can be retrieved by calling [Get Portfolio](https://docs.cloud.coinbase.com/prime/reference/primerestapi_getportfolio).
 
 Once the client is initialized, make the desired call. For example, to [list portfolios](https://github.com/coinbase-samples/prime-sdk-go/blob/main/list_portfolios.go),
 pass in the request object, check for an error, and if nil, process the response.
