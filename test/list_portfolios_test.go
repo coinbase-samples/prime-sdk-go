@@ -83,4 +83,3 @@ func testGetPortfolio(t *testing.T, client *prime.Client, portfolioId string) {
 	}
 
 }
-

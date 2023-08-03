@@ -39,7 +39,7 @@ type ListOrdersResponse struct {
 	Request    *ListOrdersRequest `json:"request"`
 }
 
-// ListOrders returns orders based on query params. Start time is requred.
+// ListOrders returns orders based on query params. Start time is required.
 // This API endpoint cannot list open orders, so do not add an OPEN status
 // to the status param.
 // https://docs.cloud.coinbase.com/prime/reference/primerestapi_getorders
