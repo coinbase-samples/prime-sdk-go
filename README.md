@@ -25,7 +25,19 @@ if err := json.Unmarshal([]byte(os.Getenv("PRIME_CREDENTIALS")), credentials); e
 client := prime.NewClient(credentials, http.Client{})
 ```
 
-Once the client is inialized, make the desired call. For example, to [list portfolios](https://github.com/coinbase-samples/prime-sdk-go/blob/main/list_portfolios.go), 
+There are convenience functions to read the credentials as an environment variable (prime.ReadEnvCredentials) and to deserialize the JSON structure (prime.UnmarshalCredentials) if pulled from a different source. The JSON format expected by both is:
+
+```
+{
+  "accessKey": "",
+  "passphrase": "",
+  "signingKey": "",
+  "portfolioId": "",
+  "svcAccountId": ""
+}
+```
+
+Once the client is initialized, make the desired call. For example, to [list portfolios](https://github.com/coinbase-samples/prime-sdk-go/blob/main/list_portfolios.go),
 pass in the request object, check for an error, and if nil, process the response.
 
 
