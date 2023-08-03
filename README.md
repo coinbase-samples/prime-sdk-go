@@ -1,5 +1,8 @@
 # Prime Go SDK README
 
+[![GoDoc](https://godoc.org/github.com/coinbase-samples/prime-sdk-go?status.svg)](https://godoc.org/github.com/coinbase-samples/prime-sdk-go)
+[![Go Report Card](https://goreportcard.com/badge/coinbase-samples/prime-sdk-go)](https://goreportcard.com/report/coinbase-samples/prime-sdk-go)
+
 ## Overview
 
 The *Prime Go SDK* is a sample libary that demonstrates the structure of a [Coinbase Prime](https://prime.coinbase.com/) driver for
