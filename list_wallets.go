@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type ListWalletsRequest struct {
@@ -38,14 +39,14 @@ func (r ListWalletsResponse) HasNext() bool {
 	return r.Pagination != nil && r.Pagination.HasNext
 }
 
-func (c Client) ListWallets(
+func (c *Client) ListWallets(
 	ctx context.Context,
 	request *ListWalletsRequest,
 ) (*ListWalletsResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId)
 
-	queryParams := appendQueryParam(emptyQueryParams, "type", request.Type)
+	queryParams := appendQueryParam(core.EmptyQueryParams, "type", request.Type)
 
 	for _, v := range request.Symbols {
 		queryParams = appendQueryParam(queryParams, "symbols", v)
@@ -55,7 +56,7 @@ func (c Client) ListWallets(
 
 	response := &ListWalletsResponse{Request: request}
 
-	if err := get(ctx, c, path, queryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, queryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

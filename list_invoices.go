@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 	"strconv"
 )
 
@@ -36,7 +37,7 @@ type ListInvoicesResponse struct {
 	Pagination *Pagination          `json:"pagination"`
 }
 
-func (c Client) ListInvoices(
+func (c *Client) ListInvoices(
 	ctx context.Context,
 	request *ListInvoicesRequest,
 ) (*ListInvoicesResponse, error) {
@@ -60,7 +61,7 @@ func (c Client) ListInvoices(
 
 	response := &ListInvoicesResponse{Request: request}
 
-	if err := get(ctx, c, path, queryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, queryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

@@ -17,26 +17,58 @@
 package prime
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
+	"fmt"
+	"github.com/coinbase-samples/core-go"
 	"net/http"
+	"strconv"
+	"time"
 )
 
 var defaultV1ApiBaseUrl = "https://api.prime.coinbase.com/v1"
 
 type Client struct {
-	HttpClient  http.Client
+	httpClient  http.Client
+	httpBaseUrl string
 	Credentials *Credentials
-	HttpBaseUrl string
 }
 
-func (c *Client) BaseUrl(u string) *Client {
-	c.HttpBaseUrl = u
+func (c *Client) HttpBaseUrl() string {
+	return c.httpBaseUrl
+}
+
+func (c *Client) HttpClient() *http.Client {
+	return &c.httpClient
+}
+
+func (c *Client) SetBaseUrl(u string) *Client {
+	c.httpBaseUrl = u
 	return c
 }
 
 func NewClient(credentials *Credentials, httpClient http.Client) *Client {
 	return &Client{
+		httpBaseUrl: defaultV1ApiBaseUrl,
 		Credentials: credentials,
-		HttpClient:  httpClient,
-		HttpBaseUrl: defaultV1ApiBaseUrl,
+		httpClient:  httpClient,
 	}
+}
+
+func addPrimeHeaders(req *http.Request, path string, body []byte, client core.Client, t time.Time) {
+	c := client.(*Client)
+	timestamp := strconv.FormatInt(t.Unix(), 10)
+	signature := sign(req.Method, path, timestamp, c.Credentials.SigningKey, string(body))
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("X-CB-ACCESS-KEY", c.Credentials.AccessKey)
+	req.Header.Add("X-CB-ACCESS-PASSPHRASE", c.Credentials.Passphrase)
+	req.Header.Add("X-CB-ACCESS-SIGNATURE", signature)
+	req.Header.Add("X-CB-ACCESS-TIMESTAMP", timestamp)
+}
+
+func sign(method, path, timestamp, signingKey, body string) string {
+	h := hmac.New(sha256.New, []byte(signingKey))
+	h.Write([]byte(fmt.Sprintf("%s%s%s%s", timestamp, method, path, body)))
+	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }

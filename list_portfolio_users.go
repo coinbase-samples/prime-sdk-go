@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type ListPortfolioUsersRequest struct {
@@ -32,18 +33,18 @@ type ListPortfolioUsersResponse struct {
 	Pagination *Pagination                `json:"pagination"`
 }
 
-func (c Client) ListPortfolioUsers(
+func (c *Client) ListPortfolioUsers(
 	ctx context.Context,
 	request *ListPortfolioUsersRequest,
 ) (*ListPortfolioUsersResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/users", request.PortfolioId)
 
-	queryParams := appendPaginationParams(emptyQueryParams, request.Pagination)
+	queryParams := appendPaginationParams(core.EmptyQueryParams, request.Pagination)
 
 	response := &ListPortfolioUsersResponse{Request: request}
 
-	if err := get(ctx, c, path, queryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, queryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

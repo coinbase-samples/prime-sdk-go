@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 	"time"
 )
 
@@ -43,7 +44,7 @@ type ListOrdersResponse struct {
 // This API endpoint cannot list open orders, so do not add an OPEN status
 // to the status param.
 // https://docs.cloud.coinbase.com/prime/reference/primerestapi_getorders
-func (c Client) ListOrders(
+func (c *Client) ListOrders(
 	ctx context.Context,
 	request *ListOrdersRequest,
 ) (*ListOrdersResponse, error) {
@@ -78,7 +79,7 @@ func (c Client) ListOrders(
 
 	response := &ListOrdersResponse{Request: request}
 
-	if err := get(ctx, c, path, queryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, queryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

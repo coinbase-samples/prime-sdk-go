@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type GetTransactionRequest struct {
@@ -31,7 +32,7 @@ type GetTransactionResponse struct {
 	Request     *GetTransactionRequest `json:"request"`
 }
 
-func (c Client) GetTransaction(
+func (c *Client) GetTransaction(
 	ctx context.Context,
 	request *GetTransactionRequest,
 ) (*GetTransactionResponse, error) {
@@ -40,7 +41,7 @@ func (c Client) GetTransaction(
 
 	response := &GetTransactionResponse{Request: request}
 
-	if err := get(ctx, c, path, emptyQueryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type CancelOrderRequest struct {
@@ -31,13 +32,12 @@ type CancelOrderResponse struct {
 	Request *CancelOrderRequest `json:"request"`
 }
 
-func (c Client) CancelOrder(ctx context.Context, request *CancelOrderRequest) (*CancelOrderResponse, error) {
-
+func (c *Client) CancelOrder(ctx context.Context, request *CancelOrderRequest) (*CancelOrderResponse, error) {
 	path := fmt.Sprintf("/portfolios/%s/orders/%s/cancel", request.PortfolioId, request.OrderId)
 
 	response := &CancelOrderResponse{Request: request}
 
-	if err := post(ctx, c, path, emptyQueryParams, request, response); err != nil {
+	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

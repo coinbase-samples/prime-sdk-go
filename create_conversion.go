@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type CreateConversionRequest struct {
@@ -41,7 +42,7 @@ type CreateConversionResponse struct {
 	Request             *CreateConversionRequest `json:"request"`
 }
 
-func (c Client) CreateConversion(
+func (c *Client) CreateConversion(
 	ctx context.Context,
 	request *CreateConversionRequest,
 ) (*CreateConversionResponse, error) {
@@ -53,10 +54,9 @@ func (c Client) CreateConversion(
 
 	response := &CreateConversionResponse{Request: request}
 
-	if err := post(ctx, c, path, emptyQueryParams, request, response); err != nil {
+	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 
 	return response, nil
-
 }

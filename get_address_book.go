@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type GetAddressBookRequest struct {
@@ -34,7 +35,7 @@ type GetAddressBookResponse struct {
 	Pagination *Pagination            `json:"pagination"`
 }
 
-func (c Client) GetAddressBook(
+func (c *Client) GetAddressBook(
 	ctx context.Context,
 	request *GetAddressBookRequest,
 ) (*GetAddressBookResponse, error) {
@@ -54,7 +55,7 @@ func (c Client) GetAddressBook(
 
 	response := &GetAddressBookResponse{Request: request}
 
-	if err := get(ctx, c, path, queryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, queryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

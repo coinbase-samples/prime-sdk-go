@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type CreateAddressBookEntryRequest struct {
@@ -36,7 +37,7 @@ type CreateAddressBookEntryResponse struct {
 	Request            *CreateAddressBookEntryRequest `json:"request"`
 }
 
-func (c Client) CreateAddressBookEntry(
+func (c *Client) CreateAddressBookEntry(
 	ctx context.Context,
 	request *CreateAddressBookEntryRequest,
 ) (*CreateAddressBookEntryResponse, error) {
@@ -45,7 +46,7 @@ func (c Client) CreateAddressBookEntry(
 
 	response := &CreateAddressBookEntryResponse{Request: request}
 
-	if err := post(ctx, c, path, emptyQueryParams, request, response); err != nil {
+	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

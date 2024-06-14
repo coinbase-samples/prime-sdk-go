@@ -17,9 +17,6 @@
 package prime
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/base64"
 	"fmt"
 	"strings"
 	"time"
@@ -34,12 +31,6 @@ func TimeToStr(t time.Time) string {
 func strToNum(v string) (amount decimal.Decimal, err error) {
 	amount, err = decimal.NewFromString(v)
 	return
-}
-
-func sign(path, body, method, signingKey string, t int64) string {
-	h := hmac.New(sha256.New, []byte(signingKey))
-	h.Write([]byte(fmt.Sprintf("%d%s%s%s", t, method, path, body)))
-	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
 
 func appendQueryParam(queryParams, key, value string) string {

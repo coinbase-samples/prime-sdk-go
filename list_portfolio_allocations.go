@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 	"time"
 )
 
@@ -36,14 +37,14 @@ type ListPortfolioAllocationsResponse struct {
 	Pagination *Pagination                      `json:"pagination"`
 }
 
-func (c Client) ListPortfolioAllocations(
+func (c *Client) ListPortfolioAllocations(
 	ctx context.Context,
 	request *ListPortfolioAllocationsRequest,
 ) (*ListPortfolioAllocationsResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/allocations", request.PortfolioId)
 
-	queryParams := appendPaginationParams(emptyQueryParams, request.Pagination)
+	queryParams := appendPaginationParams(core.EmptyQueryParams, request.Pagination)
 
 	if !request.Start.IsZero() {
 		queryParams = appendQueryParam(queryParams, "start_date", TimeToStr(request.Start))
@@ -63,7 +64,7 @@ func (c Client) ListPortfolioAllocations(
 
 	response := &ListPortfolioAllocationsResponse{Request: request}
 
-	if err := get(ctx, c, path, queryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, queryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

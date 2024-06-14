@@ -18,6 +18,7 @@ package prime
 
 import (
 	"context"
+	"github.com/coinbase-samples/core-go"
 )
 
 type ListPortfoliosRequest struct{}
@@ -27,7 +28,7 @@ type ListPortfoliosResponse struct {
 	Request    *ListPortfoliosRequest `json:"request"`
 }
 
-func (c Client) ListPortfolios(
+func (c *Client) ListPortfolios(
 	ctx context.Context,
 	request *ListPortfoliosRequest,
 ) (*ListPortfoliosResponse, error) {
@@ -36,7 +37,7 @@ func (c Client) ListPortfolios(
 
 	response := &ListPortfoliosResponse{Request: request}
 
-	if err := get(ctx, c, path, emptyQueryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

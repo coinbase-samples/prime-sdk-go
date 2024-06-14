@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type ListOpenOrdersRequest struct {
@@ -36,18 +37,18 @@ type ListOpenOrdersResponse struct {
 // This function will change once the Prime endpoint design is finalized.
 // This will not return more than 1k open orders and pagination is not supported.
 // https://docs.cloud.coinbase.com/prime/reference/primerestapi_getopenorders
-func (c Client) ListOpenOrders(
+func (c *Client) ListOpenOrders(
 	ctx context.Context,
 	request *ListOpenOrdersRequest,
 ) (*ListOpenOrdersResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/open_orders", request.PortfolioId)
 
-	queryParams := appendQueryParam(emptyQueryParams, "product_ids", request.ProductId)
+	queryParams := appendQueryParam(core.EmptyQueryParams, "product_ids", request.ProductId)
 
 	response := &ListOpenOrdersResponse{Request: request}
 
-	if err := get(ctx, c, path, queryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, queryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

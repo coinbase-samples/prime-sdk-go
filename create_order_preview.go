@@ -20,6 +20,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type CreateOrderPreviewResponse struct {
@@ -27,7 +28,7 @@ type CreateOrderPreviewResponse struct {
 	Request *CreateOrderRequest `json:"request"`
 }
 
-func (c Client) CreateOrderPreview(
+func (c *Client) CreateOrderPreview(
 	ctx context.Context,
 	request *CreateOrderRequest,
 ) (*CreateOrderPreviewResponse, error) {
@@ -42,7 +43,7 @@ func (c Client) CreateOrderPreview(
 
 	responseOrder := &Order{}
 
-	if err := post(ctx, c, path, emptyQueryParams, request.Order, responseOrder); err != nil {
+	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request.Order, responseOrder, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 
