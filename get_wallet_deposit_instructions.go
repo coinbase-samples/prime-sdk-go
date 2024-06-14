@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type GetWalletDepositInstructionsRequest struct {
@@ -33,18 +34,18 @@ type GetWalletDepositInstructionsResponse struct {
 	Request *GetWalletDepositInstructionsRequest
 }
 
-func (c Client) GetWalletDepositInstructions(
+func (c *Client) GetWalletDepositInstructions(
 	ctx context.Context,
 	request *GetWalletDepositInstructionsRequest,
 ) (*GetWalletDepositInstructionsResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/wallets/%s/deposit_instructions", request.PortfolioId, request.Id)
 
-	queryParams := appendQueryParam(emptyQueryParams, "deposit_type", request.Type)
+	queryParams := appendQueryParam(core.EmptyQueryParams, "deposit_type", request.Type)
 
 	response := &GetWalletDepositInstructionsResponse{Request: request}
 
-	if err := get(ctx, c, path, queryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, queryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

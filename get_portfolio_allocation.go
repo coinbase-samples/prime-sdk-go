@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type GetPortfolioAllocationRequest struct {
@@ -31,7 +32,7 @@ type GetPortfolioAllocationResponse struct {
 	Request    *GetPortfolioAllocationRequest `json:"request"`
 }
 
-func (c Client) GetPortfolioAllocation(
+func (c *Client) GetPortfolioAllocation(
 	ctx context.Context,
 	request *GetPortfolioAllocationRequest,
 ) (*GetPortfolioAllocationResponse, error) {
@@ -44,7 +45,7 @@ func (c Client) GetPortfolioAllocation(
 
 	response := &GetPortfolioAllocationResponse{Request: request}
 
-	if err := get(ctx, c, path, emptyQueryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

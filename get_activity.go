@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type GetActivityRequest struct {
@@ -31,7 +32,7 @@ type GetActivityResponse struct {
 	Request  *GetActivityRequest
 }
 
-func (c Client) GetActivity(
+func (c *Client) GetActivity(
 	ctx context.Context,
 	request *GetActivityRequest,
 ) (*GetActivityResponse, error) {
@@ -40,7 +41,7 @@ func (c Client) GetActivity(
 
 	response := &GetActivityResponse{Request: request}
 
-	if err := get(ctx, c, path, emptyQueryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

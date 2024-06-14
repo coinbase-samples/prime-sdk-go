@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type ListProductsRequest struct {
@@ -32,18 +33,18 @@ type ListProductsResponse struct {
 	Request    *ListProductsRequest `json:"request"`
 }
 
-func (c Client) ListProducts(
+func (c *Client) ListProducts(
 	ctx context.Context,
 	request *ListProductsRequest,
 ) (*ListProductsResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/products", request.PortfolioId)
 
-	queryParams := appendPaginationParams(emptyQueryParams, request.Pagination)
+	queryParams := appendPaginationParams(core.EmptyQueryParams, request.Pagination)
 
 	response := &ListProductsResponse{Request: request}
 
-	if err := get(ctx, c, path, queryParams, request, response); err != nil {
+	if err := core.Get(ctx, c, path, queryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

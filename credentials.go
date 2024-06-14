@@ -23,32 +23,26 @@ import (
 )
 
 type Credentials struct {
-	AccessKey   string `json:"accessKey"`
-	Passphrase  string `json:"passphrase"`
-	SigningKey  string `json:"signingKey"`
-	PortfolioId string `json:"portfolioId"`
-	EntityId    string `json:"entityId"`
-
-	// The Service Account ID is the API key's user id equivalent when looking at activities
+	AccessKey    string `json:"accessKey"`
+	Passphrase   string `json:"passphrase"`
+	SigningKey   string `json:"signingKey"`
+	PortfolioId  string `json:"portfolioId"`
+	EntityId     string `json:"entityId"`
 	SvcAccountId string `json:"svcAccountId"`
 }
 
 func UnmarshalCredentials(b []byte) (*Credentials, error) {
-
 	c := &Credentials{}
 	if err := json.Unmarshal(b, c); err != nil {
 		return nil, err
 	}
-
 	return c, nil
 }
 
 func ReadEnvCredentials(variableName string) (*Credentials, error) {
-
 	v := os.Getenv(variableName)
 	if len(v) == 0 {
 		return nil, fmt.Errorf("%s not set as environment variable", variableName)
 	}
-
 	return UnmarshalCredentials([]byte(v))
 }

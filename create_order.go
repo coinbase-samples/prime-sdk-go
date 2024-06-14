@@ -20,6 +20,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type CreateOrderRequest struct {
@@ -31,7 +32,7 @@ type CreateOrderResponse struct {
 	Request *CreateOrderRequest `json:"request"`
 }
 
-func (c Client) CreateOrder(ctx context.Context, request *CreateOrderRequest) (*CreateOrderResponse, error) {
+func (c *Client) CreateOrder(ctx context.Context, request *CreateOrderRequest) (*CreateOrderResponse, error) {
 
 	if request.Order == nil {
 		return nil, errors.New("order not set on request")
@@ -41,7 +42,7 @@ func (c Client) CreateOrder(ctx context.Context, request *CreateOrderRequest) (*
 
 	response := &CreateOrderResponse{Request: request}
 
-	if err := post(ctx, c, path, emptyQueryParams, request.Order, response); err != nil {
+	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request.Order, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 

@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+	"github.com/coinbase-samples/core-go"
 )
 
 type CreateWalletWithdrawalRequest struct {
@@ -50,7 +51,7 @@ type CreateWalletWithdrawalResponse struct {
 	Request         *CreateWalletWithdrawalRequest `json:"request"`
 }
 
-func (c Client) CreateWalletWithdrawal(
+func (c *Client) CreateWalletWithdrawal(
 	ctx context.Context,
 	request *CreateWalletWithdrawalRequest,
 ) (*CreateWalletWithdrawalResponse, error) {
@@ -62,7 +63,7 @@ func (c Client) CreateWalletWithdrawal(
 
 	response := &CreateWalletWithdrawalResponse{Request: request}
 
-	if err := post(ctx, c, path, emptyQueryParams, request, response); err != nil {
+	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
 		return nil, err
 	}
 
