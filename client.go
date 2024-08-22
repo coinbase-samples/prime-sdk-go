@@ -21,10 +21,11 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
-	"github.com/coinbase-samples/core-go"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/coinbase-samples/core-go"
 )
 
 var defaultV1ApiBaseUrl = "https://api.prime.coinbase.com/v1"
@@ -65,6 +66,7 @@ func addPrimeHeaders(req *http.Request, path string, body []byte, client core.Cl
 	req.Header.Add("X-CB-ACCESS-PASSPHRASE", c.Credentials.Passphrase)
 	req.Header.Add("X-CB-ACCESS-SIGNATURE", signature)
 	req.Header.Add("X-CB-ACCESS-TIMESTAMP", timestamp)
+	req.Header.Set("User-Agent", fmt.Sprintf("prime-sdk-go/%s", sdkVersion))
 }
 
 func sign(method, path, timestamp, signingKey, body string) string {
