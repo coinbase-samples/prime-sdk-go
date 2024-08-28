@@ -30,9 +30,12 @@ import (
 
 var defaultV1ApiBaseUrl = "https://api.prime.coinbase.com/v1"
 
+var defaultHeadersFunc = AddPrimeHeaders
+
 type Client struct {
 	httpClient  http.Client
 	httpBaseUrl string
+	headersFunc core.HeaderFunc
 	Credentials *Credentials
 }
 
@@ -49,15 +52,21 @@ func (c *Client) SetBaseUrl(u string) *Client {
 	return c
 }
 
+func (c *Client) SetHeadersFunc(hf core.HeaderFunc) *Client {
+	c.headersFunc = hf
+	return c
+}
+
 func NewClient(credentials *Credentials, httpClient http.Client) *Client {
 	return &Client{
 		httpBaseUrl: defaultV1ApiBaseUrl,
 		Credentials: credentials,
 		httpClient:  httpClient,
+		headersFunc: defaultHeadersFunc,
 	}
 }
 
-func addPrimeHeaders(req *http.Request, path string, body []byte, client core.Client, t time.Time) {
+func AddPrimeHeaders(req *http.Request, path string, body []byte, client core.Client, t time.Time) {
 	c := client.(*Client)
 	timestamp := strconv.FormatInt(t.Unix(), 10)
 	signature := sign(req.Method, path, timestamp, c.Credentials.SigningKey, string(body))

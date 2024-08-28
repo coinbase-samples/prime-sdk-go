@@ -20,6 +20,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/coinbase-samples/core-go"
 )
 
@@ -43,7 +44,7 @@ func (c *Client) CreateOrderPreview(
 
 	responseOrder := &Order{}
 
-	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request.Order, responseOrder, addPrimeHeaders); err != nil {
+	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request.Order, responseOrder, c.headersFunc); err != nil {
 		return nil, err
 	}
 
