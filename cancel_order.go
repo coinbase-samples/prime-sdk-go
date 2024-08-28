@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+
 	"github.com/coinbase-samples/core-go"
 )
 
@@ -37,7 +38,7 @@ func (c *Client) CancelOrder(ctx context.Context, request *CancelOrderRequest) (
 
 	response := &CancelOrderResponse{Request: request}
 
-	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
+	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request, response, c.headersFunc); err != nil {
 		return nil, err
 	}
 

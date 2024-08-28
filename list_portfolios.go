@@ -18,6 +18,7 @@ package prime
 
 import (
 	"context"
+
 	"github.com/coinbase-samples/core-go"
 )
 
@@ -37,7 +38,7 @@ func (c *Client) ListPortfolios(
 
 	response := &ListPortfoliosResponse{Request: request}
 
-	if err := core.Get(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
+	if err := core.Get(ctx, c, path, core.EmptyQueryParams, request, response, c.headersFunc); err != nil {
 		return nil, err
 	}
 

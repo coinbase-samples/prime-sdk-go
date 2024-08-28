@@ -20,6 +20,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/coinbase-samples/core-go"
 )
 
@@ -42,7 +43,7 @@ func (c *Client) CreateOrder(ctx context.Context, request *CreateOrderRequest) (
 
 	response := &CreateOrderResponse{Request: request}
 
-	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request.Order, response, addPrimeHeaders); err != nil {
+	if err := core.Post(ctx, c, path, core.EmptyQueryParams, request.Order, response, c.headersFunc); err != nil {
 		return nil, err
 	}
 

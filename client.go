@@ -21,17 +21,21 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
-	"github.com/coinbase-samples/core-go"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/coinbase-samples/core-go"
 )
 
 var defaultV1ApiBaseUrl = "https://api.prime.coinbase.com/v1"
 
+var defaultHeadersFunc = AddPrimeHeaders
+
 type Client struct {
 	httpClient  http.Client
 	httpBaseUrl string
+	headersFunc core.HeaderFunc
 	Credentials *Credentials
 }
 
@@ -48,15 +52,21 @@ func (c *Client) SetBaseUrl(u string) *Client {
 	return c
 }
 
+func (c *Client) SetHeadersFunc(hf core.HeaderFunc) *Client {
+	c.headersFunc = hf
+	return c
+}
+
 func NewClient(credentials *Credentials, httpClient http.Client) *Client {
 	return &Client{
 		httpBaseUrl: defaultV1ApiBaseUrl,
 		Credentials: credentials,
 		httpClient:  httpClient,
+		headersFunc: defaultHeadersFunc,
 	}
 }
 
-func addPrimeHeaders(req *http.Request, path string, body []byte, client core.Client, t time.Time) {
+func AddPrimeHeaders(req *http.Request, path string, body []byte, client core.Client, t time.Time) {
 	c := client.(*Client)
 	timestamp := strconv.FormatInt(t.Unix(), 10)
 	signature := sign(req.Method, path, timestamp, c.Credentials.SigningKey, string(body))
@@ -65,6 +75,7 @@ func addPrimeHeaders(req *http.Request, path string, body []byte, client core.Cl
 	req.Header.Add("X-CB-ACCESS-PASSPHRASE", c.Credentials.Passphrase)
 	req.Header.Add("X-CB-ACCESS-SIGNATURE", signature)
 	req.Header.Add("X-CB-ACCESS-TIMESTAMP", timestamp)
+	req.Header.Set("User-Agent", fmt.Sprintf("prime-sdk-go/%s", sdkVersion))
 }
 
 func sign(method, path, timestamp, signingKey, body string) string {

@@ -19,6 +19,7 @@ package prime
 import (
 	"context"
 	"fmt"
+
 	"github.com/coinbase-samples/core-go"
 )
 
@@ -50,7 +51,7 @@ func (c *Client) GetEntityPaymentMethod(
 
 	response := &GetEntityPaymentMethodResponse{Request: request}
 
-	if err := core.Get(ctx, c, path, core.EmptyQueryParams, request, response, addPrimeHeaders); err != nil {
+	if err := core.Get(ctx, c, path, core.EmptyQueryParams, request, response, c.headersFunc); err != nil {
 		return nil, err
 	}
 
