@@ -228,6 +228,7 @@ func (p Product) QuoteIncrementNum() (amount decimal.Decimal, err error) {
 
 type OrderFill struct {
 	Id             string    `json:"id"`
+	OrderId        string    `json:"order_id"`
 	Side           string    `json:"side"`
 	ProductId      string    `json:"product_id"`
 	FilledQuantity string    `json:"filled_quantity"`
