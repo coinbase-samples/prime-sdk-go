@@ -33,7 +33,7 @@ if err != nil {
 client := prime.NewRestClient(primeCredentials, httpClient)
 ```
 
-The credentials.ReadEvnCredentials is a convenience function to read the credentials from an environment variable and deserialize the JSON structure. Use credentials.UnmarshalCredentials,
+The credentials.ReadEnvCredentials is a convenience function to read the credentials from an environment variable and deserialize the JSON structure. Use credentials.UnmarshalCredentials,
 if pulled from a different source. The JSON format expected by both is:
 
 ```
