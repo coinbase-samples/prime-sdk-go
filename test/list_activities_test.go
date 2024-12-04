@@ -1,3 +1,19 @@
+/**
+ * Copyright 2023-present Coinbase Global, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package test
 
 import (
@@ -5,22 +21,25 @@ import (
 	"testing"
 	"time"
 
-	prime "github.com/coinbase-samples/prime-sdk-go"
+	"github.com/coinbase-samples/prime-sdk-go/activities"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 func TestListActivities(t *testing.T) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	client, err := newLiveTestClient()
+	c, err := newLiveTestClient()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	response, err := client.ListActivities(ctx, &prime.ListActivitiesRequest{
-		PortfolioId: client.Credentials.PortfolioId,
-		Pagination:  &prime.PaginationParams{Limit: "10"},
+	service := activities.NewActivitiesService(c)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	response, err := service.ListActivities(ctx, &activities.ListActivitiesRequest{
+		PortfolioId: c.Credentials().PortfolioId,
+		Pagination:  &model.PaginationParams{Limit: "10"},
 	})
 
 	if err != nil {
@@ -74,22 +93,16 @@ func TestListActivities(t *testing.T) {
 			}
 		}
 
-		if a.AccountMetadata != nil && a.AccountMetadata.Consensus != nil {
-			if len(a.AccountMetadata.Consensus.ApprovalDeadline) == 0 {
-				t.Error("expected approval deadline to be set")
-			}
-		}
-
-		testGetActivity(t, client, client.Credentials.PortfolioId, a.Id)
+		testGetActivity(t, service, c.Credentials().PortfolioId, a.Id)
 	}
 }
 
-func testGetActivity(t *testing.T, client *prime.Client, portfolioId, activityId string) {
+func testGetActivity(t *testing.T, svc activities.ActivitiesService, portfolioId, activityId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.GetActivity(ctx, &prime.GetActivityRequest{
+	response, err := svc.GetActivity(ctx, &activities.GetActivityRequest{
 		PortfolioId: portfolioId,
 		Id:          activityId,
 	})

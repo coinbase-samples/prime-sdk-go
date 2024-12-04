@@ -1,3 +1,19 @@
+/**
+ * Copyright 2023-present Coinbase Global, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package test
 
 import (
@@ -6,20 +22,23 @@ import (
 	"testing"
 	"time"
 
-	prime "github.com/coinbase-samples/prime-sdk-go"
+	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase-samples/prime-sdk-go/portfolios"
 )
 
 func TestListPortfolios(t *testing.T) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	client, err := newLiveTestClient()
+	c, err := newLiveTestClient()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	response, err := client.ListPortfolios(ctx, &prime.ListPortfoliosRequest{})
+	service := portfolios.NewPortfoliosService(c)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	response, err := service.ListPortfolios(ctx, &portfolios.ListPortfoliosRequest{})
 
 	if err != nil {
 		t.Fatal(err)
@@ -37,9 +56,9 @@ func TestListPortfolios(t *testing.T) {
 		t.Fatal("expected portfoliio id to be set")
 	}
 
-	var portfolio *prime.Portfolio
+	var portfolio *model.Portfolio
 	for _, v := range response.Portfolios {
-		if v.Id == client.Credentials.PortfolioId {
+		if v.Id == c.Credentials().PortfolioId {
 			portfolio = v
 			break
 		}
@@ -49,16 +68,16 @@ func TestListPortfolios(t *testing.T) {
 		t.Fatal("expected get to include credentials portfolio")
 	}
 
-	testGetPortfolio(t, client, portfolio.Id)
+	testGetPortfolio(t, service, portfolio.Id)
 
 }
 
-func testGetPortfolio(t *testing.T, client *prime.Client, portfolioId string) {
+func testGetPortfolio(t *testing.T, svc portfolios.PortfoliosService, portfolioId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.GetPortfolio(ctx, &prime.GetPortfolioRequest{
+	response, err := svc.GetPortfolio(ctx, &portfolios.GetPortfolioRequest{
 		PortfolioId: portfolioId,
 	})
 
