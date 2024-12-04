@@ -20,15 +20,17 @@ To use the *Prime Go SDK*, initialize the [Credentials](credentials.go) struct a
 enabled. Ensure that Prime API credentials are stored in a secure manner.
 
 ```
-credentials := &prime.Credentials{}
-if err := json.Unmarshal([]byte(os.Getenv("PRIME_CREDENTIALS")), credentials); err != nil {
-    return nil, fmt.Errorf("unable to deserialize prime credentials JSON: %w", err)
+primeCredentials, err := primeCredentials.ReadEnvCredentials("PRIME_CREDENTIALS")
+if err != nil {
+    log.Fatalf("unable to load prime credentials: %v", err)
 }
 
-client := prime.NewClient(credentials, http.Client{})
+httpClient, err := client.DefaultHttpClient()
+client := prime.NewRestClient(primeCredentials, httpClient)
 ```
 
-There are convenience functions to read the credentials as an environment variable (prime.ReadEnvCredentials) and to deserialize the JSON structure (prime.UnmarshalCredentials) if pulled from a different source. The JSON format expected by both is:
+The credentials.ReadEvnCredentials is a convenience function to read the credentials from an environment variable and deserialize the JSON structure. Use credentials.UnmarshalCredentials,
+if pulled from a different source. The JSON format expected by both is:
 
 ```
 {
@@ -41,14 +43,14 @@ There are convenience functions to read the credentials as an environment variab
 }
 ```
 
-Coinbase Prime API credentials can be created in the Prime web console under Settings -> APIs. Entity ID can be retrieved by calling [Get Portfolio](https://docs.cloud.coinbase.com/prime/reference/primerestapi_getportfolio).
+Coinbase Prime API credentials can be created in the Prime web console under Settings -> APIs. Entity ID can be retrieved by calling [Get Portfolio](https://docs.cdp.coinbase.com/prime/reference/primerestapi_getportfolio).
 
-Once the client is initialized, make the desired call. For example, to [list portfolios](https://github.com/coinbase-samples/prime-sdk-go/blob/main/list_portfolios.go),
-pass in the request object, check for an error, and if nil, process the response.
-
+Once the client is initialized, instantiate a service to make the desired call. For example, to list portfolios, create the service, pass in the request object, check for an error, and if nil, process the response.
 
 ```
-response, err := client.ListPortfolios(ctx, &prime.ListPortfoliosRequest{})
+service := portfolios.NewPortfoliosService(client)
+
+response, err := service.ListPortfolios(ctx, &prime.ListPortfoliosRequest{})
 ```
 
 ## Build
@@ -56,5 +58,5 @@ response, err := client.ListPortfolios(ctx, &prime.ListPortfoliosRequest{})
 To build the sample library, ensure that [Go](https://go.dev/) 1.19+ is installed and then run:
 
 ```bash
-go build *.go
+go build ./...
 ```
