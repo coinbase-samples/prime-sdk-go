@@ -20,12 +20,16 @@ To use the *Prime Go SDK*, initialize the [Credentials](credentials.go) struct a
 enabled. Ensure that Prime API credentials are stored in a secure manner.
 
 ```
-primeCredentials, err := primeCredentials.ReadEnvCredentials("PRIME_CREDENTIALS")
+primeCredentials, err := credentials.ReadEnvCredentials("PRIME_CREDENTIALS")
 if err != nil {
     log.Fatalf("unable to load prime credentials: %v", err)
 }
 
 httpClient, err := client.DefaultHttpClient()
+if err != nil {
+    log.Fatalf("unable to load default http client: %v", err)
+}
+
 client := prime.NewRestClient(primeCredentials, httpClient)
 ```
 
