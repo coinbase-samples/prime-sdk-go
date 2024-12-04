@@ -1,3 +1,19 @@
+/**
+ * Copyright 2023-present Coinbase Global, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package test
 
 import (
@@ -5,36 +21,40 @@ import (
 	"testing"
 	"time"
 
-	prime "github.com/coinbase-samples/prime-sdk-go"
+	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase-samples/prime-sdk-go/orders"
 )
 
 func TestOrders(t *testing.T) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	client, err := newLiveTestClient()
+	c, err := newLiveTestClient()
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	testProductId := "ADA-USD"
 
-	order := &prime.Order{
-		PortfolioId:   client.Credentials.PortfolioId,
-		Side:          prime.OrderSideBuy,
+	service := orders.NewOrdersService(c)
+
+	order := &model.Order{
+		PortfolioId:   c.Credentials().PortfolioId,
+		Side:          model.OrderSideBuy,
 		ClientOrderId: time.Now().String(),
 		ProductId:     "ADA-USD",
 		BaseQuantity:  "20",
-		Type:          prime.OrderTypeLimit,
+		Type:          model.OrderTypeLimit,
 		LimitPrice:    "0.15",
-		TimeInForce:   prime.TimeInForceGoodUntilCancelled,
+		TimeInForce:   model.TimeInForceGoodUntilCancelled,
 	}
 
-	response, err := client.CreateOrderPreview(
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	response, err := service.CreateOrderPreview(
 		ctx,
-		&prime.CreateOrderRequest{Order: order},
+		&orders.CreateOrderRequest{Order: order},
 	)
+
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -51,24 +71,24 @@ func TestOrders(t *testing.T) {
 		t.Error("expected an order total in the response")
 	}
 
-	orderId := testCreateOrder(t, client, order)
+	orderId := testCreateOrder(t, service, order)
 
-	testGetOrder(t, client, orderId)
+	testGetOrder(t, service, c.Credentials().PortfolioId, orderId)
 
-	testListOpenOrders(t, client, testProductId, orderId)
+	testListOpenOrders(t, service, c.Credentials().PortfolioId, testProductId, orderId)
 
-	testCancelOrder(t, client, orderId)
+	testCancelOrder(t, service, c.Credentials().PortfolioId, orderId)
 }
 
-func testListOpenOrders(t *testing.T, client *prime.Client, productId, orderId string) {
+func testListOpenOrders(t *testing.T, svc orders.OrdersService, portfolioId, productId, orderId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.ListOpenOrders(
+	response, err := svc.ListOpenOrders(
 		ctx,
-		&prime.ListOpenOrdersRequest{
-			PortfolioId: client.Credentials.PortfolioId,
+		&orders.ListOpenOrdersRequest{
+			PortfolioId: portfolioId,
 			ProductId:   productId,
 		},
 	)
@@ -96,14 +116,14 @@ func testListOpenOrders(t *testing.T, client *prime.Client, productId, orderId s
 
 }
 
-func testCreateOrder(t *testing.T, client *prime.Client, order *prime.Order) string {
+func testCreateOrder(t *testing.T, svc orders.OrdersService, order *model.Order) string {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.CreateOrder(
+	response, err := svc.CreateOrder(
 		ctx,
-		&prime.CreateOrderRequest{
+		&orders.CreateOrderRequest{
 			Order: order,
 		},
 	)
@@ -122,7 +142,7 @@ func testCreateOrder(t *testing.T, client *prime.Client, order *prime.Order) str
 	return response.OrderId
 }
 
-func testGetOrder(t *testing.T, client *prime.Client, orderId string) {
+func testGetOrder(t *testing.T, svc orders.OrdersService, portfolioId, orderId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -130,12 +150,12 @@ func testGetOrder(t *testing.T, client *prime.Client, orderId string) {
 	var err error
 	for idx := 0; idx < 3; idx++ {
 
-		var response *prime.GetOrderResponse
+		var response *orders.GetOrderResponse
 
-		response, err = client.GetOrder(
+		response, err = svc.GetOrder(
 			ctx,
-			&prime.GetOrderRequest{
-				PortfolioId: client.Credentials.PortfolioId,
+			&orders.GetOrderRequest{
+				PortfolioId: portfolioId,
 				OrderId:     orderId,
 			},
 		)
@@ -165,15 +185,15 @@ func testGetOrder(t *testing.T, client *prime.Client, orderId string) {
 	}
 }
 
-func testCancelOrder(t *testing.T, client *prime.Client, orderId string) {
+func testCancelOrder(t *testing.T, svc orders.OrdersService, portfolioId, orderId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.CancelOrder(
+	response, err := svc.CancelOrder(
 		ctx,
-		&prime.CancelOrderRequest{
-			PortfolioId: client.Credentials.PortfolioId,
+		&orders.CancelOrderRequest{
+			PortfolioId: portfolioId,
 			OrderId:     orderId,
 		},
 	)

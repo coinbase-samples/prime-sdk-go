@@ -21,28 +21,25 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/assets"
+	"github.com/coinbase-samples/prime-sdk-go/balances"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-func TestListAssets(t *testing.T) {
+func TestListPortfolioBalances(t *testing.T) {
 
 	c, err := newLiveTestClient()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	entityId, err := loadEntityId(c)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	service := assets.NewAssetsService(c)
+	service := balances.NewBalancesService(c)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := service.ListAssets(ctx, &assets.ListAssetsRequest{
-		EntityId: entityId,
+	response, err := service.ListPortfolioBalances(ctx, &balances.ListPortfolioBalancesRequest{
+		PortfolioId: c.Credentials().PortfolioId,
+		Type:        model.BalanceTypeTrading,
 	})
 
 	if err != nil {
@@ -53,7 +50,8 @@ func TestListAssets(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if len(response.Assets) == 0 {
-		t.Fatal("expected assets in get")
+	if len(response.Balances) == 0 {
+		t.Fatal("expected balances in get")
 	}
+
 }

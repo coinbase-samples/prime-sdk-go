@@ -1,3 +1,19 @@
+/**
+ * Copyright 2023-present Coinbase Global, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package test
 
 import (
@@ -5,22 +21,25 @@ import (
 	"testing"
 	"time"
 
-	prime "github.com/coinbase-samples/prime-sdk-go"
+	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase-samples/prime-sdk-go/wallets"
 )
 
 func TestGetWalletDepositInstructions(t *testing.T) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	client, err := newLiveTestClient()
+	c, err := newLiveTestClient()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	walletsResponse, err := client.ListWallets(ctx, &prime.ListWalletsRequest{
-		PortfolioId: client.Credentials.PortfolioId,
-		Type:        prime.WalletTypeVault,
+	service := wallets.NewWalletsService(c)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	walletsResponse, err := service.ListWallets(ctx, &wallets.ListWalletsRequest{
+		PortfolioId: c.Credentials().PortfolioId,
+		Type:        model.WalletTypeVault,
 	})
 
 	if err != nil {
@@ -35,18 +54,18 @@ func TestGetWalletDepositInstructions(t *testing.T) {
 		t.Fatal("expected crypto wallets in get")
 	}
 
-	testGetDepositInstructions(t, client, walletsResponse.Wallets[0].Id)
+	testGetDepositInstructions(t, service, c.Credentials().PortfolioId, walletsResponse.Wallets[0].Id)
 }
 
-func testGetDepositInstructions(t *testing.T, client *prime.Client, walletId string) {
+func testGetDepositInstructions(t *testing.T, svc wallets.WalletsService, portfolioId, walletId string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := client.GetWalletDepositInstructions(ctx, &prime.GetWalletDepositInstructionsRequest{
-		PortfolioId: client.Credentials.PortfolioId,
+	response, err := svc.GetWalletDepositInstructions(ctx, &wallets.GetWalletDepositInstructionsRequest{
+		PortfolioId: portfolioId,
 		Id:          walletId,
-		Type:        prime.WalletDepositTypeCrypto,
+		Type:        model.WalletDepositTypeCrypto,
 	})
 
 	if err != nil {

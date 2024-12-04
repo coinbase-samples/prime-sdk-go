@@ -14,46 +14,36 @@
  * limitations under the License.
  */
 
-package test
+package utils
 
 import (
-	"context"
-	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/assets"
+	"github.com/coinbase-samples/core-go"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-func TestListAssets(t *testing.T) {
+func TimeToStr(t time.Time) string {
+	return t.Format("2006-01-02T15:04:05Z")
+}
 
-	c, err := newLiveTestClient()
-	if err != nil {
-		t.Fatal(err)
+func AppendPaginationParams(v string, p *model.PaginationParams) string {
+
+	if p == nil {
+		return v
 	}
 
-	entityId, err := loadEntityId(c)
-	if err != nil {
-		t.Fatal(err)
+	if len(p.Cursor) > 0 {
+		v = core.AppendHttpQueryParam(v, "cursor", p.Cursor)
 	}
 
-	service := assets.NewAssetsService(c)
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	response, err := service.ListAssets(ctx, &assets.ListAssetsRequest{
-		EntityId: entityId,
-	})
-
-	if err != nil {
-		t.Fatal(err)
+	if len(p.Limit) > 0 {
+		v = core.AppendHttpQueryParam(v, "limit", p.Limit)
 	}
 
-	if response == nil {
-		t.Fatal(err)
+	if len(p.SortDirection) > 0 {
+		v = core.AppendHttpQueryParam(v, "sort_direction", p.SortDirection)
 	}
 
-	if len(response.Assets) == 0 {
-		t.Fatal("expected assets in get")
-	}
+	return v
 }
