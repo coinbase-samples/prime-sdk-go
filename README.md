@@ -54,7 +54,7 @@ Once the client is initialized, instantiate a service to make the desired call. 
 ```
 service := portfolios.NewPortfoliosService(client)
 
-response, err := service.ListPortfolios(ctx, &prime.ListPortfoliosRequest{})
+response, err := service.ListPortfolios(ctx, &portfolios.ListPortfoliosRequest{})
 ```
 
 ## Build
