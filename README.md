@@ -30,7 +30,7 @@ if err != nil {
     log.Fatalf("unable to load default http client: %v", err)
 }
 
-client := prime.NewRestClient(primeCredentials, httpClient)
+client := client.NewRestClient(primeCredentials, httpClient)
 ```
 
 The credentials.ReadEnvCredentials is a convenience function to read the credentials from an environment variable and deserialize the JSON structure. Use credentials.UnmarshalCredentials,
