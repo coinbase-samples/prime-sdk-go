@@ -339,7 +339,7 @@ type Transaction struct {
 
 type OnchainDetail struct {
 	SignedTransaction     string          `json:"signed_transaction"`
-	RiskAssessment        *RiskAssessment `json:"risk_assessment"`Í
+	RiskAssessment        *RiskAssessment `json:"risk_assessment"`
 	ChainId               string          `json:"chain_id"`
 	Nonce                 string          `json:"nonce"`
 	ReplacedTransactionId string          `json:"replaced_transaction_id"`
