@@ -311,30 +311,22 @@ type Order struct {
 	Slippage           string `json:"slippage,omitempty"`
 }
 
-type Transaction struct {
-	Id                    string         `json:"id"`
-	WalletId              string         `json:"wallet_id"`
-	PortfolioId           string         `json:"portfolio_id"`
-	Type                  string         `json:"type"`
-	Status                string         `json:"status"`
-	Symbol                string         `json:"symbol"`
-	Created               time.Time      `json:"created_at"`
-	Completed             time.Time      `json:"completed_at"`
-	Amount                string         `json:"amount"`
-	TransferFrom          *Transfer      `json:"transfer_from"`
-	TransferTo            *Transfer      `json:"transfer_to"`
-	NetworkFees           string         `json:"network_fees"`
-	Fees                  string         `json:"fees"`
-	FeeSymbol             string         `json:"fee_symbol"`
-	BlockchainIds         []string       `json:"blockchain_ids"`
-	TransactionId         string         `json:"transaction_id"`
-	DestinationSymbol     string         `json:"destination_symbol"`
-	EstimatedNetworkFees  string         `json:"estimated_network_fees"`
-	Network               string         `json:"network"`
-	EstimatedAssetChanges []string         `json:"estimated_asset_changes"`
-	Metadata              string         `json:"metadata"`
-	IdempotencyKey        string         `json:"idempotency_key"`
-	OnchainDetails        *OnchainDetail `json:"onchain_details"`
+type EstimatedNetworkFees struct {
+	LowerBound string `json:"lower_bound,omitempty"`
+	UpperBound string `json:"upper_bound,omitempty"`
+}
+
+type MatchMetadata struct {
+	ReferenceId    string `json:"reference_id,omitempty"`
+	SettlementDate string `json:"settlement_date,omitempty"`
+}
+
+type TransactionMetadata struct {
+	MatchMetadata *MatchMetadata `json:"match_metadata,omitempty"`
+}
+
+type AssetChange struct {
+	Symbol string `json:"symbol,omitempty"`
 }
 
 type OnchainDetail struct {
@@ -347,6 +339,32 @@ type OnchainDetail struct {
 	SkipBroadcast         bool            `json:"skip_broadcast"`
 	FailureReason         string          `json:"failure_reason"`
 	SigningStatus         string          `json:"signing_status"`
+}
+
+type Transaction struct {
+	Id                    string                `json:"id"`
+	WalletId              string                `json:"wallet_id"`
+	PortfolioId           string                `json:"portfolio_id"`
+	Type                  string                `json:"type"`
+	Status                string                `json:"status"`
+	Symbol                string                `json:"symbol"`
+	Created               time.Time             `json:"created_at"`
+	Completed             time.Time             `json:"completed_at"`
+	Amount                string                `json:"amount"`
+	TransferFrom          *Transfer             `json:"transfer_from,omitempty"`
+	TransferTo            *Transfer             `json:"transfer_to,omitempty"`
+	NetworkFees           string                `json:"network_fees"`
+	Fees                  string                `json:"fees"`
+	FeeSymbol             string                `json:"fee_symbol"`
+	BlockchainIds         []string              `json:"blockchain_ids"`
+	TransactionId         string                `json:"transaction_id"`
+	DestinationSymbol     string                `json:"destination_symbol"`
+	EstimatedNetworkFees  *EstimatedNetworkFees `json:"estimated_network_fees,omitempty"`
+	Network               string                `json:"network"`
+	EstimatedAssetChanges []AssetChange         `json:"estimated_asset_changes"`
+	Metadata              *TransactionMetadata  `json:"metadata,omitempty"`
+	IdempotencyKey        string                `json:"idempotency_key"`
+	OnchainDetails        *OnchainDetail        `json:"onchain_details,omitempty"`
 }
 
 type RiskAssessment struct {
