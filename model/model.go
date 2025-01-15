@@ -331,7 +331,7 @@ type Transaction struct {
 	DestinationSymbol     string         `json:"destination_symbol"`
 	EstimatedNetworkFees  string         `json:"estimated_network_fees"`
 	Network               string         `json:"network"`
-	EstimatedAssetChanges string         `json:"estimated_asset_changes"`
+	EstimatedAssetChanges []string       `json:"estimated_asset_changes"`
 	Metadata              string         `json:"metadata"`
 	IdempotencyKey        string         `json:"idempotency_key"`
 	OnchainDetails        *OnchainDetail `json:"onchain_details"`
