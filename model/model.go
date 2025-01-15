@@ -312,23 +312,46 @@ type Order struct {
 }
 
 type Transaction struct {
-	Id                string    `json:"id"`
-	WalletId          string    `json:"wallet_id"`
-	PortfolioId       string    `json:"portfolio_id"`
-	Type              string    `json:"type"`
-	Status            string    `json:"status"`
-	Symbol            string    `json:"symbol"`
-	Created           time.Time `json:"created_at"`
-	Completed         time.Time `json:"completed_at"`
-	Amount            string    `json:"amount"`
-	TransferFrom      *Transfer `json:"transfer_from"`
-	TransferTo        *Transfer `json:"transfer_to"`
-	NetworkFees       string    `json:"network_fees"`
-	Fees              string    `json:"fees"`
-	FeeSymbol         string    `json:"fee_symbol"`
-	BlockchainIds     []string  `json:"blockchain_ids"`
-	TransactionId     string    `json:"transaction_id"`
-	DestinationSymbol string    `json:"destination_symbol"`
+	Id                    string         `json:"id"`
+	WalletId              string         `json:"wallet_id"`
+	PortfolioId           string         `json:"portfolio_id"`
+	Type                  string         `json:"type"`
+	Status                string         `json:"status"`
+	Symbol                string         `json:"symbol"`
+	Created               time.Time      `json:"created_at"`
+	Completed             time.Time      `json:"completed_at"`
+	Amount                string         `json:"amount"`
+	TransferFrom          *Transfer      `json:"transfer_from"`
+	TransferTo            *Transfer      `json:"transfer_to"`
+	NetworkFees           string         `json:"network_fees"`
+	Fees                  string         `json:"fees"`
+	FeeSymbol             string         `json:"fee_symbol"`
+	BlockchainIds         []string       `json:"blockchain_ids"`
+	TransactionId         string         `json:"transaction_id"`
+	DestinationSymbol     string         `json:"destination_symbol"`
+	EstimatedNetworkFees  string         `json:"estimated_network_fees"`
+	Network               string         `json:"network"`
+	EstimatedAssetChanges string         `json:"estimated_asset_changes"`
+	Metadata              string         `json:"metadata"`
+	IdempotencyKey        string         `json:"idempotency_key"`
+	OnchainDetails        *OnchainDetail `json:"onchain_details"`
+}
+
+type OnchainDetail struct {
+	SignedTransaction     string          `json:"signed_transaction"`
+	RiskAssessment        *RiskAssessment `json:"risk_assessment"`
+	ChainId               string          `json:"chain_id"`
+	Nonce                 string          `json:"nonce"`
+	ReplacedTransactionId string          `json:"replaced_transaction_id"`
+	DestinationAddress    string          `json:"destination_address"`
+	SkipBroadcast         bool            `json:"skip_broadcast"`
+	FailureReason         string          `json:"failure_reason"`
+	SigningStatus         string          `json:"signing_status"`
+}
+
+type RiskAssessment struct {
+	ComplianceRiskDetected bool `json:"compliance_risk_detected"`
+	SecurityRiskDetected   bool `json:"security_risk_detected"`
 }
 
 type Transfer struct {

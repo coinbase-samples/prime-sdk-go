@@ -25,6 +25,8 @@ import (
 type ActivitiesService interface {
 	ListActivities(ctx context.Context, request *ListActivitiesRequest) (*ListActivitiesResponse, error)
 	GetActivity(ctx context.Context, request *GetActivityRequest) (*GetActivityResponse, error)
+	ListEntityActivities(ctx context.Context, request *ListEntityActivitiesRequest) (*ListEntityActivitiesResponse, error)
+	GetEntityActivity(ctx context.Context, request *GetEntityActivityRequest) (*GetEntityActivityResponse, error)
 }
 
 func NewActivitiesService(c client.RestClient) ActivitiesService {
