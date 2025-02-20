@@ -32,7 +32,7 @@ type CreateOnchainAddressBookEntryRequest struct {
 
 type CreateOnchainAddressBookEntryResponse struct {
 	ActivityId         string                                `json:"activity_id"`
-	Type               string                                `json:"activity_type"`
+	ActivityType       string                                `json:"activity_type"`
 	RemainingApprovals int32                                 `json:"num_approvals_remaining"`
 	Request            *CreateOnchainAddressBookEntryRequest `json:"request"`
 }
