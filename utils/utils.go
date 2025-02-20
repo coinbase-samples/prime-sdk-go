@@ -17,7 +17,7 @@
 package utils
 
 import (
-	"strconv"
+	"fmt"
 	"time"
 
 	"github.com/coinbase-samples/core-go"
@@ -39,7 +39,7 @@ func AppendPaginationParams(v string, p *model.PaginationParams) string {
 	}
 
 	if p.Limit > 0 {
-		v = core.AppendHttpQueryParam(v, "limit", strconv.Itoa(int(p.Limit)))
+		v = core.AppendHttpQueryParam(v, "limit", fmt.Sprintf("%d", p.Limit))
 	}
 
 	if len(p.SortDirection) > 0 {
