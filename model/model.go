@@ -107,7 +107,7 @@ type BalanceWithHolds struct {
 
 type PaginationParams struct {
 	Cursor        string `json:"cursor"`
-	Limit         string `json:"limit"`
+	Limit         int32  `json:"limit"`
 	SortDirection string `json:"sort_direction"`
 }
 
@@ -297,19 +297,24 @@ type Order struct {
 	// so $2000 will then cost you 1 ETH + fee, requiring > 1 ETH
 	IsRaiseExact string `json:"is_raise_exact,omitempty"`
 
-	// Used for describe order and create order preview
-	Id                 string `json:"id,omitempty"`
-	UserId             string `json:"user_id,omitempty"`
-	Created            string `json:"created_at,omitempty"`
-	FilledQuantity     string `json:"filled_quantity,omitempty"`
-	FilledValue        string `json:"filled_value,omitempty"`
-	AverageFilledPrice string `json:"average_filled_price,omitempty"`
-	Commission         string `json:"commission,omitempty"`
-	ExchangeFee        string `json:"exchange_fee,omitempty"`
-	Total              string `json:"order_total,omitempty"`
-	BestBid            string `json:"best_bid,omitempty"`
-	BestAsk            string `json:"best_ask,omitempty"`
-	Slippage           string `json:"slippage,omitempty"`
+	// Used for describe order, create order preview, and list portfolio orders
+	Id                    string `json:"id,omitempty"`
+	UserId                string `json:"user_id,omitempty"`
+	Created               string `json:"created_at,omitempty"`
+	FilledQuantity        string `json:"filled_quantity,omitempty"`
+	FilledValue           string `json:"filled_value,omitempty"`
+	AverageFilledPrice    string `json:"average_filled_price,omitempty"`
+	Commission            string `json:"commission,omitempty"`
+	ExchangeFee           string `json:"exchange_fee,omitempty"`
+	Total                 string `json:"order_total,omitempty"`
+	BestBid               string `json:"best_bid,omitempty"`
+	BestAsk               string `json:"best_ask,omitempty"`
+	Slippage              string `json:"slippage,omitempty"`
+	Status                string `json:"status,omitempty"`
+	HistoricalPov         string `json:"historical_pov,omitempty"`
+	StopPrice             string `json:"stop_price,omitempty"`
+	NetAverageFilledPrice string `json:"net_average_filled_price,omitempty"`
+	UserContext           string `json:"user_context,omitempty"`
 }
 
 type EstimatedNetworkFees struct {
