@@ -27,6 +27,7 @@ import (
 const (
 	WalletTypeVault   = "VAULT"
 	WalletTypeTrading = "TRADING"
+	WalletTypeOnchain = "ONCHAIN"
 	WalletTypeOther   = "WALLET_TYPE_OTHER"
 
 	WalletDepositTypeWire   = "WIRE"
