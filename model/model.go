@@ -520,3 +520,16 @@ type PostTradeCredit struct {
 	AdjustedCreditUtilized string                      `json:"adjusted_credit_utilized"`
 	AdjustedEquity         string                      `json:"adjusted_portfolio_equity"`
 }
+
+type OnchainAddressGroup struct {
+	Id          string            `json:"id"`
+	Name        string            `json:"name"`
+	NetworkType string            `json:"network_type"`
+	Addresses   []*OnchainAddress `json:"addresses"`
+}
+
+type OnchainAddress struct {
+	Name     string   `json:"name"`
+	Address  string   `json:"address"`
+	ChainIds []string `json:"chain_ids"`
+}
