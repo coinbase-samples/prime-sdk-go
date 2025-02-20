@@ -18,20 +18,13 @@ package test
 
 import (
 	"context"
-	"fmt"
-	"os"
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/model"
 	"github.com/coinbase-samples/prime-sdk-go/onchainaddressbook"
 )
 
-func TestCreateOnchainAddressBookEntry(t *testing.T) {
-
-	if os.Getenv("PRIME_SDK_FULL_TESTS") != "enabled" {
-		t.Skip()
-	}
+func TestListOnchainAddressGroups(t *testing.T) {
 
 	c, err := newLiveTestClient()
 	if err != nil {
@@ -43,21 +36,13 @@ func TestCreateOnchainAddressBookEntry(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := service.CreateOnchainAddressBookEntry(
+	response, err := service.ListOnchainAddressBookGroups(
 		ctx,
-		&onchainaddressbook.CreateOnchainAddressBookEntryRequest{
+		&onchainaddressbook.ListOnchainAddressBookGroupsRequest{
 			PortfolioId: c.Credentials().PortfolioId,
-			AddressGroup: &model.OnchainAddressGroup{
-				Name:        fmt.Sprintf("PrimeSdkTestAddressGroup-%d", time.Now().UnixMilli()),
-				NetworkType: "NETWORK_TYPE_EVM",
-				Addresses: []*model.OnchainAddress{&model.OnchainAddress{
-					Name:     fmt.Sprintf("PrimeSdkTestAddress-%d", time.Now().UnixMilli()),
-					Address:  "0x836fa72D2aF55d698e8767acBE88c042b8201036",
-					ChainIds: []string{"8453"},
-				},
-				},
-			},
-		})
+		},
+	)
+
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -66,15 +51,4 @@ func TestCreateOnchainAddressBookEntry(t *testing.T) {
 		t.Fatal("expected a not nil response")
 	}
 
-	if len(response.ActivityId) == 0 {
-		t.Fatal("expected an activity id")
-	}
-
-	if len(response.ActivityType) == 0 {
-		t.Fatal("expected an activity type")
-	}
-
-	if response.RemainingApprovals == 0 {
-		t.Fatal("expected consensus approvals > 0")
-	}
 }
