@@ -533,3 +533,20 @@ type OnchainAddress struct {
 	Address  string   `json:"address"`
 	ChainIds []string `json:"chain_ids"`
 }
+
+type OnchainTransaction struct {
+	RawUnsignedTransaction string      `json:"raw_unsigned_txn"`
+	Rpc                    *OnchainRpc `json:"rpc"`
+}
+
+type OnchainRpc struct {
+	Url           string            `json:"url,omitempty"`
+	SkipBroadcast bool              `json:"skip_broadcast"`
+	EvmParams     *OnchainEvmParams `json:"evm_params,omitempty"`
+}
+
+type OnchainEvmParams struct {
+	DisableDynamicGas     bool   `json:"disable_dynamic_gas"`
+	ReplacedTransactionId string `json:"replaced_transaction_id,omitempty"`
+	ChainId               string `json:"chain_id"`
+}

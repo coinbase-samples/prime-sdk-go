@@ -29,6 +29,7 @@ type TransactionsService interface {
 	ListWalletTransactions(ctx context.Context, request *ListWalletTransactionsRequest) (*ListWalletTransactionsResponse, error)
 	CreateWalletTransfer(ctx context.Context, request *CreateWalletTransferRequest) (*CreateWalletTransferResponse, error)
 	CreateWalletWithdrawal(ctx context.Context, request *CreateWalletWithdrawalRequest) (*CreateWalletWithdrawalResponse, error)
+	CreateOncahinTransaction(ctx context.Context, request *CreateOnchainTransactionRequest) (*CreateOnchainTransactionResposne, error)
 }
 
 func NewTransactionsService(c client.RestClient) TransactionsService {
