@@ -52,7 +52,7 @@ func (s *ordersServiceImpl) ListPortfolioFills(
 	queryParams = core.AppendHttpQueryParam(queryParams, "start_date", utils.TimeToStr(request.Start))
 
 	if !request.End.IsZero() {
-		queryParams = core.AppendHttpQueryParam(queryParams, "end_datae", utils.TimeToStr(request.End))
+		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", utils.TimeToStr(request.End))
 	}
 
 	response := &ListPortfolioFillsResponse{Request: request}
