@@ -25,28 +25,25 @@ import (
 	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type UpdateOnchainAddressBookEntryRequest struct {
-	AddressGroup *model.OnchainAddressGroup `json:"address_group"`
-	PortfolioId  string                     `json:"portfolio_id"`
+type ListOnchainAddressBookGroupsRequest struct {
+	PortfolioId string `json:"portfolio_id"`
 }
 
-type UpdateOnchainAddressBookEntryResponse struct {
-	ActivityId         string                                `json:"activity_id"`
-	ActivityType       string                                `json:"activity_type"`
-	RemainingApprovals int32                                 `json:"num_approvals_remaining"`
-	Request            *UpdateOnchainAddressBookEntryRequest `json:"request"`
+type ListOnchainAddressBookGroupsResponse struct {
+	AddressGroup []*model.OnchainAddressGroup         `json:"address_groups`
+	Request      *ListOnchainAddressBookGroupsRequest `json:"request"`
 }
 
-func (s *onchainAddressBookServiceImpl) UpdateOnchainAddressBookEntry(
+func (s *onchainAddressBookServiceImpl) ListOnchainAddressBookGroups(
 	ctx context.Context,
-	request *UpdateOnchainAddressBookEntryRequest,
-) (*UpdateOnchainAddressBookEntryResponse, error) {
+	request *ListOnchainAddressBookGroupsRequest,
+) (*ListOnchainAddressBookGroupsResponse, error) {
 
-	path := fmt.Sprintf("/portfolios/%s/onchain_address_group", request.PortfolioId)
+	path := fmt.Sprintf("/portfolios/%s/onchain_address_groups", request.PortfolioId)
 
-	response := &UpdateOnchainAddressBookEntryResponse{Request: request}
+	response := &ListOnchainAddressBookGroupsResponse{Request: request}
 
-	if err := core.HttpPut(
+	if err := core.HttpGet(
 		ctx,
 		s.client,
 		path,
