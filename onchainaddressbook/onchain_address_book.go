@@ -25,6 +25,7 @@ import (
 type OnchainAddressBookService interface {
 	CreateOnchainAddressBookEntry(ctx context.Context, request *CreateOnchainAddressBookEntryRequest) (*CreateOnchainAddressBookEntryResponse, error)
 	UpdateOnchainAddressBookEntry(ctx context.Context, request *UpdateOnchainAddressBookEntryRequest) (*UpdateOnchainAddressBookEntryResponse, error)
+	DeleteOnchainAddressBookEntry(ctx context.Context, request *DeleteOnchainAddressBookEntryRequest) (*DeleteOnchainAddressBookEntryResponse, error)
 }
 
 func NewOnchainAddressBookService(c client.RestClient) OnchainAddressBookService {
