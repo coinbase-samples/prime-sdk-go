@@ -32,7 +32,7 @@ type ListOrdersRequest struct {
 	Statuses    []string                `json:"order_statuses"`
 	ProductIds  []string                `json:"product_ids"`
 	Type        string                  `json:"order_type"`
-	OtherSide   string                  `json:"order_side"`
+	OrderSide   string                  `json:"order_side"`
 	Start       time.Time               `json:"start_date"` // required
 	End         time.Time               `json:"end_date"`
 	Pagination  *model.PaginationParams `json:"pagination_params"`
@@ -67,8 +67,8 @@ func (s *ordersServiceImpl) ListOrders(
 		queryParams = core.AppendHttpQueryParam(queryParams, "order_type", request.Type)
 	}
 
-	if len(request.OtherSide) > 0 {
-		queryParams = core.AppendHttpQueryParam(queryParams, "order_side", request.OtherSide)
+	if len(request.OrderSide) > 0 {
+		queryParams = core.AppendHttpQueryParam(queryParams, "order_side", request.OrderSide)
 	}
 
 	for _, s := range request.Statuses {
