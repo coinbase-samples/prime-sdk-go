@@ -39,7 +39,7 @@ func TestListActivities(t *testing.T) {
 
 	response, err := service.ListActivities(ctx, &activities.ListActivitiesRequest{
 		PortfolioId: c.Credentials().PortfolioId,
-		Pagination:  &model.PaginationParams{Limit: "10"},
+		Pagination:  &model.PaginationParams{Limit: 10},
 	})
 
 	if err != nil {

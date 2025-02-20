@@ -39,7 +39,7 @@ func TestListPortfolioUsers(t *testing.T) {
 
 	response, err := service.ListPortfolioUsers(ctx, &users.ListPortfolioUsersRequest{
 		PortfolioId: c.Credentials().PortfolioId,
-		Pagination:  &model.PaginationParams{Limit: "100"},
+		Pagination:  &model.PaginationParams{Limit: 100},
 	})
 
 	if err != nil {
