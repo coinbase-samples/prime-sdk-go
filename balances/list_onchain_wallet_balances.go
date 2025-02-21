@@ -47,8 +47,9 @@ func (s *balancesServiceImpl) ListOnchainWalletBalances(
 ) (*ListOnchainWalletBalancesResponse, error) {
 
 	path := fmt.Sprintf(
-		"/portfolios/$s/wallets/%s/web3_balances",
+		"/portfolios/%s/wallets/%s/web3_balances",
 		request.PortfolioId,
+		request.WalletId,
 	)
 
 	var queryParams string
@@ -72,7 +73,6 @@ func (s *balancesServiceImpl) ListOnchainWalletBalances(
 		s.client.HeadersFunc(),
 	); err != nil {
 		return nil, err
-
 	}
 
 	return response, nil

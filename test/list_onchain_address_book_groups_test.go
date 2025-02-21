@@ -1,5 +1,5 @@
 /**
- * Copyright 2023-present Coinbase Global, Inc.
+ * Copyright 2025-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,45 +21,34 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/model"
-	"github.com/coinbase-samples/prime-sdk-go/users"
+	"github.com/coinbase-samples/prime-sdk-go/onchainaddressbook"
 )
 
-func TestListPortfolioUsers(t *testing.T) {
+func TestListOnchainAddressGroups(t *testing.T) {
 
 	c, err := newLiveTestClient()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	service := users.NewUsersService(c)
+	service := onchainaddressbook.NewOnchainAddressBookService(c)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	response, err := service.ListPortfolioUsers(ctx, &users.ListPortfolioUsersRequest{
-		PortfolioId: c.Credentials().PortfolioId,
-		Pagination:  &model.PaginationParams{Limit: 100},
-	})
+	response, err := service.ListOnchainAddressBookGroups(
+		ctx,
+		&onchainaddressbook.ListOnchainAddressBookGroupsRequest{
+			PortfolioId: c.Credentials().PortfolioId,
+		},
+	)
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	if response == nil {
-		t.Fatal(err)
-	}
-
-	if len(response.Users) == 0 {
-		t.Fatal("expected users in get")
-	}
-
-	if len(response.Users[0].Id) == 0 {
-		t.Fatal("expected user id to be set")
-	}
-
-	if len(response.Users[0].PortfolioId) == 0 {
-		t.Fatal("expected user portfolio id to be set")
+		t.Fatal("expected a not nil response")
 	}
 
 }
