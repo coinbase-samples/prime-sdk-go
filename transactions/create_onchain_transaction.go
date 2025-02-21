@@ -36,7 +36,7 @@ type CreateOnchainTransactionResposne struct {
 	Request       *CreateOnchainTransactionRequest `json:"request"`
 }
 
-func (s *transactionsServiceImpl) CreateOncahinTransaction(
+func (s *transactionsServiceImpl) CreateOnchainTransaction(
 	ctx context.Context,
 	request *CreateOnchainTransactionRequest,
 ) (*CreateOnchainTransactionResposne, error) {
