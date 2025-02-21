@@ -22,6 +22,7 @@ import (
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type DeleteOnchainAddressBookEntryRequest struct {
@@ -31,7 +32,7 @@ type DeleteOnchainAddressBookEntryRequest struct {
 
 type DeleteOnchainAddressBookEntryResponse struct {
 	ActivityId         string                                `json:"activity_id"`
-	ActivityType       string                                `json:"activity_type"`
+	ActivityType       model.OnchainActivityType             `json:"activity_type"`
 	RemainingApprovals int32                                 `json:"num_approvals_remaining"`
 	Request            *DeleteOnchainAddressBookEntryRequest `json:"request"`
 }
