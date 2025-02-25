@@ -454,11 +454,29 @@ type AddressBookEntryAddedBy struct {
 }
 
 type Asset struct {
-	Name             string `json:"name"`
-	Symbol           string `json:"symbol"`
-	DecimalPrecision string `json:"decial_precision"`
-	TradingSupported bool   `json:"trading_supported"`
-	ExplorerUrl      string `json:"explorer_url"`
+	Name             string     `json:"name"`
+	Symbol           string     `json:"symbol"`
+	DecimalPrecision string     `json:"decial_precision"`
+	TradingSupported bool       `json:"trading_supported"`
+	ExplorerUrl      string     `json:"explorer_url"`
+	Networks         []*Network `json:"networks"`
+}
+
+type Network struct {
+	Network                *NetworkDetails `json:"network"`
+	Name                   string          `json:"name"`
+	MaxDecimals            string          `json:"max_decimals"`
+	Default                bool            `json:"default"`
+	TradingSupported       bool            `json:"trading_supported"`
+	VaultSupported         bool            `json:"vault_supported"`
+	PrimeCustodySupported  bool            `json:"prime_custody_supported"`
+	DestinationTagRequired bool            `json:"destination_tag_required"`
+	NetworkLink            string          `json:"network_link"`
+}
+
+type NetworkDetails struct {
+	Id   string `json:"id"`
+	Type string `json:"type"`
 }
 
 type CryptoDepositInstructions struct {
