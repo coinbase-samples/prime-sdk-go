@@ -456,7 +456,7 @@ type AddressBookEntryAddedBy struct {
 type Asset struct {
 	Name             string     `json:"name"`
 	Symbol           string     `json:"symbol"`
-	DecimalPrecision string     `json:"decial_precision"`
+	DecimalPrecision string     `json:"decimal_precision"`
 	TradingSupported bool       `json:"trading_supported"`
 	ExplorerUrl      string     `json:"explorer_url"`
 	Networks         []*Network `json:"networks"`
