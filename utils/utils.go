@@ -28,6 +28,10 @@ func TimeToStr(t time.Time) string {
 	return t.Format("2006-01-02T15:04:05Z")
 }
 
+func NewUuid() string {
+	return core.NewUuid()
+}
+
 func AppendPaginationParams(v string, p *model.PaginationParams) string {
 
 	if p == nil {

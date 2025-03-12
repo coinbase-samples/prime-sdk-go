@@ -46,6 +46,10 @@ type RestClient interface {
 	Credentials() *credentials.Credentials
 }
 
+func DefaultHttpClient() (http.Client, error) {
+	return core.DefaultHttpClient()
+}
+
 type restClientImpl struct {
 	httpClient http.Client
 	baseUrl    string
