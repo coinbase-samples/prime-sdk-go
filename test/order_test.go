@@ -38,10 +38,10 @@ func TestOrders(t *testing.T) {
 
 	order := &model.Order{
 		PortfolioId:   c.Credentials().PortfolioId,
-		Side:          model.OrderSideBuy,
+		Side:          "BUY",
 		ClientOrderId: time.Now().String(),
 		ProductId:     "ADA-USD",
-		BaseQuantity:  "20",
+		BaseQuantity:  "10",
 		Type:          model.OrderTypeLimit,
 		LimitPrice:    "0.15",
 		TimeInForce:   model.TimeInForceGoodUntilCancelled,
