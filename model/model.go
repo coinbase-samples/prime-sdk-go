@@ -38,9 +38,6 @@ const (
 	BalanceTypeVault   = "VAULT_BALANCES"
 	BalanceTypeTotal   = "TOTAL_BALANCES"
 
-	OrderSideBuy  = "BUY"
-	OrderSideSell = "SELL"
-
 	OrderTypeMarket = "MARKET"
 	OrderTypeLimit  = "LIMIT"
 	OrderTypeTwap   = "TWAP"
@@ -49,6 +46,14 @@ const (
 	TimeInForceGoodUntilTime      = "GOOD_UNTIL_DATE_TIME"
 	TimeInForceGoodUntilCancelled = "GOOD_UNTIL_CANCELLED"
 	TimeInForceImmediateOrCancel  = "IMMEDIATE_OR_CANCEL"
+)
+
+type OrderSide string
+
+const (
+	OrderSideBuy     OrderSide = "BUY"
+	OrderSideSell    OrderSide = "SELL"
+	OrderSideUnknown OrderSide = "UNKNOWN_ORDER_SIDE"
 )
 
 type ErrorMessage struct {
