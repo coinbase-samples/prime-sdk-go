@@ -31,6 +31,8 @@ type OrdersService interface {
 	CancelOrder(ctx context.Context, request *CancelOrderRequest) (*CancelOrderResponse, error)
 	ListOrderFills(ctx context.Context, request *ListOrderFillsRequest) (*ListOrderFillsResponse, error)
 	ListPortfolioFills(ctx context.Context, request *ListPortfolioFillsRequest) (*ListPortfolioFillsResponse, error)
+	CreateQuoteRequest(ctx context.Context, request *CreateQuoteRequest) (*CreateQuoteResponse, error)
+	AcceptQuote(ctx context.Context, request *AcceptQuoteRequest) (*AcceptQuoteResponse, error)
 }
 
 func NewOrdersService(c client.RestClient) OrdersService {
