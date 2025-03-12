@@ -23,7 +23,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/credentials"
 	"github.com/coinbase-samples/prime-sdk-go/portfolios"
@@ -57,7 +56,7 @@ func newLiveTestClient() (client.RestClient, error) {
 		return nil, err
 	}
 
-	httpClient, err := core.DefaultHttpClient()
+	httpClient, err := client.DefaultHttpClient()
 	if err != nil {
 		return nil, err
 	}
