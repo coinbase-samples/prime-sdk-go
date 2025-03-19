@@ -25,10 +25,9 @@ import (
 )
 
 type ScheduleEntityFuturesSweepRequest struct {
-	EntityId       string `json:"entity_id"`
-	Amount         string `json:"amount"`
-	Currency       string `json:"currency"`
-	ShouldSweepAll bool   `json:"should_sweep_all"`
+	EntityId string `json:"entity_id"`
+	Amount   string `json:"amount"`
+	Currency string `json:"currency"`
 }
 
 type ScheduleEntityFuturesSweepResponse struct {
