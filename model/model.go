@@ -544,3 +544,39 @@ type PostTradeCredit struct {
 	AdjustedCreditUtilized string                      `json:"adjusted_credit_utilized"`
 	AdjustedEquity         string                      `json:"adjusted_portfolio_equity"`
 }
+
+type FcmBalance struct {
+	PortfolioId        string `json:"portfolio_id"`
+	CfmUsdBalance      string `json:"cfm_usd_balance"`
+	UnrealizedPnl      string `json:"unrealized_pnl"`
+	DailyRealizedPnl   string `json:"daily_realized_pnl"`
+	ExcessLiquidity    string `json:"excess_liquidity"`
+	FuturesBuyingPower string `json:"futures_buying_power"`
+	InitialMargin      string `json:"initial_margin"`
+	MaintenanceMargin  string `json:"maintenance_margin"`
+	ClearingAccountId  string `json:"clearing_account_id"`
+}
+
+type Position struct {
+	ProductId         string    `json:"product_id"`
+	Side              string    `json:"side"`
+	NumberOfContracts string    `json:"number_of_contracts"`
+	DailyRealizedPnl  string    `json:"daily_realized_pnl"`
+	UnrealizedPnl     string    `json:"unrealized_pnl"`
+	CurrentPrice      string    `json:"current_price"`
+	AvgEntryPrice     string    `json:"avg_entry_price"`
+	ExpirationTime    time.Time `json:"expiration_time"`
+}
+
+type Sweep struct {
+	Id              string           `json:"id"`
+	RequestedAmount *RequestedAmount `json:"requested_amount"`
+	ShouldSweepAll  bool             `json:"should_sweep_all"`
+	Status          string           `json:"status"`
+	ScheduledTime   string           `json:"scheduled_time"`
+}
+
+type RequestedAmount struct {
+	Currency string `json:"currency"`
+	Amount   string `json:"amount"`
+}
