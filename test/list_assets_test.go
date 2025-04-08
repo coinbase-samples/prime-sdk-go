@@ -56,4 +56,22 @@ func TestListAssets(t *testing.T) {
 	if len(response.Assets) == 0 {
 		t.Fatal("expected assets in get")
 	}
+
+	for _, asset := range response.Assets {
+
+		var vault bool
+
+		for _, n := range asset.Networks {
+			if n.VaultSupported {
+				vault = true
+				break
+			}
+		}
+
+		if !vault {
+			continue
+		}
+
+		//fmt.Println(strings.ToUpper(asset.Symbol))
+	}
 }

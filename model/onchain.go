@@ -73,14 +73,14 @@ type OnchainAddress struct {
 }
 
 type OnchainTransaction struct {
-	RawUnsignedTransaction string      `json:"raw_unsigned_txn"`
-	Rpc                    *OnchainRpc `json:"rpc"`
+	RawUnsignedTransaction string            `json:"raw_unsigned_txn"`
+	Rpc                    *OnchainRpc       `json:"rpc,omitempty"`
+	EvmParams              *OnchainEvmParams `json:"evm_params,omitempty"`
 }
 
 type OnchainRpc struct {
-	Url           string            `json:"url,omitempty"`
-	SkipBroadcast bool              `json:"skip_broadcast"`
-	EvmParams     *OnchainEvmParams `json:"evm_params,omitempty"`
+	Url           string `json:"url,omitempty"`
+	SkipBroadcast bool   `json:"skip_broadcast"`
 }
 
 type OnchainEvmParams struct {
