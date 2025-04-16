@@ -10,6 +10,6 @@ require (
 require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
-	golang.org/x/net v0.30.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 )
