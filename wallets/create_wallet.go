@@ -22,13 +22,18 @@ import (
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase-samples/prime-sdk-go/utils"
 )
 
 type CreateWalletRequest struct {
-	PortfolioId string `json:"portfolio_id"`
-	Name        string `json:"name"`
-	Symbol      string `json:"symbol"`
-	Type        string `json:"wallet_type"`
+	PortfolioId    string                `json:"portfolio_id"`
+	Name           string                `json:"name"`
+	Symbol         string                `json:"symbol,omitempty"`
+	Type           string                `json:"wallet_type"`
+	IdempotencyKey string                `json:"idempotency_key,omitempty"`
+	Network        *model.NetworkDetails `json:"network,omitempty"`
+	NetworkFamily  string                `json:"network_family,omitempty"`
 }
 
 type CreateWalletResponse struct {
@@ -42,6 +47,10 @@ type CreateWalletResponse struct {
 func (s *walletsServiceImpl) CreateWallet(ctx context.Context, request *CreateWalletRequest) (*CreateWalletResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId)
+
+	if len(request.IdempotencyKey) == 0 {
+		request.IdempotencyKey = utils.NewUuid()
+	}
 
 	response := &CreateWalletResponse{Request: request}
 

@@ -48,6 +48,11 @@ const (
 	TimeInForceImmediateOrCancel  = "IMMEDIATE_OR_CANCEL"
 )
 
+const (
+	EvmNetworkFamily    = "NETWORK_FAMILY_EVM"
+	SolanaNetworkFamily = "NETWORK_FAMILY_SOLANA"
+)
+
 type OrderSide string
 
 const (
