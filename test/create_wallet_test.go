@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase-samples/prime-sdk-go/utils"
 	"github.com/coinbase-samples/prime-sdk-go/wallets"
 )
 
@@ -51,6 +52,46 @@ func TestCreateWallet(t *testing.T) {
 			Type:        model.WalletTypeVault,
 			Symbol:      "BTC",
 		})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if response == nil {
+		t.Fatal("expected a not nil response")
+	}
+
+	if len(response.ActivityId) == 0 {
+		t.Fatal("expected an activity id")
+	}
+
+}
+
+func TestCreateOnchainWallet(t *testing.T) {
+
+	if os.Getenv("PRIME_SDK_FULL_TESTS") != "enabled" {
+		t.Skip()
+	}
+
+	c, err := newLiveTestClient()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	service := wallets.NewWalletsService(c)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	req := &wallets.CreateWalletRequest{
+		PortfolioId:    c.Credentials().PortfolioId,
+		Name:           fmt.Sprintf("PrimeSdkOnchainTest-%d", time.Now().UnixMilli()),
+		Type:           model.WalletTypeOnchain,
+		NetworkFamily:  model.EvmNetworkFamily,
+		IdempotencyKey: utils.NewUuid(),
+	}
+
+	response, err := service.CreateWallet(ctx, req)
+
 	if err != nil {
 		t.Fatal(err)
 	}
