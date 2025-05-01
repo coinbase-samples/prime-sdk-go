@@ -44,7 +44,7 @@ func TestPaginationParams(t *testing.T) {
 		},
 		{
 			description: "TestPaginationParams1",
-			params:      &model.PaginationParams{Cursor: "test", Limit: "10", SortDirection: "ASC"},
+			params:      &model.PaginationParams{Cursor: "test", Limit: 10, SortDirection: "ASC"},
 			query:       "?test=new",
 			expected:    "?test=new&cursor=test&limit=10&sort_direction=ASC",
 		},
