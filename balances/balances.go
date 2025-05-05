@@ -26,6 +26,7 @@ type BalancesService interface {
 	ListPortfolioBalances(ctx context.Context, request *ListPortfolioBalancesRequest) (*ListPortfolioBalancesResponse, error)
 	GetWalletBalance(ctx context.Context, request *GetWalletBalanceRequest) (*GetWalletBalanceResponse, error)
 	ListOnchainWalletBalances(ctx context.Context, request *ListOnchainWalletBalancesRequest) (*ListOnchainWalletBalancesResponse, error)
+	ListEntityBalances(ctx context.Context, request *ListEntityBalancesRequest) (*ListEntityBalancesResponse, error)
 }
 
 func NewBalancesService(c client.RestClient) BalancesService {

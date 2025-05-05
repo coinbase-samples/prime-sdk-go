@@ -522,7 +522,6 @@ type InvoiceItem struct {
 	Description    string  `json:"description"`
 	CurrencySymbol string  `json:"currency_symbol"`
 	InvoiceType    string  `json:"invoice_type"`
-	Type           string  `json:"invoice_type"`
 	Rate           float64 `json:"rate"`
 	Quantity       float64 `json:"quantity"`
 	Price          float64 `json:"price"`

@@ -1,5 +1,5 @@
 /**
- * Copyright 2024-present Coinbase Global, Inc.
+ * Copyright 2025-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,23 @@
  * limitations under the License.
  */
 
-package client
+package staking
 
-const sdkVersion = "0.3.8"
+import (
+	"context"
+
+	"github.com/coinbase-samples/prime-sdk-go/client"
+)
+
+type StakingService interface {
+	CreateStake(ctx context.Context, request *CreateStakeRequest) (*CreateStakeResponse, error)
+	CreateUnstake(ctx context.Context, request *CreateUnstakeRequest) (*CreateUnstakeResponse, error)
+}
+
+func NewStakingService(c client.RestClient) StakingService {
+	return &stakingServiceImpl{client: c}
+}
+
+type stakingServiceImpl struct {
+	client client.RestClient
+}
