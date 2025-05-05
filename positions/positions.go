@@ -26,7 +26,6 @@ type PositionsService interface {
 	ListAggregateEntityPositions(ctx context.Context, request *ListAggregateEntityPositionsRequest) (*ListAggregateEntityPositionsResponse, error)
 	ListEntityPositions(ctx context.Context, request *ListEntityPositionsRequest) (*ListEntityPositionsResponse, error)
 }
-}
 
 func NewPositionsService(c client.RestClient) PositionsService {
 	return &positionsServiceImpl{client: c}

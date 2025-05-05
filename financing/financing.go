@@ -23,7 +23,18 @@ import (
 )
 
 type FinancingService interface {
+	CreateNewLocates(ctx context.Context, request *CreateNewLocatesRequest) (*CreateNewLocatesResponse, error)
 	GetEntityLocateAvailabilities(ctx context.Context, request *GetEntityLocateAvailabilitiesRequest) (*GetEntityLocateAvailabilitiesResponse, error)
+	GetBuyingPower(ctx context.Context, request *GetBuyingPowerRequest) (*GetBuyingPowerResponse, error)
+	GetWithdrawalPower(ctx context.Context, request *GetWithdrawalPowerRequest) (*GetWithdrawalPowerResponse, error)
+	GetMarginInformation(ctx context.Context, request *GetMarginInformationRequest) (*GetMarginInformationResponse, error)
+	GetPortfolioCreditInformation(ctx context.Context, request *GetPortfolioCreditInformationRequest) (*GetPortfolioCreditInformationResponse, error)
+	GetTieredPricingFees(ctx context.Context, request *GetTieredPricingFeesRequest) (*GetTieredPricingFeesResponse, error)
+	ListExistingLocates(ctx context.Context, request *ListExistingLocatesRequest) (*ListExistingLocatesResponse, error)
+	ListInterestAccruals(ctx context.Context, request *ListInterestAccrualsRequest) (*ListInterestAccrualsResponse, error)
+	ListPortfolioInterestAccruals(ctx context.Context, request *ListPortfolioInterestAccrualsRequest) (*ListPortfolioInterestAccrualsResponse, error)
+	ListMarginCallSummaries(ctx context.Context, request *ListMarginCallSummariesRequest) (*ListMarginCallSummariesResponse, error)
+	ListMarginConversions(ctx context.Context, request *ListMarginConversionsRequest) (*ListMarginConversionsResponse, error)
 }
 
 func NewFinancingService(c client.RestClient) FinancingService {
