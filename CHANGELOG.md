@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.7] - 2025-MAY-07
+## [0.3.8] - 2025-MAY-07
 
 ### Added
 
@@ -20,12 +20,17 @@
 - Adding support for new Positions endpoints
   - ListAggregateEntityPositions
   - ListEntityPositions
-- Adding support for various other new endpoints
-  - BalancesService
-    - ListEntityBalances
+- Adding support for new Balance endpoint
+  - ListEntityBalances
 - Added support for new staking endpoints
   - CreateStake
   - CreateUnstake
+
+## [0.3.7] - 2025-MAY-01
+
+### Fix
+
+- Fix missing allocations on list request
 
 ## [0.3.6] - 2025-APR-30
 
