@@ -1,22 +1,22 @@
 # Changelog
 
-## [0.3.7] - 2025-MAY-02
+## [0.3.7] - 2025-MAY-07
 
 ### Added
 
 - Adding support for new Financing endpoints
-  - list_existing_locations
-  - list_interest_accruals
-  - list_portfolio_interest_accruals
-  - list_margin_call_summaries
-  - list_margin_conversions
-  - get_entity_locate_availabilities
-  - get_margin_information
-  - get_portfolio_buying_power
-  - get_portfolio_credit_information
-  - get_portfolio_withdrawal_power
-  - get_tiered_pricing_fees
-  - create_new_locates
+  - ListExistingLocations
+  - ListInterestAccruals
+  - ListPortfolioInterestAccruals
+  - ListMarginCallSummaries
+  - ListMarginConversions
+  - GetEntityLocateAvailabilities
+  - GetMarginInformation
+  - GetPortfolioBuyingPower
+  - GetPortfolioCreditInformation
+  - GetPortfolioWithdrawalPower
+  - GetTieredPricingFees
+  - CreateNewLocates
 - Adding support for new Positions endpoints
   - ListAggregateEntityPositions
   - ListEntityPositions
@@ -24,8 +24,8 @@
   - BalancesService
     - ListEntityBalances
 - Added support for new staking endpoints
-  - create_stake
-  - create_unstake
+  - CreateStake
+  - CreateUnstake
 
 ## [0.3.6] - 2025-APR-30
 
