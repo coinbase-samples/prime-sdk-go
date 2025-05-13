@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.9] - 2025-MAY-13
+
+### Fix
+
+- Add pagination support for ListOpenOrders
+- Request structs are now excluded from JSON serialization when marshaling a response
+
+
 ## [0.3.8] - 2025-MAY-07
 
 ### Added
