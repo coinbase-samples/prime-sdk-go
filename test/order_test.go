@@ -89,7 +89,7 @@ func testListOpenOrders(t *testing.T, svc orders.OrdersService, portfolioId, pro
 		ctx,
 		&orders.ListOpenOrdersRequest{
 			PortfolioId: portfolioId,
-			ProductId:   productId,
+			ProductIds:  []string{productId},
 		},
 	)
 	if err != nil {
