@@ -36,7 +36,7 @@ type ListEntityBalancesRequest struct {
 type ListEntityBalancesResponse struct {
 	Balances   []*model.EntityBalance     `json:"balances"`
 	Pagination *model.Pagination          `json:"pagination"`
-	Request    *ListEntityBalancesRequest `json:"request"`
+	Request    *ListEntityBalancesRequest `json:"-"`
 }
 
 func (s *balancesServiceImpl) ListEntityBalances(

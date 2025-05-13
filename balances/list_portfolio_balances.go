@@ -36,7 +36,7 @@ type ListPortfolioBalancesResponse struct {
 	Type                  string                        `json:"type"`
 	TradingWalletBalances *model.BalanceWithHolds       `json:"trading_balances"`
 	VaultWalletBalances   *model.BalanceWithHolds       `json:"vault_balances"`
-	Request               *ListPortfolioBalancesRequest `json:"request"`
+	Request               *ListPortfolioBalancesRequest `json:"-"`
 }
 
 func (s *balancesServiceImpl) ListPortfolioBalances(
