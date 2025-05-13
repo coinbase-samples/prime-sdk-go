@@ -29,12 +29,12 @@ import (
 
 type ListOpenOrdersRequest struct {
 	PortfolioId string                  `json:"portfolio_id"`
-	ProductIds  []string                `json:"product_ids"`
-	OrderType   string                  `json:"order_type"`
-	OrderSide   string                  `json:"order_side"`
-	Start       time.Time               `json:"start_date"`
-	End         time.Time               `json:"end_date"`
-	Pagination  *model.PaginationParams `json:"pagination_params"`
+	ProductIds  []string                `json:"product_ids,omitempty"`
+	OrderType   string                  `json:"order_type,omitempty"`
+	OrderSide   string                  `json:"order_side,omitempty"`
+	Start       time.Time               `json:"start_date,omitempty"`
+	End         time.Time               `json:"end_date,omitempty"`
+	Pagination  *model.PaginationParams `json:"pagination_params,omitempty"`
 }
 
 type ListOpenOrdersResponse struct {
