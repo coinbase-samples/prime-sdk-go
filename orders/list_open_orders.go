@@ -65,9 +65,19 @@ func (s *ordersServiceImpl) ListOpenOrders(
 		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", utils.TimeToStr(request.End))
 	}
 
+	if request.OrderType != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "order_type", request.OrderType)
+	}
+
+	if request.OrderSide != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "order_side", request.OrderSide)
+	}
+
 	for _, p := range request.ProductIds {
 		queryParams = core.AppendHttpQueryParam(queryParams, "product_ids", p)
 	}
+
+	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
 	response := &ListOpenOrdersResponse{Request: request}
 
