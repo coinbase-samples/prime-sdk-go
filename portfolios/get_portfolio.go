@@ -31,7 +31,7 @@ type GetPortfolioRequest struct {
 
 type GetPortfolioResponse struct {
 	Portfolio *model.Portfolio     `json:"portfolio"`
-	Request   *GetPortfolioRequest `json:"request"`
+	Request   *GetPortfolioRequest `json:"-"`
 }
 
 func (s *portfoliosServiceImpl) GetPortfolio(

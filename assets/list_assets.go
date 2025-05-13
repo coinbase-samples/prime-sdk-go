@@ -31,7 +31,7 @@ type ListAssetsRequest struct {
 
 type ListAssetsResponse struct {
 	Assets  []*model.Asset     `json:"assets"`
-	Request *ListAssetsRequest `json:"request"`
+	Request *ListAssetsRequest `json:"-"`
 }
 
 func (s *assetsServiceImpl) ListAssets(

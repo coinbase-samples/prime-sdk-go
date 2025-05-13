@@ -19,20 +19,28 @@ package orders
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase-samples/prime-sdk-go/utils"
 )
 
 type ListOpenOrdersRequest struct {
-	PortfolioId string `json:"portfolio_id"`
-	ProductId   string `json:"product_id"`
+	PortfolioId string                  `json:"portfolio_id"`
+	ProductIds  []string                `json:"product_ids"`
+	OrderType   string                  `json:"order_type"`
+	OrderSide   string                  `json:"order_side"`
+	Start       time.Time               `json:"start_date"`
+	End         time.Time               `json:"end_date"`
+	Pagination  *model.PaginationParams `json:"pagination_params"`
 }
 
 type ListOpenOrdersResponse struct {
-	Orders  []*model.Order         `json:"orders"`
-	Request *ListOpenOrdersRequest `json:"request"`
+	Orders     []*model.Order         `json:"orders"`
+	Pagination *model.Pagination      `json:"pagination"`
+	Request    *ListOpenOrdersRequest `json:"-"`
 }
 
 // ListOpenOrders enables searching for open orders by product id.
@@ -47,7 +55,19 @@ func (s *ordersServiceImpl) ListOpenOrders(
 
 	path := fmt.Sprintf("/portfolios/%s/open_orders", request.PortfolioId)
 
-	queryParams := core.AppendHttpQueryParam(core.EmptyQueryParams, "product_ids", request.ProductId)
+	var queryParams string
+
+	if !request.Start.IsZero() {
+		queryParams = core.AppendHttpQueryParam(queryParams, "start_date", utils.TimeToStr(request.Start))
+	}
+
+	if !request.End.IsZero() {
+		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", utils.TimeToStr(request.End))
+	}
+
+	for _, p := range request.ProductIds {
+		queryParams = core.AppendHttpQueryParam(queryParams, "product_ids", p)
+	}
 
 	response := &ListOpenOrdersResponse{Request: request}
 

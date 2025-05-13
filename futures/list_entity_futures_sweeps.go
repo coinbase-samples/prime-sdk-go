@@ -32,7 +32,7 @@ type ListEntityFuturesSweepsRequest struct {
 type ListEntityFuturesSweepsResponse struct {
 	Sweeps    []*model.Sweep                  `json:"sweeps"`
 	AutoSweep bool                            `json:"auto_sweep"`
-	Request   *ListEntityFuturesSweepsRequest `json:"request"`
+	Request   *ListEntityFuturesSweepsRequest `json:"-"`
 }
 
 func (s *futuresServiceImpl) ListEntityFuturesSweeps(

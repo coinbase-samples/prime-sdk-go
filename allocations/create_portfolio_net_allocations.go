@@ -40,7 +40,7 @@ type CreatePortfolioNetAllocationsResponse struct {
 	FailureReason    string                                `json:"failure_reason"`
 	BuyAllocationId  string                                `json:"buy_allocation_id"`
 	SellAllocationId string                                `json:"sell_allocation_id"`
-	Request          *CreatePortfolioNetAllocationsRequest `json:"request"`
+	Request          *CreatePortfolioNetAllocationsRequest `json:"-"`
 }
 
 func (s *allocationsServiceImpl) CreatePortfolioNetAllocations(

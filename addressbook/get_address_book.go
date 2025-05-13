@@ -35,8 +35,8 @@ type GetAddressBookRequest struct {
 
 type GetAddressBookResponse struct {
 	Addresses  []*model.AddressBookEntry `json:"addresses"`
-	Request    *GetAddressBookRequest    `json:"request"`
 	Pagination *model.Pagination         `json:"pagination"`
+	Request    *GetAddressBookRequest    `json:"-"`
 }
 
 func (s *addressBookServiceImpl) GetAddressBook(

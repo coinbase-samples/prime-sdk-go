@@ -33,7 +33,7 @@ type ListExistingLocatesRequest struct {
 
 type ListExistingLocatesResponse struct {
 	Locates []model.ExistingLocate      `json:"locates"`
-	Request *ListExistingLocatesRequest `json:"request"`
+	Request *ListExistingLocatesRequest `json:"-"`
 }
 
 func (s *financingServiceImpl) ListExistingLocates(

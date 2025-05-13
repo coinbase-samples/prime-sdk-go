@@ -31,7 +31,7 @@ type SetAutoSweepRequest struct {
 
 type SetAutoSweepResponse struct {
 	Success bool                 `json:"success"`
-	Request *SetAutoSweepRequest `json:"request"`
+	Request *SetAutoSweepRequest `json:"-"`
 }
 
 func (s *futuresServiceImpl) SetAutoSweep(

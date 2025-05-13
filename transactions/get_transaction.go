@@ -32,7 +32,7 @@ type GetTransactionRequest struct {
 
 type GetTransactionResponse struct {
 	Transaction *model.Transaction     `json:"transaction"`
-	Request     *GetTransactionRequest `json:"request"`
+	Request     *GetTransactionRequest `json:"-"`
 }
 
 func (s *transactionsServiceImpl) GetTransaction(

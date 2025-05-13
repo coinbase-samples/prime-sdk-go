@@ -32,7 +32,7 @@ type GetPortfolioNetAllocationRequest struct {
 
 type GetPortfolioNetAllocationResponse struct {
 	Allocations []*model.Allocation               `json:"allocations"`
-	Request     *GetPortfolioNetAllocationRequest `json:"request"`
+	Request     *GetPortfolioNetAllocationRequest `json:"-"`
 }
 
 func (s *allocationsServiceImpl) GetPortfolioNetAllocation(

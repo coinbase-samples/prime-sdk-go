@@ -35,8 +35,8 @@ type ListWalletsRequest struct {
 
 type ListWalletsResponse struct {
 	Wallets    []*model.Wallet     `json:"wallets"`
-	Request    *ListWalletsRequest `json:"request"`
 	Pagination *model.Pagination   `json:"pagination"`
+	Request    *ListWalletsRequest `json:"-"`
 }
 
 func (r ListWalletsResponse) HasNext() bool {

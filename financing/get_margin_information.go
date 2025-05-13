@@ -31,7 +31,7 @@ type GetMarginInformationRequest struct {
 
 type GetMarginInformationResponse struct {
 	MarginInformation model.MarginInformation      `json:"margin_information"`
-	Request           *GetMarginInformationRequest `json:"request"`
+	Request           *GetMarginInformationRequest `json:"-"`
 }
 
 func (s *financingServiceImpl) GetMarginInformation(

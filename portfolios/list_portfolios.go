@@ -28,7 +28,7 @@ type ListPortfoliosRequest struct{}
 
 type ListPortfoliosResponse struct {
 	Portfolios []*model.Portfolio     `json:"portfolios"`
-	Request    *ListPortfoliosRequest `json:"request"`
+	Request    *ListPortfoliosRequest `json:"-"`
 }
 
 func (s *portfoliosServiceImpl) ListPortfolios(

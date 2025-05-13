@@ -44,7 +44,7 @@ type CreateWalletTransferResponse struct {
 	SourceAddress      string                       `json:"source_address"`
 	SourceType         string                       `json:"source_type"`
 	TransactionId      string                       `json:"transaction_id"`
-	Request            *CreateWalletTransferRequest `json:"request"`
+	Request            *CreateWalletTransferRequest `json:"-"`
 }
 
 func (s *transactionsServiceImpl) CreateWalletTransfer(

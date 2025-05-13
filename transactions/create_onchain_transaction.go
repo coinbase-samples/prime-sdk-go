@@ -33,7 +33,7 @@ type CreateOnchainTransactionRequest struct {
 
 type CreateOnchainTransactionResposne struct {
 	TransactionId string                           `json:"transaction_id"`
-	Request       *CreateOnchainTransactionRequest `json:"request"`
+	Request       *CreateOnchainTransactionRequest `json:"-"`
 }
 
 func (s *transactionsServiceImpl) CreateOnchainTransaction(

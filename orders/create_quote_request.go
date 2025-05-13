@@ -41,7 +41,7 @@ type CreateQuoteResponse struct {
 	BestPrice            string              `json:"best_price"`
 	OrderTotal           string              `json:"order_total"`
 	PriceInclusiveOfFees string              `json:"price_inclusive_of_fees"`
-	Request              *CreateQuoteRequest `json:"request"`
+	Request              *CreateQuoteRequest `json:"-"`
 }
 
 func (s *ordersServiceImpl) CreateQuoteRequest(ctx context.Context, request *CreateQuoteRequest) (*CreateQuoteResponse, error) {

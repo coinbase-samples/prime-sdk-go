@@ -32,7 +32,7 @@ type GetEntityPaymentMethodRequest struct {
 
 type GetEntityPaymentMethodResponse struct {
 	Details *model.EntityPaymentMethod     `json:"details"`
-	Request *GetEntityPaymentMethodRequest `json:"request"`
+	Request *GetEntityPaymentMethodRequest `json:"-"`
 }
 
 func (s *paymentMethodsServiceImpl) GetEntityPaymentMethod(

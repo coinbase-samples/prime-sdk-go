@@ -31,7 +31,7 @@ type GetEntityFcmBalanceRequest struct {
 
 type GetEntityFcmBalanceResponse struct {
 	FcmBalance *model.FcmBalance           `json:"fcm_balance"`
-	Request    *GetEntityFcmBalanceRequest `json:"request"`
+	Request    *GetEntityFcmBalanceRequest `json:"-"`
 }
 
 func (s *futuresServiceImpl) GetEntityFcmBalance(

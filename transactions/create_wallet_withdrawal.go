@@ -51,7 +51,7 @@ type CreateWalletWithdrawalResponse struct {
 	Destination     *model.BlockchainAddress       `json:"blockchain_destination"`
 	Source          *model.BlockchainAddress       `json:"blockchain_source"`
 	TransactionId   string                         `json:"transaction_id"`
-	Request         *CreateWalletWithdrawalRequest `json:"request"`
+	Request         *CreateWalletWithdrawalRequest `json:"-"`
 }
 
 func (s *transactionsServiceImpl) CreateWalletWithdrawal(

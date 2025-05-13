@@ -38,7 +38,7 @@ type CreatePortfolioAllocationsResponse struct {
 	Success       bool                               `json:"success"`
 	AllocationId  string                             `json:"allocation_id"`
 	FailureReason string                             `json:"failure_reason"`
-	Request       *CreatePortfolioAllocationsRequest `json:"request"`
+	Request       *CreatePortfolioAllocationsRequest `json:"-"`
 }
 
 func (s *allocationsServiceImpl) CreatePortfolioAllocations(

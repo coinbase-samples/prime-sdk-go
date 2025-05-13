@@ -37,9 +37,9 @@ type ListPortfolioAllocationsRequest struct {
 }
 
 type ListPortfolioAllocationsResponse struct {
-	Request     *ListPortfolioAllocationsRequest `json:"request"`
 	Allocations []*model.Allocation              `json:"allocations"`
 	Pagination  *model.Pagination                `json:"pagination"`
+	Request     *ListPortfolioAllocationsRequest `json:"-"`
 }
 
 func (s *allocationsServiceImpl) ListPortfolioAllocations(

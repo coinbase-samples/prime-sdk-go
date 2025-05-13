@@ -41,7 +41,7 @@ type ListOrdersRequest struct {
 type ListOrdersResponse struct {
 	Orders     []*model.Order     `json:"orders"`
 	Pagination *model.Pagination  `json:"pagination"`
-	Request    *ListOrdersRequest `json:"request"`
+	Request    *ListOrdersRequest `json:"-"`
 }
 
 // ListOrders returns orders based on query params. Start time is required.

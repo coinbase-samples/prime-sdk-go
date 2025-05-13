@@ -41,7 +41,7 @@ type CreateConversionResponse struct {
 	Amount              string                   `json:"amount"`
 	DestinationWalletId string                   `json:"destination"`
 	SourceWalletId      string                   `json:"source"`
-	Request             *CreateConversionRequest `json:"request"`
+	Request             *CreateConversionRequest `json:"-"`
 }
 
 func (s *transactionsServiceImpl) CreateConversion(

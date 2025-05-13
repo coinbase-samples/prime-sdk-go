@@ -32,7 +32,7 @@ type GetWithdrawalPowerRequest struct {
 
 type GetWithdrawalPowerResponse struct {
 	WithdrawalPower model.WithdrawalPower      `json:"withdrawal_power"`
-	Request         *GetWithdrawalPowerRequest `json:"request"`
+	Request         *GetWithdrawalPowerRequest `json:"-"`
 }
 
 func (s *financingServiceImpl) GetWithdrawalPower(

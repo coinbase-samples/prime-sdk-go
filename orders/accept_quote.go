@@ -34,7 +34,7 @@ type AcceptQuoteRequest struct {
 
 type AcceptQuoteResponse struct {
 	OrderId string              `json:"order_id"`
-	Request *AcceptQuoteRequest `json:"request"`
+	Request *AcceptQuoteRequest `json:"-"`
 }
 
 func (s *ordersServiceImpl) AcceptQuote(ctx context.Context, request *AcceptQuoteRequest) (*AcceptQuoteResponse, error) {

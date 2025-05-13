@@ -39,8 +39,8 @@ type ListActivitiesRequest struct {
 
 type ListActivitiesResponse struct {
 	Activities []*model.Activity      `json:"activities"`
-	Request    *ListActivitiesRequest `json:"request"`
 	Pagination *model.Pagination      `json:"pagination"`
+	Request    *ListActivitiesRequest `json:"-"`
 }
 
 func (s *activitiesServiceImpl) ListActivities(

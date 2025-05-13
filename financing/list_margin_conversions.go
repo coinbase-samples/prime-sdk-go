@@ -36,7 +36,7 @@ type ListMarginConversionsRequest struct {
 
 type ListMarginConversionsResponse struct {
 	Conversions []model.Conversion            `json:"conversions"`
-	Request     *ListMarginConversionsRequest `json:"request"`
+	Request     *ListMarginConversionsRequest `json:"-"`
 }
 
 func (s *financingServiceImpl) ListMarginConversions(
