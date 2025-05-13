@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1] - 2025-MAY-13
+
+### Added
+
+- Add disable dynamic nonce to EVM params for Onchain Txs
+- Add settle currency to quote requests
+
 ## [0.4.0] - 2025-MAY-13
 
 ### Fix

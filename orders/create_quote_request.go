@@ -26,13 +26,14 @@ import (
 )
 
 type CreateQuoteRequest struct {
-	PortfolioId   string          `json:"portfolio_id"`
-	ProductId     string          `json:"product_id"`
-	Side          model.OrderSide `json:"side"`
-	ClientQuoteId string          `json:"client_quote_id"`
-	BaseQuantity  string          `json:"base_quantity,omitempty"`
-	QuoteValue    string          `json:"quote_value,omitempty"`
-	LimitPrice    string          `json:"limit_price"`
+	PortfolioId    string          `json:"portfolio_id"`
+	ProductId      string          `json:"product_id"`
+	Side           model.OrderSide `json:"side"`
+	ClientQuoteId  string          `json:"client_quote_id"`
+	BaseQuantity   string          `json:"base_quantity,omitempty"`
+	QuoteValue     string          `json:"quote_value,omitempty"`
+	LimitPrice     string          `json:"limit_price"`
+	SettleCurrency string          `json:"settl_currency,omitempty"`
 }
 
 type CreateQuoteResponse struct {

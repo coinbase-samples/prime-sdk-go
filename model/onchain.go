@@ -85,6 +85,7 @@ type OnchainRpc struct {
 
 type OnchainEvmParams struct {
 	DisableDynamicGas     bool   `json:"disable_dynamic_gas"`
+	DisableDynamicNonce   bool   `json:"disable_dynamic_nonce,omitempty"`
 	ReplacedTransactionId string `json:"replaced_transaction_id,omitempty"`
 	ChainId               string `json:"chain_id"`
 }
