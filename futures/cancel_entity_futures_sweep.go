@@ -31,7 +31,7 @@ type CancelEntityFuturesSweepRequest struct {
 type CancelEntityFuturesSweepResponse struct {
 	Success   bool                             `json:"success"`
 	RequestId string                           `json:"request_id"`
-	Request   *CancelEntityFuturesSweepRequest `json:"request"`
+	Request   *CancelEntityFuturesSweepRequest `json:"-"`
 }
 
 func (s *futuresServiceImpl) CancelEntityFuturesSweep(

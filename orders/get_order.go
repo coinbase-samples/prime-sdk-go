@@ -32,7 +32,7 @@ type GetOrderRequest struct {
 
 type GetOrderResponse struct {
 	Order   *model.Order     `json:"order"`
-	Request *GetOrderRequest `json:"request"`
+	Request *GetOrderRequest `json:"-"`
 }
 
 func (s *ordersServiceImpl) GetOrder(

@@ -33,8 +33,8 @@ type ListPortfolioUsersRequest struct {
 
 type ListPortfolioUsersResponse struct {
 	Users      []*model.User              `json:"users"`
-	Request    *ListPortfolioUsersRequest `json:"request"`
 	Pagination *model.Pagination          `json:"pagination"`
+	Request    *ListPortfolioUsersRequest `json:"-"`
 }
 
 func (s *usersServiceImpl) ListPortfolioUsers(

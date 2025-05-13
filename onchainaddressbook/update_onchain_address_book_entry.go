@@ -34,7 +34,7 @@ type UpdateOnchainAddressBookEntryResponse struct {
 	ActivityId         string                                `json:"activity_id"`
 	ActivityType       model.OnchainActivityType             `json:"activity_type"`
 	RemainingApprovals int32                                 `json:"num_approvals_remaining"`
-	Request            *UpdateOnchainAddressBookEntryRequest `json:"request"`
+	Request            *UpdateOnchainAddressBookEntryRequest `json:"-"`
 }
 
 func (s *onchainAddressBookServiceImpl) UpdateOnchainAddressBookEntry(

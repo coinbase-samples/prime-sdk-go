@@ -34,7 +34,7 @@ type ListProductsRequest struct {
 type ListProductsResponse struct {
 	Products   []*model.Product     `json:"products"`
 	Pagination *model.Pagination    `json:"pagination"`
-	Request    *ListProductsRequest `json:"request"`
+	Request    *ListProductsRequest `json:"-"`
 }
 
 func (s *productsServiceImpl) ListProducts(

@@ -37,7 +37,7 @@ type CreateNewLocatesRequest struct {
 
 type CreateNewLocatesResponse struct {
 	LocateId string                   `json:"locate_id"`
-	Request  *CreateNewLocatesRequest `json:"request"`
+	Request  *CreateNewLocatesRequest `json:"-"`
 }
 
 func (s *financingServiceImpl) CreateNewLocates(

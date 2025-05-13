@@ -31,7 +31,7 @@ type GetPortfolioCommissionRequest struct {
 
 type GetPortfolioCommissionResponse struct {
 	Commission *model.Commission              `json:"commission"`
-	Request    *GetPortfolioCommissionRequest `json:"request"`
+	Request    *GetPortfolioCommissionRequest `json:"-"`
 }
 
 func (s *commissionServiceImpl) GetPortfolioCommission(

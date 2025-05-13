@@ -40,8 +40,8 @@ type ListEntityActivitiesRequest struct {
 
 type ListEntityActivitiesResponse struct {
 	Activities []*model.Activity            `json:"activities"`
-	Request    *ListEntityActivitiesRequest `json:"request"`
 	Pagination *model.Pagination            `json:"pagination"`
+	Request    *ListEntityActivitiesRequest `json:"-"`
 }
 
 func (s *activitiesServiceImpl) ListEntityActivities(

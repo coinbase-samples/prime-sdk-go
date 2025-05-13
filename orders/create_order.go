@@ -32,7 +32,7 @@ type CreateOrderRequest struct {
 
 type CreateOrderResponse struct {
 	OrderId string              `json:"order_id"`
-	Request *CreateOrderRequest `json:"request"`
+	Request *CreateOrderRequest `json:"-"`
 }
 
 func (s *ordersServiceImpl) CreateOrder(ctx context.Context, request *CreateOrderRequest) (*CreateOrderResponse, error) {

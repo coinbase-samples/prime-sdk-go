@@ -31,7 +31,7 @@ type ListOnchainAddressBookGroupsRequest struct {
 
 type ListOnchainAddressBookGroupsResponse struct {
 	AddressGroup []*model.OnchainAddressGroup         `json:"address_groups`
-	Request      *ListOnchainAddressBookGroupsRequest `json:"request"`
+	Request      *ListOnchainAddressBookGroupsRequest `json:"-"`
 }
 
 func (s *onchainAddressBookServiceImpl) ListOnchainAddressBookGroups(

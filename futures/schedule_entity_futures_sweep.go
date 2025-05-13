@@ -33,7 +33,7 @@ type ScheduleEntityFuturesSweepRequest struct {
 type ScheduleEntityFuturesSweepResponse struct {
 	Success   bool                               `json:"success"`
 	RequestId string                             `json:"request_id"`
-	Request   *ScheduleEntityFuturesSweepRequest `json:"request"`
+	Request   *ScheduleEntityFuturesSweepRequest `json:"-"`
 }
 
 func (s *futuresServiceImpl) ScheduleEntityFuturesSweep(

@@ -40,7 +40,7 @@ type ListWalletTransactionsRequest struct {
 type ListWalletTransactionsResponse struct {
 	Transactions []*model.Transaction           `json:"transactions"`
 	Pagination   *model.Pagination              `json:"pagination"`
-	Request      *ListWalletTransactionsRequest `json:"request"`
+	Request      *ListWalletTransactionsRequest `json:"-"`
 }
 
 func (s *transactionsServiceImpl) ListWalletTransactions(

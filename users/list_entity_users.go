@@ -33,8 +33,8 @@ type ListEntityUsersRequest struct {
 
 type ListEntityUsersResponse struct {
 	Users      []*model.User           `json:"users"`
-	Request    *ListEntityUsersRequest `json:"request"`
 	Pagination *model.Pagination       `json:"pagination"`
+	Request    *ListEntityUsersRequest `json:"-"`
 }
 
 func (s *usersServiceImpl) ListEntityUsers(

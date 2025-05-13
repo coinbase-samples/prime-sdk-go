@@ -36,7 +36,7 @@ type GetBuyingPowerRequest struct {
 
 type GetBuyingPowerResponse struct {
 	BuyingPower model.BuyingPower      `json:"buying_power"`
-	Request     *GetBuyingPowerRequest `json:"request"`
+	Request     *GetBuyingPowerRequest `json:"-"`
 }
 
 func (s *financingServiceImpl) GetBuyingPower(

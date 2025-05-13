@@ -39,7 +39,7 @@ type ListPortfolioTransactionsRequest struct {
 type ListPortfolioTransactionsResponse struct {
 	Transactions []*model.Transaction              `json:"transactions"`
 	Pagination   *model.Pagination                 `json:"pagination"`
-	Request      *ListPortfolioTransactionsRequest `json:"request"`
+	Request      *ListPortfolioTransactionsRequest `json:"-"`
 }
 
 func (s *transactionsServiceImpl) ListPortfolioTransactions(

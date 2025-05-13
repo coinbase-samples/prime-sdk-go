@@ -32,7 +32,7 @@ type GetWalletBalanceRequest struct {
 
 type GetWalletBalanceResponse struct {
 	Balance *model.Balance `json:"balance"`
-	Request *GetWalletBalanceRequest
+	Request *GetWalletBalanceRequest `json:"-"`
 }
 
 func (s *balancesServiceImpl) GetWalletBalance(

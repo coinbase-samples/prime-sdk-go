@@ -31,8 +31,8 @@ type GetWalletRequest struct {
 }
 
 type GetWalletResponse struct {
-	Wallet  *model.Wallet `json:"wallet"`
-	Request *GetWalletRequest
+	Wallet  *model.Wallet     `json:"wallet"`
+	Request *GetWalletRequest `json:"-"`
 }
 
 func (s *walletsServiceImpl) GetWallet(

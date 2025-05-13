@@ -35,7 +35,7 @@ type ListOrderFillsRequest struct {
 type ListOrderFillsResponse struct {
 	Fills      []*model.OrderFill     `json:"fills"`
 	Pagination *model.Pagination      `json:"pagination"`
-	Request    *ListOrderFillsRequest `json:"request"`
+	Request    *ListOrderFillsRequest `json:"-"`
 }
 
 func (s *ordersServiceImpl) ListOrderFills(

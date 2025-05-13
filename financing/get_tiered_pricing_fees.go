@@ -33,7 +33,7 @@ type GetTieredPricingFeesRequest struct {
 
 type GetTieredPricingFeesResponse struct {
 	Fees    *[]model.TieredPricingFee    `json:"fees,omitempty"`
-	Request *GetTieredPricingFeesRequest `json:"request"`
+	Request *GetTieredPricingFeesRequest `json:"-"`
 }
 
 func (s *financingServiceImpl) GetTieredPricingFees(

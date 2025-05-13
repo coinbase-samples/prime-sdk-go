@@ -36,7 +36,7 @@ type CreateAddressBookEntryResponse struct {
 	ActivityId         string                         `json:"activity_id"`
 	Type               string                         `json:"activity_type"`
 	RemainingApprovals int32                          `json:"num_approvals_remaining"`
-	Request            *CreateAddressBookEntryRequest `json:"request"`
+	Request            *CreateAddressBookEntryRequest `json:"-"`
 }
 
 func (s *addressBookServiceImpl) CreateAddressBookEntry(

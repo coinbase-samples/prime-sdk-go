@@ -33,7 +33,7 @@ type GetPortfolioCreditInformationRequest struct {
 
 type GetPortfolioCreditInformationResponse struct {
 	PortfolioCreditInformation model.PostTradeCreditInformation      `json:"post_trade_credit"`
-	Request                    *GetPortfolioCreditInformationRequest `json:"request"`
+	Request                    *GetPortfolioCreditInformationRequest `json:"-"`
 }
 
 func (s *financingServiceImpl) GetPortfolioCreditInformation(

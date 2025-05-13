@@ -37,8 +37,8 @@ type ListInvoicesRequest struct {
 
 type ListInvoicesResponse struct {
 	Invoices   []*model.Invoice     `json:"invoices"`
-	Request    *ListInvoicesRequest `json:"request"`
 	Pagination *model.Pagination    `json:"pagination"`
+	Request    *ListInvoicesRequest `json:"-"`
 }
 
 func (s *invoiceServiceImpl) ListInvoices(

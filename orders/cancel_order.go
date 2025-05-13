@@ -31,7 +31,7 @@ type CancelOrderRequest struct {
 
 type CancelOrderResponse struct {
 	OrderId string              `json:"id"`
-	Request *CancelOrderRequest `json:"request"`
+	Request *CancelOrderRequest `json:"-"`
 }
 
 func (s *ordersServiceImpl) CancelOrder(ctx context.Context, request *CancelOrderRequest) (*CancelOrderResponse, error) {

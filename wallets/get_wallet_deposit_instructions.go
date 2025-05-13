@@ -32,9 +32,9 @@ type GetWalletDepositInstructionsRequest struct {
 }
 
 type GetWalletDepositInstructionsResponse struct {
-	Crypto  *model.CryptoDepositInstructions `json:"crypto_instructions"`
-	Fiat    *model.FiatDepositInstructions   `json:"fiat_instructions"`
-	Request *GetWalletDepositInstructionsRequest
+	Crypto  *model.CryptoDepositInstructions     `json:"crypto_instructions"`
+	Fiat    *model.FiatDepositInstructions       `json:"fiat_instructions"`
+	Request *GetWalletDepositInstructionsRequest `json:"-"`
 }
 
 func (s *walletsServiceImpl) GetWalletDepositInstructions(

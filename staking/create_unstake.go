@@ -46,7 +46,7 @@ type CreateUnstakeResponse struct {
 	TransactionId string `json:"transaction_id"`
 	// The ID for the activity generated for this request
 	ActivityId string                `json:"activity_id"`
-	Request    *CreateUnstakeRequest `json:"request"`
+	Request    *CreateUnstakeRequest `json:"-"`
 }
 
 func (s *stakingServiceImpl) CreateUnstake(

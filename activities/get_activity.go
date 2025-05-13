@@ -32,7 +32,7 @@ type GetActivityRequest struct {
 
 type GetActivityResponse struct {
 	Activity *model.Activity `json:"activity"`
-	Request  *GetActivityRequest
+	Request  *GetActivityRequest `json:"-"`
 }
 
 func (s *activitiesServiceImpl) GetActivity(

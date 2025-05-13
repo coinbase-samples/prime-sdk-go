@@ -19,20 +19,28 @@ package orders
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase-samples/prime-sdk-go/utils"
 )
 
 type ListOpenOrdersRequest struct {
-	PortfolioId string `json:"portfolio_id"`
-	ProductId   string `json:"product_id"`
+	PortfolioId string                  `json:"portfolio_id"`
+	ProductIds  []string                `json:"product_ids,omitempty"`
+	OrderType   string                  `json:"order_type,omitempty"`
+	OrderSide   string                  `json:"order_side,omitempty"`
+	Start       time.Time               `json:"start_date,omitempty"`
+	End         time.Time               `json:"end_date,omitempty"`
+	Pagination  *model.PaginationParams `json:"pagination_params,omitempty"`
 }
 
 type ListOpenOrdersResponse struct {
-	Orders  []*model.Order         `json:"orders"`
-	Request *ListOpenOrdersRequest `json:"request"`
+	Orders     []*model.Order         `json:"orders"`
+	Pagination *model.Pagination      `json:"pagination"`
+	Request    *ListOpenOrdersRequest `json:"-"`
 }
 
 // ListOpenOrders enables searching for open orders by product id.
@@ -47,7 +55,29 @@ func (s *ordersServiceImpl) ListOpenOrders(
 
 	path := fmt.Sprintf("/portfolios/%s/open_orders", request.PortfolioId)
 
-	queryParams := core.AppendHttpQueryParam(core.EmptyQueryParams, "product_ids", request.ProductId)
+	var queryParams string
+
+	if !request.Start.IsZero() {
+		queryParams = core.AppendHttpQueryParam(queryParams, "start_date", utils.TimeToStr(request.Start))
+	}
+
+	if !request.End.IsZero() {
+		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", utils.TimeToStr(request.End))
+	}
+
+	if request.OrderType != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "order_type", request.OrderType)
+	}
+
+	if request.OrderSide != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "order_side", request.OrderSide)
+	}
+
+	for _, p := range request.ProductIds {
+		queryParams = core.AppendHttpQueryParam(queryParams, "product_ids", p)
+	}
+
+	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
 	response := &ListOpenOrdersResponse{Request: request}
 

@@ -28,7 +28,7 @@ import (
 
 type CreateOrderPreviewResponse struct {
 	Order   *model.Order        `json:"order"`
-	Request *CreateOrderRequest `json:"request"`
+	Request *CreateOrderRequest `json:"-"`
 }
 
 func (s *ordersServiceImpl) CreateOrderPreview(

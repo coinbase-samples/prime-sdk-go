@@ -34,7 +34,7 @@ type CreateOnchainAddressBookEntryResponse struct {
 	ActivityId         string                                `json:"activity_id"`
 	ActivityType       model.OnchainActivityType             `json:"activity_type"`
 	RemainingApprovals int32                                 `json:"num_approvals_remaining"`
-	Request            *CreateOnchainAddressBookEntryRequest `json:"request"`
+	Request            *CreateOnchainAddressBookEntryRequest `json:"-"`
 }
 
 func (s *onchainAddressBookServiceImpl) CreateOnchainAddressBookEntry(

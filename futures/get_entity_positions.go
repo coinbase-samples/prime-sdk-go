@@ -33,7 +33,7 @@ type GetEntityPositionsRequest struct {
 type GetEntityPositionsResponse struct {
 	Positions         []*model.Position          `json:"positions"`
 	ClearingAccountId string                     `json:"clearing_account_id"`
-	Request           *GetEntityPositionsRequest `json:"request"`
+	Request           *GetEntityPositionsRequest `json:"-"`
 }
 
 func (s *futuresServiceImpl) GetEntityPositions(

@@ -31,7 +31,7 @@ type GetEntityActivityRequest struct {
 
 type GetEntityActivityResponse struct {
 	Activity *model.Activity `json:"activity"`
-	Request  *GetEntityActivityRequest
+	Request  *GetEntityActivityRequest `json:"-"`
 }
 
 func (s *activitiesServiceImpl) GetEntityActivity(
