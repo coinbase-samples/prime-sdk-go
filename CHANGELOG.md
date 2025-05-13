@@ -4,9 +4,11 @@
 
 ### Fix
 
-- Add pagination support for ListOpenOrders
 - Request structs are now excluded from JSON serialization when marshaling a response
 
+### Added
+
+- Add pagination support for ListOpenOrders and slice support for product IDs
 
 ## [0.3.8] - 2025-MAY-07
 
