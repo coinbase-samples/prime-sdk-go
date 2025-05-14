@@ -195,6 +195,12 @@ func (p Commission) RateNum() (rate decimal.Decimal, err error) {
 	return
 }
 
+type RfqProductDetails struct {
+	Tradable bool `json:"tradable"`
+	MinNotionalSize string `json:"min_notional_size"`
+	MaxNotionalSize string `json:"max_notional_size"`	
+}
+
 type Product struct {
 	Id             string   `json:"id"`
 	BaseIncrement  string   `json:"base_increment"`
@@ -204,6 +210,8 @@ type Product struct {
 	QuoteMinSize   string   `json:"quote_min_size"`
 	QuoteMaxSize   string   `json:"quote_max_size"`
 	Permissions    []string `json:"permissions"`
+	PriceIncrement string   `json:"price_increment"`
+	RfqProductDetails *RfqProductDetails `json:"rfq_product_details"`
 }
 
 func (p Product) BaseMinSizeNum() (amount decimal.Decimal, err error) {

@@ -54,8 +54,9 @@ func main() {
 		log.Fatalf("unable to list products: %v", err)
 	}
 
-	for _, p := range response.Products {
-		fmt.Println(p.Id)
+	jsonResponse, err := json.MarshalIndent(response, "", "  ")
+	if err != nil {
+		panic(fmt.Sprintf("error marshaling response to JSON: %v", err))
 	}
-
+	fmt.Println(string(jsonResponse))
 }
