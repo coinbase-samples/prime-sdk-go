@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2] - 2025-JUN-02
+
+### Added
+
+- Add Network info to Get and List Wallets
+
+
 ## [0.4.1] - 2025-MAY-13
 
 ### Added
