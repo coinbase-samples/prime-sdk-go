@@ -132,11 +132,12 @@ type User struct {
 }
 
 type Wallet struct {
-	Id      string    `json:"id"`
-	Type    string    `json:"type"`
-	Name    string    `json:"name"`
-	Symbol  string    `json:"symbol"`
-	Created time.Time `json:"created_at"`
+	Id      string          `json:"id"`
+	Type    string          `json:"type"`
+	Name    string          `json:"name"`
+	Symbol  string          `json:"symbol"`
+	Created time.Time       `json:"created_at"`
+	Network *NetworkDetails `json:"network"`
 }
 
 type AllocationLeg struct {
@@ -196,21 +197,21 @@ func (p Commission) RateNum() (rate decimal.Decimal, err error) {
 }
 
 type RfqProductDetails struct {
-	Tradable bool `json:"tradable"`
+	Tradable        bool   `json:"tradable"`
 	MinNotionalSize string `json:"min_notional_size"`
-	MaxNotionalSize string `json:"max_notional_size"`	
+	MaxNotionalSize string `json:"max_notional_size"`
 }
 
 type Product struct {
-	Id             string   `json:"id"`
-	BaseIncrement  string   `json:"base_increment"`
-	QuoteIncrement string   `json:"quote_increment"`
-	BaseMinSize    string   `json:"base_min_size"`
-	BaseMaxSize    string   `json:"base_max_size"`
-	QuoteMinSize   string   `json:"quote_min_size"`
-	QuoteMaxSize   string   `json:"quote_max_size"`
-	Permissions    []string `json:"permissions"`
-	PriceIncrement string   `json:"price_increment"`
+	Id                string             `json:"id"`
+	BaseIncrement     string             `json:"base_increment"`
+	QuoteIncrement    string             `json:"quote_increment"`
+	BaseMinSize       string             `json:"base_min_size"`
+	BaseMaxSize       string             `json:"base_max_size"`
+	QuoteMinSize      string             `json:"quote_min_size"`
+	QuoteMaxSize      string             `json:"quote_max_size"`
+	Permissions       []string           `json:"permissions"`
+	PriceIncrement    string             `json:"price_increment"`
 	RfqProductDetails *RfqProductDetails `json:"rfq_product_details"`
 }
 
