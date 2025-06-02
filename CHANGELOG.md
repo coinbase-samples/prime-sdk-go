@@ -5,6 +5,7 @@
 ### Added
 
 - Add Network info to Get and List Wallets
+- Added TransactionMetadata to activities
 
 
 ## [0.4.1] - 2025-MAY-13
