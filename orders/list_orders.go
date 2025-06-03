@@ -57,7 +57,9 @@ func (s *ordersServiceImpl) ListOrders(
 
 	var queryParams string
 
-	queryParams = core.AppendHttpQueryParam(queryParams, "start_date", utils.TimeToStr(request.Start))
+	if !request.Start.IsZero() {
+		queryParams = core.AppendHttpQueryParam(queryParams, "start_date", utils.TimeToStr(request.Start))
+	}
 
 	if !request.End.IsZero() {
 		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", utils.TimeToStr(request.End))

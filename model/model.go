@@ -132,11 +132,12 @@ type User struct {
 }
 
 type Wallet struct {
-	Id      string    `json:"id"`
-	Type    string    `json:"type"`
-	Name    string    `json:"name"`
-	Symbol  string    `json:"symbol"`
-	Created time.Time `json:"created_at"`
+	Id      string          `json:"id"`
+	Type    string          `json:"type"`
+	Name    string          `json:"name"`
+	Symbol  string          `json:"symbol"`
+	Created time.Time       `json:"created_at"`
+	Network *NetworkDetails `json:"network"`
 }
 
 type AllocationLeg struct {
@@ -196,21 +197,21 @@ func (p Commission) RateNum() (rate decimal.Decimal, err error) {
 }
 
 type RfqProductDetails struct {
-	Tradable bool `json:"tradable"`
+	Tradable        bool   `json:"tradable"`
 	MinNotionalSize string `json:"min_notional_size"`
-	MaxNotionalSize string `json:"max_notional_size"`	
+	MaxNotionalSize string `json:"max_notional_size"`
 }
 
 type Product struct {
-	Id             string   `json:"id"`
-	BaseIncrement  string   `json:"base_increment"`
-	QuoteIncrement string   `json:"quote_increment"`
-	BaseMinSize    string   `json:"base_min_size"`
-	BaseMaxSize    string   `json:"base_max_size"`
-	QuoteMinSize   string   `json:"quote_min_size"`
-	QuoteMaxSize   string   `json:"quote_max_size"`
-	Permissions    []string `json:"permissions"`
-	PriceIncrement string   `json:"price_increment"`
+	Id                string             `json:"id"`
+	BaseIncrement     string             `json:"base_increment"`
+	QuoteIncrement    string             `json:"quote_increment"`
+	BaseMinSize       string             `json:"base_min_size"`
+	BaseMaxSize       string             `json:"base_max_size"`
+	QuoteMinSize      string             `json:"quote_min_size"`
+	QuoteMaxSize      string             `json:"quote_max_size"`
+	Permissions       []string           `json:"permissions"`
+	PriceIncrement    string             `json:"price_increment"`
 	RfqProductDetails *RfqProductDetails `json:"rfq_product_details"`
 }
 
@@ -411,21 +412,22 @@ func (tr Transfer) ValueNum() (amount decimal.Decimal, err error) {
 }
 
 type Activity struct {
-	Id              string           `json:"id"`
-	ReferenceId     string           `json:"reference_id"`
-	Category        string           `json:"category"`
-	PrimaryType     string           `json:"type"`
-	SecondaryType   string           `json:"secondary_type"`
-	Status          string           `json:"status"`
-	CreatedBy       string           `json:"created_by"`
-	Title           string           `json:"title"`
-	Description     string           `json:"description"`
-	UserActions     []*UserAction    `json:"user_actions"`
-	AccountMetadata *AccountMetadata `json:"account_metadata"`
-	OrdersMetadata  *OrdersMetadata  `json:"orders_metadata"`
-	Symbols         []string         `json:"symbols"`
-	Created         string           `json:"created_at"`
-	Updated         string           `json:"updated_at"`
+	Id                  string                `json:"id"`
+	ReferenceId         string                `json:"reference_id"`
+	Category            string                `json:"category"`
+	PrimaryType         string                `json:"type"`
+	SecondaryType       string                `json:"secondary_type"`
+	Status              string                `json:"status"`
+	CreatedBy           string                `json:"created_by"`
+	Title               string                `json:"title"`
+	Description         string                `json:"description"`
+	UserActions         []*UserAction         `json:"user_actions,omitempty"`
+	AccountMetadata     *AccountMetadata      `json:"account_metadata,omitempty"`
+	OrdersMetadata      *OrdersMetadata       `json:"orders_metadata,omitempty"`
+	TransactionMetadata *TransactionsMetadata `json:"transaction_metadata,omitempty"`
+	Symbols             []string              `json:"symbols,omitempty"`
+	Created             string                `json:"created_at"`
+	Updated             string                `json:"updated_at"`
 }
 
 type TransactionsMetadata struct {
@@ -448,7 +450,7 @@ type UserAction struct {
 	Action               string                `json:"action"`
 	UserId               string                `json:"user_id"`
 	Timestamp            string                `json:"timestamp"`
-	TransactionsMetadata *TransactionsMetadata `json:"transactions_metadata"`
+	TransactionsMetadata *TransactionsMetadata `json:"transactions_metadata,omitempty"`
 }
 
 type AddressBookEntry struct {

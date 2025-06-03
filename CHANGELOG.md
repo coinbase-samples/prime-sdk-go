@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.3] - 2025-JUN-02
+
+### Added
+
+- Add Network info to Get and List Wallets
+- Added TransactionMetadata to activities
+
+
 ## [0.4.1] - 2025-MAY-13
 
 ### Added

@@ -50,8 +50,10 @@ func (s *walletsServiceImpl) ListWallets(
 
 	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId)
 
-	queryParams := core.AppendHttpQueryParam(core.EmptyQueryParams, "type", request.Type)
-
+	queryParams := core.EmptyQueryParams
+	if request.Type != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "type", request.Type)
+	}
 	for _, v := range request.Symbols {
 		queryParams = core.AppendHttpQueryParam(queryParams, "symbols", v)
 	}
