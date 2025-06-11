@@ -452,7 +452,7 @@ type Accrual struct {
 	LoanAmount string `json:"loan_amount,omitempty"`
 
 	// Benchmark information
-	Benchmark *Benchmark `json:"benchmark,omitempty"`
+	Benchmark Benchmark `json:"benchmark,omitempty"`
 
 	// Daily interest rate fetched from the benchmark source
 	BenchmarkRate string `json:"benchmark_rate,omitempty"`
