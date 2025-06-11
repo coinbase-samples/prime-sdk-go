@@ -24,7 +24,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/credentials"
 	"github.com/coinbase-samples/prime-sdk-go/model"
@@ -34,6 +33,18 @@ import (
 
 func main() {
 
+	credentials, err := credentials.ReadEnvCredentials("PRIME_CREDENTIALS")
+	if err != nil {
+		log.Fatalf("unable to read credentials from environment: %v", err)
+	}
+
+	httpClient, err := client.DefaultHttpClient()
+	if err != nil {
+		log.Fatalf("unable to load default http client: %v", err)
+	}
+
+	client := client.NewRestClient(credentials, httpClient)
+
 	if len(os.Args) < 4 {
 		log.Fatalf("wallet ID, amount, symbol, and address are required as command-line arguments")
 	}
@@ -42,20 +53,9 @@ func main() {
 	symbol := os.Args[3]
 	address := os.Args[4]
 
-	credentials := &credentials.Credentials{}
-	if err := json.Unmarshal([]byte(os.Getenv("PRIME_CREDENTIALS")), credentials); err != nil {
-		log.Fatalf("unable to deserialize prime credentials JSON: %v", err)
-	}
-
-	httpClient, err := core.DefaultHttpClient()
-	if err != nil {
-		log.Fatalf("unable to load default http client: %v", err)
-	}
-
-	client := client.NewRestClient(credentials, httpClient)
-
 	transactionsSvc := transactions.NewTransactionsService(client)
-	withdrawalRequest := &transactions.CreateWalletWithdrawalRequest{
+
+	request := &transactions.CreateWalletWithdrawalRequest{
 		PortfolioId:     credentials.PortfolioId,
 		SourceWalletId:  walletId,
 		DestinationType: "DESTINATION_BLOCKCHAIN",
@@ -70,14 +70,14 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	withdrawalResponse, err := transactionsSvc.CreateWalletWithdrawal(ctx, withdrawalRequest)
+	response, err := transactionsSvc.CreateWalletWithdrawal(ctx, request)
 	if err != nil {
 		log.Fatalf("unable to create withdrawal: %v", err)
 	}
 
-	jsonResponse, err := json.MarshalIndent(withdrawalResponse, "", "  ")
+	output, err := json.MarshalIndent(response, "", "  ")
 	if err != nil {
 		panic(fmt.Sprintf("error marshaling response to JSON: %v", err))
 	}
-	fmt.Println(string(jsonResponse))
+	fmt.Println(string(output))
 }

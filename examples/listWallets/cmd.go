@@ -21,9 +21,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
-	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/credentials"
 	"github.com/coinbase-samples/prime-sdk-go/wallets"
@@ -31,12 +29,12 @@ import (
 
 func main() {
 
-	credentials := &credentials.Credentials{}
-	if err := json.Unmarshal([]byte(os.Getenv("PRIME_CREDENTIALS")), credentials); err != nil {
-		log.Fatalf("unable to deserialize prime credentials JSON: %v", err)
+	credentials, err := credentials.ReadEnvCredentials("PRIME_CREDENTIALS")
+	if err != nil {
+		log.Fatalf("unable to read credentials from environment: %v", err)
 	}
 
-	httpClient, err := core.DefaultHttpClient()
+	httpClient, err := client.DefaultHttpClient()
 	if err != nil {
 		log.Fatalf("unable to load default http client: %v", err)
 	}
@@ -44,6 +42,7 @@ func main() {
 	client := client.NewRestClient(credentials, httpClient)
 
 	walletsSvc := wallets.NewWalletsService(client)
+
 	request := &wallets.ListWalletsRequest{
 		PortfolioId: credentials.PortfolioId,
 	}
@@ -53,9 +52,9 @@ func main() {
 		log.Fatalf("unable to list wallets: %v", err)
 	}
 
-	jsonResponse, err := json.MarshalIndent(response, "", "  ")
+	output, err := json.MarshalIndent(response, "", "  ")
 	if err != nil {
 		panic(fmt.Sprintf("error marshaling response to JSON: %v", err))
 	}
-	fmt.Println(string(jsonResponse))
+	fmt.Println(string(output))
 }

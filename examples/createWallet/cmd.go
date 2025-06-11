@@ -23,7 +23,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/credentials"
 	"github.com/coinbase-samples/prime-sdk-go/wallets"
@@ -32,6 +31,18 @@ import (
 
 func main() {
 
+	credentials, err := credentials.ReadEnvCredentials("PRIME_CREDENTIALS")
+	if err != nil {
+		log.Fatalf("unable to read credentials from environment: %v", err)
+	}
+
+	httpClient, err := client.DefaultHttpClient()
+	if err != nil {
+		log.Fatalf("unable to load default http client: %v", err)
+	}
+
+	client := client.NewRestClient(credentials, httpClient)
+
 	if len(os.Args) < 3 {
 		log.Fatalf("name, symbol, and wallet type are required as command-line arguments")
 	}
@@ -39,20 +50,9 @@ func main() {
 	symbol := os.Args[2]
 	walletType := os.Args[3]
 
-	credentials := &credentials.Credentials{}
-	if err := json.Unmarshal([]byte(os.Getenv("PRIME_CREDENTIALS")), credentials); err != nil {
-		log.Fatalf("unable to deserialize prime credentials JSON: %v", err)
-	}
-
-	httpClient, err := core.DefaultHttpClient()
-	if err != nil {
-		log.Fatalf("unable to load default http client: %v", err)
-	}
-
-	client := client.NewRestClient(credentials, httpClient)
-
 	walletsSvc := wallets.NewWalletsService(client)
-	walletRequest := &wallets.CreateWalletRequest{
+
+	request := &wallets.CreateWalletRequest{
 		PortfolioId:    credentials.PortfolioId,
 		Name:           name,
 		Symbol:         symbol,
@@ -60,14 +60,14 @@ func main() {
 		IdempotencyKey: uuid.New().String(),
 	}
 
-	walletResponse, err := walletsSvc.CreateWallet(context.Background(), walletRequest)
+	response, err := walletsSvc.CreateWallet(context.Background(), request)
 	if err != nil {
 		log.Fatalf("unable to create vault wallet: %v", err)
 	}
 
-	jsonResponse, err := json.MarshalIndent(walletResponse, "", "  ")
+	output, err := json.MarshalIndent(response, "", "  ")
 	if err != nil {
 		panic(fmt.Sprintf("error marshaling response to JSON: %v", err))
 	}
-	fmt.Println(string(jsonResponse))
+	fmt.Println(string(output))
 }

@@ -23,7 +23,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/credentials"
 	"github.com/coinbase-samples/prime-sdk-go/model"
@@ -32,12 +31,12 @@ import (
 
 func main() {
 
-	credentials := &credentials.Credentials{}
-	if err := json.Unmarshal([]byte(os.Getenv("PRIME_CREDENTIALS")), credentials); err != nil {
-		log.Fatalf("unable to deserialize prime credentials JSON: %v", err)
+	credentials, err := credentials.ReadEnvCredentials("PRIME_CREDENTIALS")
+	if err != nil {
+		log.Fatalf("unable to read credentials from environment: %v", err)
 	}
 
-	httpClient, err := core.DefaultHttpClient()
+	httpClient, err := client.DefaultHttpClient()
 	if err != nil {
 		log.Fatalf("unable to load default http client: %v", err)
 	}
@@ -54,7 +53,8 @@ func main() {
 	limitPrice := os.Args[5]
 
 	ordersSvc := orders.NewOrdersService(client)
-	orderRequest := &orders.CreateOrderRequest{
+
+	request := &orders.CreateOrderRequest{
 		Order: &model.Order{
 			PortfolioId:  credentials.PortfolioId,
 			ProductId:    productId,
@@ -65,14 +65,14 @@ func main() {
 		},
 	}
 
-	orderResponse, err := ordersSvc.CreateOrderPreview(context.Background(), orderRequest)
+	response, err := ordersSvc.CreateOrderPreview(context.Background(), request)
 	if err != nil {
 		log.Fatalf("unable to get order preview: %v", err)
 	}
 
-	jsonResponse, err := json.MarshalIndent(orderResponse, "", "  ")
+	output, err := json.MarshalIndent(response, "", "  ")
 	if err != nil {
 		panic(fmt.Sprintf("error marshaling response to JSON: %v", err))
 	}
-	fmt.Println(string(jsonResponse))
+	fmt.Println(string(output))
 }
