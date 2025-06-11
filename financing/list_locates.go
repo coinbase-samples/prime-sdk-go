@@ -25,38 +25,35 @@ import (
 	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type ListMarginCallSummariesRequest struct {
-	// required
-	EntityId string `json:"entity_id"`
-	// The start date of the range to query for in RFC3339 format
-	StartDate string `json:"start_date"`
-	// The end date of the range to query for in RFC3339 format
-	EndDate string `json:"end_date"`
+type ListLocatesRequest struct {
+	PortfolioId string   `json:"portfolio_id"` // required
+	LocateIds   []string `json:"locate_ids"`
+	LocateDate  string   `json:"locate_date"`
 }
 
-type ListMarginCallSummariesResponse struct {
-	MarginSummaries []*model.MarginSummaryHistorical `json:"margin_summaries"`
-	Request         *ListMarginCallSummariesRequest  `json:"-"`
+type ListLocatesResponse struct {
+	Locates []*model.Locate     `json:"locates"`
+	Request *ListLocatesRequest `json:"-"`
 }
 
-func (s *financingServiceImpl) ListMarginCallSummaries(
+func (s *financingServiceImpl) ListLocates(
 	ctx context.Context,
-	request *ListMarginCallSummariesRequest,
-) (*ListMarginCallSummariesResponse, error) {
+	request *ListLocatesRequest,
+) (*ListLocatesResponse, error) {
 
-	path := fmt.Sprintf("/entities/%s/margin_summaries", request.EntityId)
+	path := fmt.Sprintf("/portfolios/%s/locates", request.PortfolioId)
 
 	var queryParams string
 
-	if request.StartDate != "" {
-		queryParams = core.AppendHttpQueryParam(queryParams, "start_date", request.StartDate)
+	if request.LocateDate != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "locate_date", request.LocateDate)
 	}
 
-	if request.EndDate != "" {
-		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", request.EndDate)
+	for _, v := range request.LocateIds {
+		queryParams = core.AppendHttpQueryParam(queryParams, "locate_ids", v)
 	}
 
-	response := &ListMarginCallSummariesResponse{Request: request}
+	response := &ListLocatesResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,

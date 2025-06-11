@@ -25,38 +25,25 @@ import (
 	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type ListMarginCallSummariesRequest struct {
-	// required
+type GetMarginInfoRequest struct {
 	EntityId string `json:"entity_id"`
-	// The start date of the range to query for in RFC3339 format
-	StartDate string `json:"start_date"`
-	// The end date of the range to query for in RFC3339 format
-	EndDate string `json:"end_date"`
 }
 
-type ListMarginCallSummariesResponse struct {
-	MarginSummaries []*model.MarginSummaryHistorical `json:"margin_summaries"`
-	Request         *ListMarginCallSummariesRequest  `json:"-"`
+type GetMarginInfoResponse struct {
+	MarginInfo *model.MarginInfo     `json:"margin_information"`
+	Request    *GetMarginInfoRequest `json:"-"`
 }
 
-func (s *financingServiceImpl) ListMarginCallSummaries(
+func (s *financingServiceImpl) GetMarginInfo(
 	ctx context.Context,
-	request *ListMarginCallSummariesRequest,
-) (*ListMarginCallSummariesResponse, error) {
+	request *GetMarginInfoRequest,
+) (*GetMarginInfoResponse, error) {
 
-	path := fmt.Sprintf("/entities/%s/margin_summaries", request.EntityId)
+	path := fmt.Sprintf("/entities/%s/margin", request.EntityId)
 
 	var queryParams string
 
-	if request.StartDate != "" {
-		queryParams = core.AppendHttpQueryParam(queryParams, "start_date", request.StartDate)
-	}
-
-	if request.EndDate != "" {
-		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", request.EndDate)
-	}
-
-	response := &ListMarginCallSummariesResponse{Request: request}
+	response := &GetMarginInfoResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,

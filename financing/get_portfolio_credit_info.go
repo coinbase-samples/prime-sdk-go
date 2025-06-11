@@ -25,38 +25,39 @@ import (
 	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type ListMarginCallSummariesRequest struct {
-	// required
-	EntityId string `json:"entity_id"`
-	// The start date of the range to query for in RFC3339 format
-	StartDate string `json:"start_date"`
-	// The end date of the range to query for in RFC3339 format
-	EndDate string `json:"end_date"`
+type GetPortfolioCreditInfoRequest struct {
+	PortfolioId   string `json:"portfolio_id"`   // required
+	BaseCurrency  string `json:"base_currency"`  // required
+	QuoteCurrency string `json:"quote_currency"` // required
 }
 
-type ListMarginCallSummariesResponse struct {
-	MarginSummaries []*model.MarginSummaryHistorical `json:"margin_summaries"`
-	Request         *ListMarginCallSummariesRequest  `json:"-"`
+type GetPortfolioCreditInfoResponse struct {
+	PortfolioCreditInfo *model.PostTradeCreditInfo     `json:"post_trade_credit"`
+	Request             *GetPortfolioCreditInfoRequest `json:"-"`
 }
 
-func (s *financingServiceImpl) ListMarginCallSummaries(
+func (s *financingServiceImpl) GetPortfolioCreditInfo(
 	ctx context.Context,
-	request *ListMarginCallSummariesRequest,
-) (*ListMarginCallSummariesResponse, error) {
+	request *GetPortfolioCreditInfoRequest,
+) (*GetPortfolioCreditInfoResponse, error) {
 
-	path := fmt.Sprintf("/entities/%s/margin_summaries", request.EntityId)
+	path := fmt.Sprintf("/portfolios/%s/credit", request.PortfolioId)
 
 	var queryParams string
 
-	if request.StartDate != "" {
-		queryParams = core.AppendHttpQueryParam(queryParams, "start_date", request.StartDate)
+	if request.BaseCurrency != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "base_currency", request.BaseCurrency)
+	} else {
+		return nil, fmt.Errorf("base_currency is required")
 	}
 
-	if request.EndDate != "" {
-		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", request.EndDate)
+	if request.QuoteCurrency != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "quote_currency", request.QuoteCurrency)
+	} else {
+		return nil, fmt.Errorf("quote_currency is required")
 	}
 
-	response := &ListMarginCallSummariesResponse{Request: request}
+	response := &GetPortfolioCreditInfoResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,

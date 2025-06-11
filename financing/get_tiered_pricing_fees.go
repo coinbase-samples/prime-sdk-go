@@ -32,7 +32,7 @@ type GetTieredPricingFeesRequest struct {
 }
 
 type GetTieredPricingFeesResponse struct {
-	Fees    *[]model.TieredPricingFee    `json:"fees,omitempty"`
+	Fees    []*model.TieredPricingFee    `json:"fees,omitempty"`
 	Request *GetTieredPricingFeesRequest `json:"-"`
 }
 

@@ -36,7 +36,7 @@ type ListInterestAccrualsRequest struct {
 }
 
 type ListInterestAccrualsResponse struct {
-	Accruals             []model.Accrual              `json:"accruals"`
+	Accruals             []*model.Accrual             `json:"accruals"`
 	TotalNotionalAccrual string                       `json:"total_notional_accrual"`
 	Request              *ListInterestAccrualsRequest `json:"-"`
 }
