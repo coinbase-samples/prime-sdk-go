@@ -23,14 +23,14 @@ import (
 )
 
 type FinancingService interface {
-	CreateNewLocates(ctx context.Context, request *CreateNewLocatesRequest) (*CreateNewLocatesResponse, error)
+	CreateLocate(ctx context.Context, request *CreateLocateRequest) (*CreateLocateResponse, error)
 	GetEntityLocateAvailabilities(ctx context.Context, request *GetEntityLocateAvailabilitiesRequest) (*GetEntityLocateAvailabilitiesResponse, error)
 	GetBuyingPower(ctx context.Context, request *GetBuyingPowerRequest) (*GetBuyingPowerResponse, error)
 	GetWithdrawalPower(ctx context.Context, request *GetWithdrawalPowerRequest) (*GetWithdrawalPowerResponse, error)
-	GetMarginInformation(ctx context.Context, request *GetMarginInformationRequest) (*GetMarginInformationResponse, error)
-	GetPortfolioCreditInformation(ctx context.Context, request *GetPortfolioCreditInformationRequest) (*GetPortfolioCreditInformationResponse, error)
+	GetMarginInfo(ctx context.Context, request *GetMarginInfoRequest) (*GetMarginInfoResponse, error)
+	GetPortfolioCreditInfo(ctx context.Context, request *GetPortfolioCreditInfoRequest) (*GetPortfolioCreditInfoResponse, error)
 	GetTieredPricingFees(ctx context.Context, request *GetTieredPricingFeesRequest) (*GetTieredPricingFeesResponse, error)
-	ListExistingLocates(ctx context.Context, request *ListExistingLocatesRequest) (*ListExistingLocatesResponse, error)
+	ListLocates(ctx context.Context, request *ListLocatesRequest) (*ListLocatesResponse, error)
 	ListInterestAccruals(ctx context.Context, request *ListInterestAccrualsRequest) (*ListInterestAccrualsResponse, error)
 	ListPortfolioInterestAccruals(ctx context.Context, request *ListPortfolioInterestAccrualsRequest) (*ListPortfolioInterestAccrualsResponse, error)
 	ListMarginCallSummaries(ctx context.Context, request *ListMarginCallSummariesRequest) (*ListMarginCallSummariesResponse, error)

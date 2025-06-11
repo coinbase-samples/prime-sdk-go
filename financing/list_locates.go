@@ -22,36 +22,40 @@ import (
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type CreateNewLocatesRequest struct {
-	// required
-	PortfolioId string `json:"portfolio_id"`
-	// Currency symbol
-	Symbol string `json:"symbol"`
-	// Locate Amount
-	Amount string `json:"amount"`
-	// The target date of the locate (YYYY-MM-DD)
-	LocateDate string `json:"locate_date"`
+type ListLocatesRequest struct {
+	PortfolioId string   `json:"portfolio_id"` // required
+	LocateIds   []string `json:"locate_ids"`
+	LocateDate  string   `json:"locate_date"`
 }
 
-type CreateNewLocatesResponse struct {
-	LocateId string                   `json:"locate_id"`
-	Request  *CreateNewLocatesRequest `json:"-"`
+type ListLocatesResponse struct {
+	Locates []*model.Locate     `json:"locates"`
+	Request *ListLocatesRequest `json:"-"`
 }
 
-func (s *financingServiceImpl) CreateNewLocates(
+func (s *financingServiceImpl) ListLocates(
 	ctx context.Context,
-	request *CreateNewLocatesRequest,
-) (*CreateNewLocatesResponse, error) {
+	request *ListLocatesRequest,
+) (*ListLocatesResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/locates", request.PortfolioId)
 
 	var queryParams string
 
-	response := &CreateNewLocatesResponse{Request: request}
+	if request.LocateDate != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "locate_date", request.LocateDate)
+	}
 
-	if err := core.HttpPost(
+	for _, v := range request.LocateIds {
+		queryParams = core.AppendHttpQueryParam(queryParams, "locate_ids", v)
+	}
+
+	response := &ListLocatesResponse{Request: request}
+
+	if err := core.HttpGet(
 		ctx,
 		s.client,
 		path,

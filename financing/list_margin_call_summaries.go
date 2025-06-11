@@ -35,8 +35,8 @@ type ListMarginCallSummariesRequest struct {
 }
 
 type ListMarginCallSummariesResponse struct {
-	MarginSummaries []model.MarginSummaryHistorical `json:"margin_summaries"`
-	Request         *ListMarginCallSummariesRequest `json:"-"`
+	MarginSummaries []*model.MarginSummaryHistorical `json:"margin_summaries"`
+	Request         *ListMarginCallSummariesRequest  `json:"-"`
 }
 
 func (s *financingServiceImpl) ListMarginCallSummaries(

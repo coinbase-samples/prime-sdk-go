@@ -35,7 +35,7 @@ type GetBuyingPowerRequest struct {
 }
 
 type GetBuyingPowerResponse struct {
-	BuyingPower model.BuyingPower      `json:"buying_power"`
+	BuyingPower *model.BuyingPower     `json:"buying_power"`
 	Request     *GetBuyingPowerRequest `json:"-"`
 }
 

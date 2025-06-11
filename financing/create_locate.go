@@ -22,43 +22,36 @@ import (
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
-	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type ListMarginConversionsRequest struct {
+type CreateLocateRequest struct {
 	// required
 	PortfolioId string `json:"portfolio_id"`
-	// The start date of the range to query for in RFC3339 format
-	StartDate string `json:"start_date"`
-	// The end date of the range to query for in RFC3339 format
-	EndDate string `json:"end_date"`
+	// Currency symbol
+	Symbol string `json:"symbol"`
+	// Locate Amount
+	Amount string `json:"amount"`
+	// The target date of the locate (YYYY-MM-DD)
+	LocateDate string `json:"locate_date"`
 }
 
-type ListMarginConversionsResponse struct {
-	Conversions []*model.Conversion           `json:"conversions"`
-	Request     *ListMarginConversionsRequest `json:"-"`
+type CreateLocateResponse struct {
+	LocateId string               `json:"locate_id"`
+	Request  *CreateLocateRequest `json:"-"`
 }
 
-func (s *financingServiceImpl) ListMarginConversions(
+func (s *financingServiceImpl) CreateLocate(
 	ctx context.Context,
-	request *ListMarginConversionsRequest,
-) (*ListMarginConversionsResponse, error) {
+	request *CreateLocateRequest,
+) (*CreateLocateResponse, error) {
 
-	path := fmt.Sprintf("/portfolios/%s/margin_conversions", request.PortfolioId)
+	path := fmt.Sprintf("/portfolios/%s/locates", request.PortfolioId)
 
 	var queryParams string
 
-	if request.StartDate != "" {
-		queryParams = core.AppendHttpQueryParam(queryParams, "start_date", request.StartDate)
-	}
+	response := &CreateLocateResponse{Request: request}
 
-	if request.EndDate != "" {
-		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", request.EndDate)
-	}
-
-	response := &ListMarginConversionsResponse{Request: request}
-
-	if err := core.HttpGet(
+	if err := core.HttpPost(
 		ctx,
 		s.client,
 		path,

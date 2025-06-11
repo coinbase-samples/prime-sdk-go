@@ -25,35 +25,39 @@ import (
 	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type ListExistingLocatesRequest struct {
-	PortfolioId string   `json:"portfolio_id"` // required
-	LocateIds   []string `json:"locate_ids"`
-	LocateDate  string   `json:"locate_date"`
+type GetPortfolioCreditInfoRequest struct {
+	PortfolioId   string `json:"portfolio_id"`   // required
+	BaseCurrency  string `json:"base_currency"`  // required
+	QuoteCurrency string `json:"quote_currency"` // required
 }
 
-type ListExistingLocatesResponse struct {
-	Locates []model.ExistingLocate      `json:"locates"`
-	Request *ListExistingLocatesRequest `json:"-"`
+type GetPortfolioCreditInfoResponse struct {
+	PortfolioCreditInfo *model.PostTradeCreditInfo     `json:"post_trade_credit"`
+	Request             *GetPortfolioCreditInfoRequest `json:"-"`
 }
 
-func (s *financingServiceImpl) ListExistingLocates(
+func (s *financingServiceImpl) GetPortfolioCreditInfo(
 	ctx context.Context,
-	request *ListExistingLocatesRequest,
-) (*ListExistingLocatesResponse, error) {
+	request *GetPortfolioCreditInfoRequest,
+) (*GetPortfolioCreditInfoResponse, error) {
 
-	path := fmt.Sprintf("/portfolios/%s/locates", request.PortfolioId)
+	path := fmt.Sprintf("/portfolios/%s/credit", request.PortfolioId)
 
 	var queryParams string
 
-	if request.LocateDate != "" {
-		queryParams = core.AppendHttpQueryParam(queryParams, "locate_date", request.LocateDate)
+	if request.BaseCurrency != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "base_currency", request.BaseCurrency)
+	} else {
+		return nil, fmt.Errorf("base_currency is required")
 	}
 
-	for _, v := range request.LocateIds {
-		queryParams = core.AppendHttpQueryParam(queryParams, "locate_ids", v)
+	if request.QuoteCurrency != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "quote_currency", request.QuoteCurrency)
+	} else {
+		return nil, fmt.Errorf("quote_currency is required")
 	}
 
-	response := &ListExistingLocatesResponse{Request: request}
+	response := &GetPortfolioCreditInfoResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,

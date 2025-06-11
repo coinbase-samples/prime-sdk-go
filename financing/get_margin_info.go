@@ -25,25 +25,25 @@ import (
 	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type GetMarginInformationRequest struct {
+type GetMarginInfoRequest struct {
 	EntityId string `json:"entity_id"`
 }
 
-type GetMarginInformationResponse struct {
-	MarginInformation model.MarginInformation      `json:"margin_information"`
-	Request           *GetMarginInformationRequest `json:"-"`
+type GetMarginInfoResponse struct {
+	MarginInfo *model.MarginInfo     `json:"margin_information"`
+	Request    *GetMarginInfoRequest `json:"-"`
 }
 
-func (s *financingServiceImpl) GetMarginInformation(
+func (s *financingServiceImpl) GetMarginInfo(
 	ctx context.Context,
-	request *GetMarginInformationRequest,
-) (*GetMarginInformationResponse, error) {
+	request *GetMarginInfoRequest,
+) (*GetMarginInfoResponse, error) {
 
 	path := fmt.Sprintf("/entities/%s/margin", request.EntityId)
 
 	var queryParams string
 
-	response := &GetMarginInformationResponse{Request: request}
+	response := &GetMarginInfoResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,

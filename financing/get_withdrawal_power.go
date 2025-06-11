@@ -31,7 +31,7 @@ type GetWithdrawalPowerRequest struct {
 }
 
 type GetWithdrawalPowerResponse struct {
-	WithdrawalPower model.WithdrawalPower      `json:"withdrawal_power"`
+	WithdrawalPower *model.WithdrawalPower     `json:"withdrawal_power"`
 	Request         *GetWithdrawalPowerRequest `json:"-"`
 }
 

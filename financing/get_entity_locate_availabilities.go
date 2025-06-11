@@ -31,9 +31,8 @@ type GetEntityLocateAvailabilitiesRequest struct {
 }
 
 type GetEntityLocateAvailabilitiesResponse struct {
-	Locates    []*model.Locate                       `json:"locates"`
-	Pagination *model.Pagination                     `json:"pagination"`
-	Request    *GetEntityLocateAvailabilitiesRequest `json:"-"`
+	Locates []*model.LocateAvailability           `json:"locates"`
+	Request *GetEntityLocateAvailabilitiesRequest `json:"-"`
 }
 
 func (s *financingServiceImpl) GetEntityLocateAvailabilities(
