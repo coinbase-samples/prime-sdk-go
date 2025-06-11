@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.0] - 2025-JUN-11
+
+### Fix
+
+- Align financing models with rest of the SDK
+
 ## [0.4.3] - 2025-JUN-02
 
 ### Added

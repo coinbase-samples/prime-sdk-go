@@ -16,7 +16,7 @@
 
 package model
 
-type Locate struct {
+type LocateAvailability struct {
 	// The currency symbol
 	Symbol string `json:"symbol"`
 	// The available quantity located
@@ -80,7 +80,7 @@ const (
 	LoanTypeShortCollateral     LoanType = "SHORT_COLLATERAL"
 )
 
-type PMAssetInfo struct {
+type PmAssetInfo struct {
 	// The currency symbol
 	Symbol string `json:"symbol,omitempty"`
 
@@ -219,19 +219,19 @@ type MarginSummary struct {
 	PmEnabled bool `json:"pm_enabled,omitempty"`
 
 	// Market rates for the list of assets
-	MarketRates []MarketRate `json:"market_rates,omitempty"`
+	MarketRates []*MarketRate `json:"market_rates,omitempty"`
 
 	// Asset Balances across portfolios
-	AssetBalances []AssetBalance `json:"asset_balances,omitempty"`
+	AssetBalances []*AssetBalance `json:"asset_balances,omitempty"`
 
 	// Trade finance debit loan amounts. This field is deprecated and will be removed in the future.
-	TfLoans []LoanInfo `json:"tf_loans,omitempty"`
+	TfLoans []*LoanInfo `json:"tf_loans,omitempty"`
 
 	// Portfolio Margin debit loan amounts
-	PmLoans []LoanInfo `json:"pm_loans,omitempty"`
+	PmLoans []*LoanInfo `json:"pm_loans,omitempty"`
 
 	// Short collateral amounts
-	ShortCollateral []LoanInfo `json:"short_collateral,omitempty"`
+	ShortCollateral []*LoanInfo `json:"short_collateral,omitempty"`
 
 	// Gross market value (GMV) = LMV + Abs (SMV)
 	GrossMarketValue string `json:"gross_market_value,omitempty"`
@@ -258,7 +258,7 @@ type MarginSummary struct {
 	PortfolioStressTriggered MarginAddOnType `json:"portfolio_stress_triggered,omitempty"`
 
 	// PM asset info netted across the entity
-	PmAssetInfo []PMAssetInfo `json:"pm_asset_info,omitempty"`
+	PmAssetInfo []*PmAssetInfo `json:"pm_asset_info,omitempty"`
 
 	// PM limit that monitors gross notional borrowings (crypto + fiat)
 	PmCreditLimit string `json:"pm_credit_limit,omitempty"`
@@ -270,17 +270,17 @@ type MarginSummary struct {
 	PmMarginConsumed string `json:"pm_margin_consumed,omitempty"`
 }
 
-type MarginInformation struct {
-	MarginCallRecords []MarginCallRecord `json:"margin_call_records,omitempty"`
-	MarginSummary     MarginSummary      `json:"margin_summary,omitempty"`
+type MarginInfo struct {
+	MarginCallRecords []*MarginCallRecord `json:"margin_call_records,omitempty"`
+	MarginSummary     *MarginSummary      `json:"margin_summary,omitempty"`
 }
 
 type MarginSummaryHistorical struct {
 	// The UTC date time used for conversion
-	ConversionDatetime *string `json:"conversion_datetime,omitempty"`
+	ConversionDatetime string `json:"conversion_datetime,omitempty"`
 
 	// The date used for conversion
-	ConversionDate *string `json:"conversion_date,omitempty"`
+	ConversionDate string `json:"conversion_date,omitempty"`
 
 	// The margin summary
 	MarginSummary *MarginSummary `json:"margin_summary,omitempty"`
@@ -288,116 +288,116 @@ type MarginSummaryHistorical struct {
 
 type BuyingPower struct {
 	// The unique ID of the portfolio
-	PortfolioId *string `json:"portfolio_id,omitempty"`
+	PortfolioId string `json:"portfolio_id,omitempty"`
 
 	// The symbol for the base currency
-	BaseCurrency *string `json:"base_currency,omitempty"`
+	BaseCurrency string `json:"base_currency,omitempty"`
 
 	// The symbol for the quote currency
-	QuoteCurrency *string `json:"quote_currency,omitempty"`
+	QuoteCurrency string `json:"quote_currency,omitempty"`
 
 	// The buying power for the base currency
-	BaseBuyingPower *string `json:"base_buying_power,omitempty"`
+	BaseBuyingPower string `json:"base_buying_power,omitempty"`
 
 	// The buying power for the quote currency
-	QuoteBuyingPower *string `json:"quote_buying_power,omitempty"`
+	QuoteBuyingPower string `json:"quote_buying_power,omitempty"`
 }
 
 type AmountDue struct {
 	// The currency this loan is due in
-	Currency *string `json:"currency,omitempty"`
+	Currency string `json:"currency,omitempty"`
 
 	// The amount due
-	Amount *string `json:"amount,omitempty"`
+	Amount string `json:"amount,omitempty"`
 
 	// The date this settlement is due, expressed in UTC
-	DueDate *string `json:"due_date,omitempty"`
+	DueDate string `json:"due_date,omitempty"`
 }
 
-type PostTradeCreditInformation struct {
+type PostTradeCreditInfo struct {
 	// The unique ID of the portfolio
-	PortfolioId *string `json:"portfolio_id,omitempty"`
+	PortfolioId string `json:"portfolio_id,omitempty"`
 
 	// The currency symbol credit is denoted in
-	Currency *string `json:"currency,omitempty"`
+	Currency string `json:"currency,omitempty"`
 
 	// The maximum credit limit
-	Limit *string `json:"limit,omitempty"`
+	Limit string `json:"limit,omitempty"`
 
 	// The amount of credit used
-	Utilized *string `json:"utilized,omitempty"`
+	Utilized string `json:"utilized,omitempty"`
 
 	// The amount of credit available
-	Available *string `json:"available,omitempty"`
+	Available string `json:"available,omitempty"`
 
 	// Whether or not a portfolio is frozen due to balance outstanding or other reason
-	Frozen *bool `json:"frozen,omitempty"`
+	Frozen bool `json:"frozen,omitempty"`
 
 	// The reason why the portfolio is frozen
-	FrozenReason *string `json:"frozen_reason,omitempty"`
+	FrozenReason string `json:"frozen_reason,omitempty"`
 
 	// Amounts due
-	AmountsDue *[]AmountDue `json:"amounts_due,omitempty"`
+	AmountsDue []*AmountDue `json:"amounts_due,omitempty"`
 
 	// Whether the portfolio has credit enabled
-	Enabled *bool `json:"enabled,omitempty"`
+	Enabled bool `json:"enabled,omitempty"`
 
 	// The amount of adjusted credit used
-	AdjustedCreditUtilized *string `json:"adjusted_credit_utilized,omitempty"`
+	AdjustedCreditUtilized string `json:"adjusted_credit_utilized,omitempty"`
 
 	// The amount of adjusted portfolio equity
-	AdjustedPortfolioEquity *string `json:"adjusted_portfolio_equity,omitempty"`
+	AdjustedPortfolioEquity string `json:"adjusted_portfolio_equity,omitempty"`
 }
 
 type WithdrawalPower struct {
 	// The currency symbol
-	Symbol *string `json:"symbol,omitempty"`
+	Symbol string `json:"symbol,omitempty"`
 
 	// Withdrawal power
-	Amount *string `json:"amount,omitempty"`
+	Amount string `json:"amount,omitempty"`
 }
 
 type TieredPricingFee struct {
 	// Asset symbol
-	Symbol *string `json:"symbol,omitempty"`
+	Symbol string `json:"symbol,omitempty"`
 
 	// The fee in bps
-	Fee *string `json:"fee,omitempty"`
+	Fee string `json:"fee,omitempty"`
 }
 
-type ExistingLocate struct {
+type Locate struct {
 	// The locate ID
-	LocateId *string `json:"locate_id,omitempty"`
+	LocateId string `json:"locate_id,omitempty"`
 
 	// The unique ID of the entity
-	EntityId *string `json:"entity_id,omitempty"`
+	EntityId string `json:"entity_id,omitempty"`
 
 	// The unique ID of the portfolio
-	PortfolioId *string `json:"portfolio_id,omitempty"`
+	PortfolioId string `json:"portfolio_id,omitempty"`
 
 	// The currency symbol
-	Symbol *string `json:"symbol,omitempty"`
+	Symbol string `json:"symbol,omitempty"`
 
 	// The requested locate amount
-	RequestedAmount *string `json:"requested_amount,omitempty"`
+	RequestedAmount string `json:"requested_amount,omitempty"`
 
 	// The interest rate of PM loan
-	InterestRate *string `json:"interest_rate,omitempty"`
+	InterestRate string `json:"interest_rate,omitempty"`
 
 	// The locate status
-	Status *string `json:"status,omitempty"`
+	Status string `json:"status,omitempty"`
 
 	// The approved locate amount
-	ApprovedAmount *string `json:"approved_amount,omitempty"`
+	ApprovedAmount string `json:"approved_amount,omitempty"`
 
 	// Deprecated: Use locate_date instead
-	ConversionDate *string `json:"conversion_date,omitempty"`
+	ConversionDate string `json:"conversion_date,omitempty"`
 
 	// The date when the locate was submitted in RFC3339 format
-	CreatedAt *string `json:"created_at,omitempty"`
+	CreatedAt string `json:"created_at,omitempty"`
 
 	// The locate date from the CreateNewLocatesRequest in RFC3339 format
-	LocateDate *string `json:"locate_date,omitempty"`
+	LocateDate string `json:"locate_date,omitempty"`
 }
 
 type Benchmark string
@@ -422,90 +422,90 @@ const (
 
 type Accrual struct {
 	// The accrual ID
-	AccrualId *string `json:"accrual_id,omitempty"`
+	AccrualId string `json:"accrual_id,omitempty"`
 
 	// The date of accrual in UTC
-	Date *string `json:"date,omitempty"`
+	Date string `json:"date,omitempty"`
 
 	// The unique ID of the portfolio
-	PortfolioId *string `json:"portfolio_id,omitempty"`
+	PortfolioId string `json:"portfolio_id,omitempty"`
 
 	// The currency symbol
-	Symbol *string `json:"symbol,omitempty"`
+	Symbol string `json:"symbol,omitempty"`
 
 	// The loan type
 	LoanType *LoanType `json:"loan_type,omitempty"`
 
 	// The daily or annualized interest rate for the loan, see rate_type
-	InterestRate *string `json:"interest_rate,omitempty"`
+	InterestRate string `json:"interest_rate,omitempty"`
 
 	// Daily accrual amount in the principal currency
-	NominalAccrual *string `json:"nominal_accrual,omitempty"`
+	NominalAccrual string `json:"nominal_accrual,omitempty"`
 
 	// Daily USD accrued interest
-	NotionalAccrual *string `json:"notional_accrual,omitempty"`
+	NotionalAccrual string `json:"notional_accrual,omitempty"`
 
 	// Accrual rate used to convert from principal to USD accrual
-	ConversionRate *string `json:"conversion_rate,omitempty"`
+	ConversionRate string `json:"conversion_rate,omitempty"`
 
 	// Outstanding principal of the loan
-	LoanAmount *string `json:"loan_amount,omitempty"`
+	LoanAmount string `json:"loan_amount,omitempty"`
 
 	// Benchmark information
 	Benchmark *Benchmark `json:"benchmark,omitempty"`
 
 	// Daily interest rate fetched from the benchmark source
-	BenchmarkRate *string `json:"benchmark_rate,omitempty"`
+	BenchmarkRate string `json:"benchmark_rate,omitempty"`
 
 	// Daily spread offset from the benchmark rate
-	Spread *string `json:"spread,omitempty"`
+	Spread string `json:"spread,omitempty"`
 
 	// The rate type
-	RateType *RateType `json:"rate_type,omitempty"`
+	RateType RateType `json:"rate_type,omitempty"`
 
 	// Outstanding principal of the loan in USD
-	LoanAmountNotional *string `json:"loan_amount_notional,omitempty"`
+	LoanAmountNotional string `json:"loan_amount_notional,omitempty"`
 
 	// Settled open borrow as of start-of-day in the principal currency
-	NominalOpenBorrowSod *string `json:"nominal_open_borrow_sod,omitempty"`
+	NominalOpenBorrowSod string `json:"nominal_open_borrow_sod,omitempty"`
 
 	// Settled open borrow as of start-of-day in USD
-	NotionalOpenBorrowSod *string `json:"notional_open_borrow_sod,omitempty"`
+	NotionalOpenBorrowSod string `json:"notional_open_borrow_sod,omitempty"`
 }
 
 type ConversionDetail struct {
 	// The currency symbol
-	Symbol *string `json:"symbol,omitempty"`
+	Symbol string `json:"symbol,omitempty"`
 
 	// Trade finance balance after the conversion
-	TfBalance *string `json:"tf_balance,omitempty"`
+	TfBalance string `json:"tf_balance,omitempty"`
 
 	// Notional trade finance balance after the conversion
-	NotionalTfBalance *string `json:"notional_tf_balance,omitempty"`
+	NotionalTfBalance string `json:"notional_tf_balance,omitempty"`
 
 	// Converted balance
-	ConvertedBalance *string `json:"converted_balance,omitempty"`
+	ConvertedBalance string `json:"converted_balance,omitempty"`
 
 	// Notional converted balance
-	NotionalConvertedBalance *string `json:"notional_converted_balance,omitempty"`
+	NotionalConvertedBalance string `json:"notional_converted_balance,omitempty"`
 
 	// Interest rate
-	InterestRate *string `json:"interest_rate,omitempty"`
+	InterestRate string `json:"interest_rate,omitempty"`
 
 	// Conversion rate
-	ConversionRate *string `json:"conversion_rate,omitempty"`
+	ConversionRate string `json:"conversion_rate,omitempty"`
 }
 
 type Conversion struct {
 	// Conversion details
-	ConversionDetails *[]ConversionDetail `json:"conversion_details,omitempty"`
+	ConversionDetails []*ConversionDetail `json:"conversion_details,omitempty"`
 
 	// Short collateral
 	ShortCollateral *ShortCollateral `json:"short_collateral,omitempty"`
 
 	// The UTC date time used for conversion
-	ConversionDatetime *string `json:"conversion_datetime,omitempty"`
+	ConversionDatetime string `json:"conversion_datetime,omitempty"`
 
 	// Portfolio ID
-	PortfolioId *string `json:"portfolio_id,omitempty"`
+	PortfolioId string `json:"portfolio_id,omitempty"`
 }
