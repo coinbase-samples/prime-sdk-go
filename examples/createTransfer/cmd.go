@@ -69,7 +69,7 @@ func main() {
 
 	output, err := json.MarshalIndent(response, "", "  ")
 	if err != nil {
-		panic(fmt.Sprintf("error marshaling response to JSON: %v", err))
+		log.Fatalf("error marshaling response to JSON: %v", err)
 	}
 	fmt.Println(string(output))
 }

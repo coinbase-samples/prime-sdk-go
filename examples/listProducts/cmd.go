@@ -1,5 +1,5 @@
 /**
- * Copyright 2024-present Coinbase Global, Inc.
+ * Copyright 2025-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,22 +21,21 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
-	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/credentials"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 	"github.com/coinbase-samples/prime-sdk-go/products"
 )
 
 func main() {
 
-	credentials := &credentials.Credentials{}
-	if err := json.Unmarshal([]byte(os.Getenv("PRIME_CREDENTIALS")), credentials); err != nil {
-		log.Fatalf("unable to deserialize prime credentials JSON: %v", err)
+	credentials, err := credentials.ReadEnvCredentials("PRIME_CREDENTIALS")
+	if err != nil {
+		log.Fatalf("unable to read credentials from environment: %v", err)
 	}
 
-	httpClient, err := core.DefaultHttpClient()
+	httpClient, err := client.DefaultHttpClient()
 	if err != nil {
 		log.Fatalf("unable to load default http client: %v", err)
 	}
@@ -47,6 +46,9 @@ func main() {
 
 	request := &products.ListProductsRequest{
 		PortfolioId: credentials.PortfolioId,
+		Pagination: &model.PaginationParams{
+			Limit: 1000,
+		},
 	}
 
 	response, err := productsSvc.ListProducts(context.Background(), request)
@@ -54,9 +56,9 @@ func main() {
 		log.Fatalf("unable to list products: %v", err)
 	}
 
-	jsonResponse, err := json.MarshalIndent(response, "", "  ")
+	output, err := json.MarshalIndent(response, "", "  ")
 	if err != nil {
-		panic(fmt.Sprintf("error marshaling response to JSON: %v", err))
+		log.Fatalf("error marshaling response to JSON: %v", err)
 	}
-	fmt.Println(string(jsonResponse))
+	fmt.Println(string(output))
 }
