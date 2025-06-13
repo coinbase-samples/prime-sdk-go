@@ -1,5 +1,5 @@
 /**
- * Copyright 2024-present Coinbase Global, Inc.
+ * Copyright 2025-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/credentials"
-	"github.com/coinbase-samples/prime-sdk-go/wallets"
+	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase-samples/prime-sdk-go/orders"
 )
 
 func main() {
@@ -41,15 +43,31 @@ func main() {
 
 	client := client.NewRestClient(credentials, httpClient)
 
-	walletsSvc := wallets.NewWalletsService(client)
+	if len(os.Args) < 6 {
+		log.Fatalf("product ID, side, type, base quantity, and limit price are required as command-line arguments")
+	}
+	productId := os.Args[1]
+	side := os.Args[2]
+	orderType := os.Args[3]
+	baseQuantity := os.Args[4]
+	limitPrice := os.Args[5]
 
-	request := &wallets.ListWalletsRequest{
-		PortfolioId: credentials.PortfolioId,
+	ordersSvc := orders.NewOrdersService(client)
+
+	request := &orders.CreateOrderRequest{
+		Order: &model.Order{
+			PortfolioId:  credentials.PortfolioId,
+			ProductId:    productId,
+			Side:         side,
+			Type:         orderType,
+			BaseQuantity: baseQuantity,
+			LimitPrice:   limitPrice,
+		},
 	}
 
-	response, err := walletsSvc.ListWallets(context.Background(), request)
+	response, err := ordersSvc.CreateOrderPreview(context.Background(), request)
 	if err != nil {
-		log.Fatalf("unable to list wallets: %v", err)
+		log.Fatalf("unable to get order preview: %v", err)
 	}
 
 	output, err := json.MarshalIndent(response, "", "  ")

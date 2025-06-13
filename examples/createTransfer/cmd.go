@@ -1,5 +1,5 @@
 /**
- * Copyright 2024-present Coinbase Global, Inc.
+ * Copyright 2025-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/credentials"
-	"github.com/coinbase-samples/prime-sdk-go/wallets"
+	"github.com/coinbase-samples/prime-sdk-go/transactions"
+	"github.com/google/uuid"
 )
 
 func main() {
@@ -41,15 +43,28 @@ func main() {
 
 	client := client.NewRestClient(credentials, httpClient)
 
-	walletsSvc := wallets.NewWalletsService(client)
+	if len(os.Args) < 4 {
+		log.Fatalf("source wallet ID, destination wallet ID, amount, and symbol are required as command-line arguments")
+	}
+	sourceWalletId := os.Args[1]
+	destinationWalletId := os.Args[2]
+	amount := os.Args[3]
+	symbol := os.Args[4]
 
-	request := &wallets.ListWalletsRequest{
-		PortfolioId: credentials.PortfolioId,
+	transactionsSvc := transactions.NewTransactionsService(client)
+
+	request := &transactions.CreateWalletTransferRequest{
+		PortfolioId:         credentials.PortfolioId,
+		SourceWalletId:      sourceWalletId,
+		DestinationWalletId: destinationWalletId,
+		Amount:              amount,
+		IdempotencyKey:      uuid.New().String(),
+		Symbol:              symbol,
 	}
 
-	response, err := walletsSvc.ListWallets(context.Background(), request)
+	response, err := transactionsSvc.CreateWalletTransfer(context.Background(), request)
 	if err != nil {
-		log.Fatalf("unable to list wallets: %v", err)
+		log.Fatalf("unable to create transfer: %v", err)
 	}
 
 	output, err := json.MarshalIndent(response, "", "  ")
