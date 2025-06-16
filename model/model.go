@@ -172,8 +172,9 @@ type Allocation struct {
 }
 
 type BlockchainAddress struct {
-	Address           string `json:"address"`
-	AccountIdentifier string `json:"account_identifier"`
+	Address           string          `json:"address"`
+	AccountIdentifier string          `json:"account_identifier"`
+	Network           *NetworkDetails `json:"network"`
 }
 
 type Pagination struct {
