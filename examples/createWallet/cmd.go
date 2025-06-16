@@ -1,5 +1,5 @@
 /**
- * Copyright 2024-present Coinbase Global, Inc.
+ * Copyright 2025-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/credentials"
 	"github.com/coinbase-samples/prime-sdk-go/wallets"
+	"github.com/google/uuid"
 )
 
 func main() {
@@ -41,15 +43,26 @@ func main() {
 
 	client := client.NewRestClient(credentials, httpClient)
 
+	if len(os.Args) < 3 {
+		log.Fatalf("name, symbol, and wallet type are required as command-line arguments")
+	}
+	name := os.Args[1]
+	symbol := os.Args[2]
+	walletType := os.Args[3]
+
 	walletsSvc := wallets.NewWalletsService(client)
 
-	request := &wallets.ListWalletsRequest{
-		PortfolioId: credentials.PortfolioId,
+	request := &wallets.CreateWalletRequest{
+		PortfolioId:    credentials.PortfolioId,
+		Name:           name,
+		Symbol:         symbol,
+		Type:           walletType,
+		IdempotencyKey: uuid.New().String(),
 	}
 
-	response, err := walletsSvc.ListWallets(context.Background(), request)
+	response, err := walletsSvc.CreateWallet(context.Background(), request)
 	if err != nil {
-		log.Fatalf("unable to list wallets: %v", err)
+		log.Fatalf("unable to create vault wallet: %v", err)
 	}
 
 	output, err := json.MarshalIndent(response, "", "  ")

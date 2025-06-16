@@ -1,5 +1,5 @@
 /**
- * Copyright 2024-present Coinbase Global, Inc.
+ * Copyright 2025-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
 	"github.com/coinbase-samples/prime-sdk-go/credentials"
-	"github.com/coinbase-samples/prime-sdk-go/wallets"
+	"github.com/coinbase-samples/prime-sdk-go/orders"
 )
 
 func main() {
@@ -41,15 +42,21 @@ func main() {
 
 	client := client.NewRestClient(credentials, httpClient)
 
-	walletsSvc := wallets.NewWalletsService(client)
+	if len(os.Args) < 2 {
+		log.Fatalf("order ID is required as a command-line argument")
+	}
+	orderId := os.Args[1]
 
-	request := &wallets.ListWalletsRequest{
+	ordersSvc := orders.NewOrdersService(client)
+
+	request := &orders.GetOrderRequest{
 		PortfolioId: credentials.PortfolioId,
+		OrderId:     orderId,
 	}
 
-	response, err := walletsSvc.ListWallets(context.Background(), request)
+	response, err := ordersSvc.GetOrder(context.Background(), request)
 	if err != nil {
-		log.Fatalf("unable to list wallets: %v", err)
+		log.Fatalf("unable to get order by ID: %v", err)
 	}
 
 	output, err := json.MarshalIndent(response, "", "  ")
