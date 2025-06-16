@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.2] - 2025-JUN-17
+
+### Added
+
+- Wallet Service has two new endpoints
+  - listWalletAddresses
+  - createWalletAddress
+
 ## [0.5.0] - 2025-JUN-11
 
 ### Fix

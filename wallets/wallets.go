@@ -27,6 +27,8 @@ type WalletsService interface {
 	CreateWallet(ctx context.Context, request *CreateWalletRequest) (*CreateWalletResponse, error)
 	GetWallet(ctx context.Context, request *GetWalletRequest) (*GetWalletResponse, error)
 	GetWalletDepositInstructions(ctx context.Context, request *GetWalletDepositInstructionsRequest) (*GetWalletDepositInstructionsResponse, error)
+	ListWalletAddresses(ctx context.Context, request *ListWalletAddressesRequest) (*ListWalletAddressesResponse, error)
+	CreateWalletAddress(ctx context.Context, request *CreateWalletAddressRequest) (*CreateWalletAddressResponse, error)
 }
 
 func NewWalletsService(c client.RestClient) WalletsService {
