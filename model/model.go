@@ -316,7 +316,7 @@ type Order struct {
 
 	// If you pass is_raise_exact = TRUE, you must use quote_value = n where n is the amount you want,
 	// so $2000 will then cost you 1 ETH + fee, requiring > 1 ETH
-	IsRaiseExact string `json:"is_raise_exact,omitempty"`
+	IsRaiseExact bool `json:"is_raise_exact,omitempty"`
 
 	// Used for describe order, create order preview, and list portfolio orders
 	Id                    string `json:"id,omitempty"`
