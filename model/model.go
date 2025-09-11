@@ -400,8 +400,10 @@ type RiskAssessment struct {
 }
 
 type Transfer struct {
-	Type  string `json:"type"`
-	Value string `json:"value"`
+	Type              string `json:"type"`
+	Value             string `json:"value"`
+	Address           string `json:"address"`
+	AccountIdentifier string `json:"account_identifier"`
 }
 
 func (tr Transfer) ValueNum() (amount decimal.Decimal, err error) {
