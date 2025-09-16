@@ -143,7 +143,7 @@ type Wallet struct {
 	Id         string           `json:"id"`
 	Type       string           `json:"type"`
 	Name       string           `json:"name"`
-	Address    string           `json:"name"`
+	Address    string           `json:"address"`
 	Visibility WalletVisibility `json:"visibility"`
 	Symbol     string           `json:"symbol"`
 	Created    time.Time        `json:"created_at"`
