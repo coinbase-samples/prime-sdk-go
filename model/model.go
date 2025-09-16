@@ -24,6 +24,14 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+type WalletVisibility string
+
+const (
+	WalletVisibilityUnspecified WalletVisibility = "WALLET_VISIBILITY_UNSPECIFIED"
+	WalletVisibilityVisible     WalletVisibility = "WALLET_VISIBILITY_VISIBLE"
+	WalletVisibilityHidden      WalletVisibility = "WALLET_VISIBILITY_HIDDEN"
+)
+
 const (
 	WalletTypeVault   = "VAULT"
 	WalletTypeTrading = "TRADING"
@@ -132,12 +140,14 @@ type User struct {
 }
 
 type Wallet struct {
-	Id      string          `json:"id"`
-	Type    string          `json:"type"`
-	Name    string          `json:"name"`
-	Symbol  string          `json:"symbol"`
-	Created time.Time       `json:"created_at"`
-	Network *NetworkDetails `json:"network"`
+	Id         string           `json:"id"`
+	Type       string           `json:"type"`
+	Name       string           `json:"name"`
+	Address    string           `json:"name"`
+	Visibility WalletVisibility `json:"visibility"`
+	Symbol     string           `json:"symbol"`
+	Created    time.Time        `json:"created_at"`
+	Network    *NetworkDetails  `json:"network"`
 }
 
 type AllocationLeg struct {
