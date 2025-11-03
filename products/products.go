@@ -24,6 +24,7 @@ import (
 
 type ProductsService interface {
 	ListProducts(ctx context.Context, request *ListProductsRequest) (*ListProductsResponse, error)
+	GetCandles(ctx context.Context, request *GetCandlesRequest) (*GetCandlesResponse, error)
 }
 
 func NewProductsService(c client.RestClient) ProductsService {
