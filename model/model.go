@@ -357,48 +357,6 @@ func (tr Transfer) ValueNum() (amount decimal.Decimal, err error) {
 	return
 }
 
-type Activity struct {
-	Id                  string                `json:"id"`
-	ReferenceId         string                `json:"reference_id"`
-	Category            string                `json:"category"`
-	PrimaryType         string                `json:"type"`
-	SecondaryType       string                `json:"secondary_type"`
-	Status              string                `json:"status"`
-	CreatedBy           string                `json:"created_by"`
-	Title               string                `json:"title"`
-	Description         string                `json:"description"`
-	UserActions         []*UserAction         `json:"user_actions,omitempty"`
-	AccountMetadata     *AccountMetadata      `json:"account_metadata,omitempty"`
-	OrdersMetadata      *OrdersMetadata       `json:"orders_metadata,omitempty"`
-	TransactionMetadata *TransactionsMetadata `json:"transaction_metadata,omitempty"`
-	Symbols             []string              `json:"symbols,omitempty"`
-	Created             string                `json:"created_at"`
-	Updated             string                `json:"updated_at"`
-}
-
-type TransactionsMetadata struct {
-	Consensus *Consensus `json:"consensus"`
-}
-
-type AccountMetadata struct {
-	Consensus *Consensus `json:"consensus"`
-}
-
-// An empty/unimplemented/placeholder object in Prime
-type OrdersMetadata struct{}
-
-type Consensus struct {
-	ApprovalDeadline string `json:"approval_deadline"`
-	PassedConsensus  bool   `json:"has_passed_consensus"`
-}
-
-type UserAction struct {
-	Action               string                `json:"action"`
-	UserId               string                `json:"user_id"`
-	Timestamp            string                `json:"timestamp"`
-	TransactionsMetadata *TransactionsMetadata `json:"transactions_metadata,omitempty"`
-}
-
 type AddressBookEntry struct {
 	Id                    string                   `json:"id"`
 	Symbol                string                   `json:"currency_symbol"`
