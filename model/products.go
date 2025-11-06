@@ -38,13 +38,15 @@ type Product struct {
 }
 
 type RfqProductDetails struct {
-	Tradable        bool   `json:"tradable"`
-	MinNotionalSize string `json:"min_notional_size"`
-	MaxNotionalSize string `json:"max_notional_size"`
-	MinBaseSize     string `json:"min_base_size"`
-	MaxBaseSize     string `json:"max_base_size"`
-	MinQuoteSize    string `json:"min_quote_size"`
-	MaxQuoteSize    string `json:"max_quote_size"`
+	Tradable bool `json:"tradable"`
+	// Deprecated: Use MinQuoteSize instead
+	MinNotionalSize string `json:"min_notional_size,omitempty"`
+	// Deprecated: Use MaxQuoteSize instead
+	MaxNotionalSize string `json:"max_notional_size,omitempty"`
+	MinBaseSize     string `json:"min_base_size,omitempty"`
+	MaxBaseSize     string `json:"max_base_size,omitempty"`
+	MinQuoteSize    string `json:"min_quote_size,omitempty"`
+	MaxQuoteSize    string `json:"max_quote_size,omitempty"`
 }
 
 func (p Product) BaseMinSizeNum() (amount decimal.Decimal, err error) {
