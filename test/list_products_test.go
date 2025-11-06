@@ -55,6 +55,8 @@ func TestListProducts(t *testing.T) {
 				t.Fatal("received a nil product ")
 			}
 			//fmt.Println(p.Id)
+			//fmt.Println(fmt.Sprintf("%s-%t-%s-%s-%s-%s-%s-%s", p.Id, p.RfqProductDetails.Tradable, p.RfqProductDetails.MinNotionalSize, p.RfqProductDetails.MaxNotionalSize, p.RfqProductDetails.MinBaseSize, p.RfqProductDetails.MaxBaseSize, p.RfqProductDetails.MinQuoteSize, p.RfqProductDetails.MaxQuoteSize))
+
 		}
 
 		if len(cursor) == 0 {
