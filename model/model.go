@@ -346,6 +346,15 @@ type Order struct {
 	StopPrice             string `json:"stop_price,omitempty"`
 	NetAverageFilledPrice string `json:"net_average_filled_price,omitempty"`
 	UserContext           string `json:"user_context,omitempty"`
+	ClientProductId       string `json:"client_product_id,omitempty"`
+	PostOnly              bool   `json:"post_only,omitempty"`
+	// Deprecated: Use EditHistory instead
+	OrderEditHistory []*OrderEditHistory `json:"order_edit_history,omitempty"`
+	DisplaySize      string              `json:"display_size,omitempty"`
+	EditHistory      []*EditHistory      `json:"edit_history,omitempty"`
+	PegOffsetType    string              `json:"peg_offset_type,omitempty"`
+	Offset           string              `json:"offset,omitempty"`
+	WigLevel         string              `json:"wig_level,omitempty"`
 }
 
 type EstimatedNetworkFees struct {
@@ -505,6 +514,7 @@ type Network struct {
 	PrimeCustodySupported  bool            `json:"prime_custody_supported"`
 	DestinationTagRequired bool            `json:"destination_tag_required"`
 	NetworkLink            string          `json:"network_link"`
+	NetworkScopedSymbol    string          `json:"network_scoped_symbol"`
 }
 
 type NetworkDetails struct {
@@ -606,4 +616,120 @@ type Sweep struct {
 type RequestedAmount struct {
 	Currency string `json:"currency"`
 	Amount   string `json:"amount"`
+}
+
+type EditHistory struct {
+	Price            string `json:"price"`
+	BaseQuantity     string `json:"base_quantity"`
+	QuoteValue       string `json:"quote_value"`
+	DisplayBaseSize  string `json:"display_base_size"`
+	DisplayQuoteSize string `json:"display_quote_size"`
+	StopPrice        string `json:"stop_price"`
+	ExpiryTime       string `json:"expiry_time"`
+	AcceptTime       string `json:"accept_time"`
+	ClientOrderId    string `json:"client_order_id"`
+}
+
+type OrderEditHistory struct {
+	Price          string `json:"price"`
+	Size           string `json:"size"`
+	DisplaySize    string `json:"display_size"`
+	StopPrice      string `json:"stop_price"`
+	StopLimitPrice string `json:"stop_limit_price"`
+	EndTime        string `json:"end_time"`
+	AcceptTime     string `json:"accept_time"`
+	ClientOrderId  string `json:"client_order_id"`
+}
+
+type CandleGranularity string
+
+const (
+	CandleGranularityOneMinute      CandleGranularity = "ONE_MINUTE"
+	CandleGranularityFiveMinutes    CandleGranularity = "FIVE_MINUTES"
+	CandleGranularityFifteenMinutes CandleGranularity = "FIFTEEN_MINUTES"
+	CandleGranularityThirtyMinutes  CandleGranularity = "THIRTY_MINUTES"
+	CandleGranularityOneHour        CandleGranularity = "ONE_HOUR"
+	CandleGranularityTwoHours       CandleGranularity = "TWO_HOURS"
+	CandleGranularityFourHours      CandleGranularity = "FOUR_HOURS"
+	CandleGranularitySixHours       CandleGranularity = "SIX_HOURS"
+	CandleGranularityOneDay         CandleGranularity = "ONE_DAY"
+)
+
+type Candle struct {
+	Timestamp string `json:"timestamp"`
+	Open      string `json:"open"`
+	High      string `json:"high"`
+	Low       string `json:"low"`
+	Close     string `json:"close"`
+	Volume    string `json:"volume"`
+}
+
+// FCM Futures types
+type FcmMarginCallType string
+
+const (
+	FcmMarginCallTypeUnspecified FcmMarginCallType = "FCM_MARGIN_CALL_TYPE_UNSPECIFIED"
+)
+
+type FcmMarginCallState string
+
+const (
+	FcmMarginCallStateUnspecified FcmMarginCallState = "FCM_MARGIN_CALL_STATE_UNSPECIFIED"
+)
+
+type FcmMarginCall struct {
+	Type            FcmMarginCallType  `json:"type"`
+	State           FcmMarginCallState `json:"state"`
+	InitialAmount   string             `json:"initial_amount"`
+	RemainingAmount string             `json:"remaining_amount"`
+	BusinessDate    string             `json:"business_date"`
+	CureDeadline    string             `json:"cure_deadline"`
+}
+
+type FcmRiskLimits struct {
+	CfmRiskLimit                  string `json:"cfm_risk_limit"`
+	CfmRiskLimitUtilization       string `json:"cfm_risk_limit_utilization"`
+	CfmTotalMargin                string `json:"cfm_total_margin"`
+	CfmDeltaOte                   string `json:"cfm_delta_ote"`
+	CfmUnsettledRealizedPnl       string `json:"cfm_unsettled_realized_pnl"`
+	CfmUnsettledAccruedFundingPnl string `json:"cfm_unsettled_accrued_funding_pnl"`
+}
+
+type UnstakeEstimateType string
+
+const (
+	UnstakeEstimateTypeUnspecified UnstakeEstimateType = "UNSPECIFIED"
+)
+
+type UnstakeType string
+
+const (
+	UnstakeTypeUnspecified UnstakeType = "UNSTAKE_TYPE_UNSPECIFIED"
+)
+
+type UnstakeStatus struct {
+	Amount              string              `json:"amount"`
+	EstimateType        UnstakeEstimateType `json:"estimate_type"`
+	EstimateDescription string              `json:"estimate_description"`
+	UnstakeType         UnstakeType         `json:"unstake_type"`
+	FinishingAt         string              `json:"finishing_at"`
+	RemainingHours      int                 `json:"remaining_hours"`
+	RequestedAt         string              `json:"requested_at"`
+}
+
+type UnstakeValidator struct {
+	ValidatorAddress string           `json:"validator_address"`
+	Statuses         []*UnstakeStatus `json:"statuses"`
+}
+
+type ValidatorStatus string
+
+const (
+	ValidatorStatusUnspecified ValidatorStatus = "VALIDATOR_STATUS_UNSPECIFIED"
+)
+
+type TransactionValidator struct {
+	TransactionId    string          `json:"transaction_id"`
+	ValidatorAddress string          `json:"validator_address"`
+	ValidatorStatus  ValidatorStatus `json:"validator_status"`
 }
