@@ -41,6 +41,7 @@ type CreateConversionResponse struct {
 	Amount              string                   `json:"amount"`
 	DestinationWalletId string                   `json:"destination"`
 	SourceWalletId      string                   `json:"source"`
+	TransactionId       string                   `json:"transaction_id"`
 	Request             *CreateConversionRequest `json:"-"`
 }
 
