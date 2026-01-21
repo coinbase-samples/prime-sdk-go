@@ -37,6 +37,25 @@ func DefaultPaginationConfig() *PaginationConfig {
 	}
 }
 
+// PaginationMixin provides HasNext and GetNextCursor functionality.
+// Embed this in response structs to avoid duplicating these methods.
+type PaginationMixin struct {
+	Pagination *Pagination `json:"pagination"`
+}
+
+// HasNext returns true if there are more pages available
+func (m *PaginationMixin) HasNext() bool {
+	return m.Pagination != nil && m.Pagination.HasNext
+}
+
+// GetNextCursor returns the cursor for the next page, or empty string if none
+func (m *PaginationMixin) GetNextCursor() string {
+	if m.Pagination == nil {
+		return ""
+	}
+	return m.Pagination.NextCursor
+}
+
 // PaginatedResponse is implemented by any response that supports pagination
 type PaginatedResponse[T any] interface {
 	HasNext() bool

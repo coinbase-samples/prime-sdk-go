@@ -34,24 +34,11 @@ type ListWalletsRequest struct {
 }
 
 type ListWalletsResponse struct {
-	Wallets          []*model.Wallet         `json:"wallets"`
-	Pagination       *model.Pagination       `json:"pagination"`
-	Request          *ListWalletsRequest     `json:"-"`
-	service          WalletsService          // unexported, injected by service
-	paginationConfig *model.PaginationConfig // unexported, injected by service
-}
-
-// HasNext returns true if there are more pages available
-func (r *ListWalletsResponse) HasNext() bool {
-	return r.Pagination != nil && r.Pagination.HasNext
-}
-
-// GetNextCursor returns the cursor for the next page, or empty string if none
-func (r *ListWalletsResponse) GetNextCursor() string {
-	if r.Pagination == nil {
-		return ""
-	}
-	return r.Pagination.NextCursor
+	model.PaginationMixin                         // provides Pagination, HasNext(), GetNextCursor()
+	Wallets               []*model.Wallet         `json:"wallets"`
+	Request               *ListWalletsRequest     `json:"-"`
+	service               WalletsService          // unexported, injected by service
+	paginationConfig      *model.PaginationConfig // unexported, injected by service
 }
 
 // Next fetches the next page of results. Returns nil, nil if no more pages.

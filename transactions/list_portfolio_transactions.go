@@ -37,24 +37,11 @@ type ListPortfolioTransactionsRequest struct {
 }
 
 type ListPortfolioTransactionsResponse struct {
-	Transactions     []*model.Transaction              `json:"transactions"`
-	Pagination       *model.Pagination                 `json:"pagination"`
-	Request          *ListPortfolioTransactionsRequest `json:"-"`
-	service          TransactionsService               // unexported, injected by service
-	paginationConfig *model.PaginationConfig           // unexported, injected by service
-}
-
-// HasNext returns true if there are more pages available
-func (r *ListPortfolioTransactionsResponse) HasNext() bool {
-	return r.Pagination != nil && r.Pagination.HasNext
-}
-
-// GetNextCursor returns the cursor for the next page, or empty string if none
-func (r *ListPortfolioTransactionsResponse) GetNextCursor() string {
-	if r.Pagination == nil {
-		return ""
-	}
-	return r.Pagination.NextCursor
+	model.PaginationMixin                                   // provides Pagination, HasNext(), GetNextCursor()
+	Transactions          []*model.Transaction              `json:"transactions"`
+	Request               *ListPortfolioTransactionsRequest `json:"-"`
+	service               TransactionsService               // unexported, injected by service
+	paginationConfig      *model.PaginationConfig           // unexported, injected by service
 }
 
 // Next fetches the next page of results. Returns nil, nil if no more pages.
