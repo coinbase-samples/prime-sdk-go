@@ -37,9 +37,50 @@ type ListPortfolioTransactionsRequest struct {
 }
 
 type ListPortfolioTransactionsResponse struct {
-	Transactions []*model.Transaction              `json:"transactions"`
-	Pagination   *model.Pagination                 `json:"pagination"`
-	Request      *ListPortfolioTransactionsRequest `json:"-"`
+	Transactions     []*model.Transaction              `json:"transactions"`
+	Pagination       *model.Pagination                 `json:"pagination"`
+	Request          *ListPortfolioTransactionsRequest `json:"-"`
+	service          TransactionsService               // unexported, injected by service
+	paginationConfig *model.PaginationConfig           // unexported, injected by service
+}
+
+// HasNext returns true if there are more pages available
+func (r *ListPortfolioTransactionsResponse) HasNext() bool {
+	return r.Pagination != nil && r.Pagination.HasNext
+}
+
+// GetNextCursor returns the cursor for the next page, or empty string if none
+func (r *ListPortfolioTransactionsResponse) GetNextCursor() string {
+	if r.Pagination == nil {
+		return ""
+	}
+	return r.Pagination.NextCursor
+}
+
+// Next fetches the next page of results. Returns nil, nil if no more pages.
+func (r *ListPortfolioTransactionsResponse) Next(ctx context.Context) (*ListPortfolioTransactionsResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextReq := *r.Request
+	if nextReq.Pagination == nil {
+		nextReq.Pagination = &model.PaginationParams{}
+	} else {
+		paginationCopy := *nextReq.Pagination
+		nextReq.Pagination = &paginationCopy
+	}
+	nextReq.Pagination.Cursor = r.Pagination.NextCursor
+
+	return r.service.ListPortfolioTransactions(ctx, &nextReq)
+}
+
+// Iterator returns a PageIterator for convenient iteration and FetchAll.
+// The iterator respects the service's PaginationConfig for MaxPages and MaxItems.
+func (r *ListPortfolioTransactionsResponse) Iterator() *model.PageIterator[*ListPortfolioTransactionsResponse, *model.Transaction] {
+	return model.NewPageIteratorWithConfig(r, func(resp *ListPortfolioTransactionsResponse) []*model.Transaction {
+		return resp.Transactions
+	}, r.paginationConfig)
 }
 
 func (s *transactionsServiceImpl) ListPortfolioTransactions(
@@ -48,6 +89,15 @@ func (s *transactionsServiceImpl) ListPortfolioTransactions(
 ) (*ListPortfolioTransactionsResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/transactions", request.PortfolioId)
+
+	// Apply default limit from config if not specified in request
+	if s.paginationConfig != nil && s.paginationConfig.DefaultLimit > 0 {
+		if request.Pagination == nil {
+			request.Pagination = &model.PaginationParams{Limit: s.paginationConfig.DefaultLimit}
+		} else if request.Pagination.Limit == 0 {
+			request.Pagination.Limit = s.paginationConfig.DefaultLimit
+		}
+	}
 
 	var queryParams string
 
@@ -69,7 +119,11 @@ func (s *transactionsServiceImpl) ListPortfolioTransactions(
 
 	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
-	response := &ListPortfolioTransactionsResponse{Request: request}
+	response := &ListPortfolioTransactionsResponse{
+		Request:          request,
+		service:          s,
+		paginationConfig: s.paginationConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,

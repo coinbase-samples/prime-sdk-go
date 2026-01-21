@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type TransactionsService interface {
@@ -30,12 +31,33 @@ type TransactionsService interface {
 	CreateWalletTransfer(ctx context.Context, request *CreateWalletTransferRequest) (*CreateWalletTransferResponse, error)
 	CreateWalletWithdrawal(ctx context.Context, request *CreateWalletWithdrawalRequest) (*CreateWalletWithdrawalResponse, error)
 	CreateOnchainTransaction(ctx context.Context, request *CreateOnchainTransactionRequest) (*CreateOnchainTransactionResposne, error)
+	PaginationConfig() *model.PaginationConfig
 }
 
+// NewTransactionsService creates a new TransactionsService with default pagination config
 func NewTransactionsService(c client.RestClient) TransactionsService {
-	return &transactionsServiceImpl{client: c}
+	return &transactionsServiceImpl{
+		client:           c,
+		paginationConfig: model.DefaultPaginationConfig(),
+	}
+}
+
+// NewTransactionsServiceWithConfig creates a new TransactionsService with custom pagination config
+func NewTransactionsServiceWithConfig(c client.RestClient, config *model.PaginationConfig) TransactionsService {
+	if config == nil {
+		config = model.DefaultPaginationConfig()
+	}
+	return &transactionsServiceImpl{
+		client:           c,
+		paginationConfig: config,
+	}
 }
 
 type transactionsServiceImpl struct {
-	client client.RestClient
+	client           client.RestClient
+	paginationConfig *model.PaginationConfig
+}
+
+func (s *transactionsServiceImpl) PaginationConfig() *model.PaginationConfig {
+	return s.paginationConfig
 }

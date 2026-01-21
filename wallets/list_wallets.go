@@ -34,13 +34,50 @@ type ListWalletsRequest struct {
 }
 
 type ListWalletsResponse struct {
-	Wallets    []*model.Wallet     `json:"wallets"`
-	Pagination *model.Pagination   `json:"pagination"`
-	Request    *ListWalletsRequest `json:"-"`
+	Wallets          []*model.Wallet         `json:"wallets"`
+	Pagination       *model.Pagination       `json:"pagination"`
+	Request          *ListWalletsRequest     `json:"-"`
+	service          WalletsService          // unexported, injected by service
+	paginationConfig *model.PaginationConfig // unexported, injected by service
 }
 
-func (r ListWalletsResponse) HasNext() bool {
+// HasNext returns true if there are more pages available
+func (r *ListWalletsResponse) HasNext() bool {
 	return r.Pagination != nil && r.Pagination.HasNext
+}
+
+// GetNextCursor returns the cursor for the next page, or empty string if none
+func (r *ListWalletsResponse) GetNextCursor() string {
+	if r.Pagination == nil {
+		return ""
+	}
+	return r.Pagination.NextCursor
+}
+
+// Next fetches the next page of results. Returns nil, nil if no more pages.
+func (r *ListWalletsResponse) Next(ctx context.Context) (*ListWalletsResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextReq := *r.Request
+	if nextReq.Pagination == nil {
+		nextReq.Pagination = &model.PaginationParams{}
+	} else {
+		paginationCopy := *nextReq.Pagination
+		nextReq.Pagination = &paginationCopy
+	}
+	nextReq.Pagination.Cursor = r.Pagination.NextCursor
+
+	return r.service.ListWallets(ctx, &nextReq)
+}
+
+// Iterator returns a PageIterator for convenient iteration and FetchAll.
+// The iterator respects the service's PaginationConfig for MaxPages and MaxItems.
+func (r *ListWalletsResponse) Iterator() *model.PageIterator[*ListWalletsResponse, *model.Wallet] {
+	return model.NewPageIteratorWithConfig(r, func(resp *ListWalletsResponse) []*model.Wallet {
+		return resp.Wallets
+	}, r.paginationConfig)
 }
 
 func (s *walletsServiceImpl) ListWallets(
@@ -49,6 +86,15 @@ func (s *walletsServiceImpl) ListWallets(
 ) (*ListWalletsResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId)
+
+	// Apply default limit from config if not specified in request
+	if s.paginationConfig != nil && s.paginationConfig.DefaultLimit > 0 {
+		if request.Pagination == nil {
+			request.Pagination = &model.PaginationParams{Limit: s.paginationConfig.DefaultLimit}
+		} else if request.Pagination.Limit == 0 {
+			request.Pagination.Limit = s.paginationConfig.DefaultLimit
+		}
+	}
 
 	queryParams := core.EmptyQueryParams
 	if request.Type != "" {
@@ -60,7 +106,11 @@ func (s *walletsServiceImpl) ListWallets(
 
 	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
-	response := &ListWalletsResponse{Request: request}
+	response := &ListWalletsResponse{
+		Request:          request,
+		service:          s,
+		paginationConfig: s.paginationConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,
