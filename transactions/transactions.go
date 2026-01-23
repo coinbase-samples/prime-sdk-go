@@ -31,33 +31,33 @@ type TransactionsService interface {
 	CreateWalletTransfer(ctx context.Context, request *CreateWalletTransferRequest) (*CreateWalletTransferResponse, error)
 	CreateWalletWithdrawal(ctx context.Context, request *CreateWalletWithdrawalRequest) (*CreateWalletWithdrawalResponse, error)
 	CreateOnchainTransaction(ctx context.Context, request *CreateOnchainTransactionRequest) (*CreateOnchainTransactionResposne, error)
-	PaginationConfig() *model.PaginationConfig
+	ServiceConfig() *model.ServiceConfig
 }
 
 // NewTransactionsService creates a new TransactionsService with default pagination config
 func NewTransactionsService(c client.RestClient) TransactionsService {
 	return &transactionsServiceImpl{
 		client:           c,
-		paginationConfig: model.DefaultPaginationConfig(),
+		serviceConfig: model.DefaultServiceConfig(),
 	}
 }
 
 // NewTransactionsServiceWithConfig creates a new TransactionsService with custom pagination config
-func NewTransactionsServiceWithConfig(c client.RestClient, config *model.PaginationConfig) TransactionsService {
+func NewTransactionsServiceWithConfig(c client.RestClient, config *model.ServiceConfig) TransactionsService {
 	if config == nil {
-		config = model.DefaultPaginationConfig()
+		config = model.DefaultServiceConfig()
 	}
 	return &transactionsServiceImpl{
 		client:           c,
-		paginationConfig: config,
+		serviceConfig: config,
 	}
 }
 
 type transactionsServiceImpl struct {
 	client           client.RestClient
-	paginationConfig *model.PaginationConfig
+	serviceConfig *model.ServiceConfig
 }
 
-func (s *transactionsServiceImpl) PaginationConfig() *model.PaginationConfig {
-	return s.paginationConfig
+func (s *transactionsServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }

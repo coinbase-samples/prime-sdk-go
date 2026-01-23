@@ -101,7 +101,7 @@ func fetchAllWithMaxItems(ctx context.Context, restClient client.RestClient, por
 	fmt.Println("\n=== Example 2: FetchAll with MaxItems of 500 ===")
 
 	// Create service with MaxItems config
-	config := &model.PaginationConfig{
+	config := &model.ServiceConfig{
 		MaxItems:     500, // Stop after collecting 500 items
 		DefaultLimit: 100, // Request 100 items per page
 	}
@@ -135,7 +135,7 @@ func fetchAllWithMaxItems(ctx context.Context, restClient client.RestClient, por
 		log.Fatalf("error fetching transactions: %v", err)
 	}
 
-	customConfig := &model.PaginationConfig{MaxItems: 200}
+	customConfig := &model.ServiceConfig{MaxItems: 200}
 	limitedTransactions, err := resp2.Iterator().WithConfig(customConfig).FetchAll(ctx)
 	if err != nil {
 		log.Fatalf("error fetching limited transactions: %v", err)
@@ -149,7 +149,7 @@ func fetchAllWithMaxPages(ctx context.Context, restClient client.RestClient, por
 	fmt.Println("\n=== Example 3: FetchAll with MaxPages of 5 ===")
 
 	// Create service with MaxPages config
-	config := &model.PaginationConfig{
+	config := &model.ServiceConfig{
 		MaxPages:     5,  // Stop after 5 pages
 		DefaultLimit: 25, // Request 25 items per page
 	}
@@ -202,7 +202,7 @@ func fetchWithDefaultLimit(ctx context.Context, restClient client.RestClient, po
 
 	// Create service with DefaultLimit config
 	// This means all requests will use 100 items per page unless overridden
-	config := &model.PaginationConfig{
+	config := &model.ServiceConfig{
 		DefaultLimit: 100, // All requests will default to 100 items per page
 	}
 
@@ -265,7 +265,7 @@ func overrideConfigOnIterator(ctx context.Context, restClient client.RestClient,
 	fmt.Println("\n--- Option 1: Limit to 3 pages using WithConfig ---")
 
 	resp1, _ := walletsSvc.ListWallets(ctx, request)
-	threePageConfig := &model.PaginationConfig{MaxPages: 3}
+	threePageConfig := &model.ServiceConfig{MaxPages: 3}
 	walletsFrom3Pages, err := resp1.Iterator().WithConfig(threePageConfig).FetchAll(ctx)
 	if err != nil {
 		log.Fatalf("error fetching wallets: %v", err)
@@ -276,7 +276,7 @@ func overrideConfigOnIterator(ctx context.Context, restClient client.RestClient,
 	fmt.Println("\n--- Option 2: Limit to 25 items using WithConfig ---")
 
 	resp2, _ := walletsSvc.ListWallets(ctx, request)
-	maxItemsConfig := &model.PaginationConfig{MaxItems: 25}
+	maxItemsConfig := &model.ServiceConfig{MaxItems: 25}
 	first25Wallets, err := resp2.Iterator().WithConfig(maxItemsConfig).FetchAll(ctx)
 	if err != nil {
 		log.Fatalf("error fetching wallets: %v", err)
@@ -287,7 +287,7 @@ func overrideConfigOnIterator(ctx context.Context, restClient client.RestClient,
 	fmt.Println("\n--- Option 3: Combine MaxPages and MaxItems ---")
 
 	resp3, _ := walletsSvc.ListWallets(ctx, request)
-	combinedConfig := &model.PaginationConfig{
+	combinedConfig := &model.ServiceConfig{
 		MaxPages: 10, // Up to 10 pages
 		MaxItems: 50, // But no more than 50 items total
 	}
@@ -301,7 +301,7 @@ func overrideConfigOnIterator(ctx context.Context, restClient client.RestClient,
 	fmt.Println("\n--- Option 4: Override service config per-iterator ---")
 
 	// Service with MaxPages: 2
-	configuredSvc := wallets.NewWalletsServiceWithConfig(restClient, &model.PaginationConfig{
+	configuredSvc := wallets.NewWalletsServiceWithConfig(restClient, &model.ServiceConfig{
 		MaxPages:     2,
 		DefaultLimit: 10,
 	})
@@ -314,7 +314,7 @@ func overrideConfigOnIterator(ctx context.Context, restClient client.RestClient,
 
 	// Override: use custom config for this specific iteration (5 pages max)
 	resp5, _ := configuredSvc.ListWallets(ctx, request)
-	overrideConfig := &model.PaginationConfig{MaxPages: 5}
+	overrideConfig := &model.ServiceConfig{MaxPages: 5}
 	overriddenWallets, _ := resp5.Iterator().WithConfig(overrideConfig).FetchAll(ctx)
 	fmt.Printf("Using overridden config (max 5 pages): %d wallets\n", len(overriddenWallets))
 }

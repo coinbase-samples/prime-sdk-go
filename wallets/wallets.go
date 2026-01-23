@@ -30,33 +30,33 @@ type WalletsService interface {
 	GetWalletDepositInstructions(ctx context.Context, request *GetWalletDepositInstructionsRequest) (*GetWalletDepositInstructionsResponse, error)
 	ListWalletAddresses(ctx context.Context, request *ListWalletAddressesRequest) (*ListWalletAddressesResponse, error)
 	CreateWalletAddress(ctx context.Context, request *CreateWalletAddressRequest) (*CreateWalletAddressResponse, error)
-	PaginationConfig() *model.PaginationConfig
+	ServiceConfig() *model.ServiceConfig
 }
 
 // NewWalletsService creates a new WalletsService with default pagination config
 func NewWalletsService(c client.RestClient) WalletsService {
 	return &walletsServiceImpl{
 		client:           c,
-		paginationConfig: model.DefaultPaginationConfig(),
+		serviceConfig: model.DefaultServiceConfig(),
 	}
 }
 
 // NewWalletsServiceWithConfig creates a new WalletsService with custom pagination config
-func NewWalletsServiceWithConfig(c client.RestClient, config *model.PaginationConfig) WalletsService {
+func NewWalletsServiceWithConfig(c client.RestClient, config *model.ServiceConfig) WalletsService {
 	if config == nil {
-		config = model.DefaultPaginationConfig()
+		config = model.DefaultServiceConfig()
 	}
 	return &walletsServiceImpl{
 		client:           c,
-		paginationConfig: config,
+		serviceConfig: config,
 	}
 }
 
 type walletsServiceImpl struct {
 	client           client.RestClient
-	paginationConfig *model.PaginationConfig
+	serviceConfig *model.ServiceConfig
 }
 
-func (s *walletsServiceImpl) PaginationConfig() *model.PaginationConfig {
-	return s.paginationConfig
+func (s *walletsServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }

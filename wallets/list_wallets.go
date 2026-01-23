@@ -38,7 +38,7 @@ type ListWalletsResponse struct {
 	Wallets               []*model.Wallet         `json:"wallets"`
 	Request               *ListWalletsRequest     `json:"-"`
 	service               WalletsService          // unexported, injected by service
-	paginationConfig      *model.PaginationConfig // unexported, injected by service
+	serviceConfig      *model.ServiceConfig // unexported, injected by service
 }
 
 // Next fetches the next page of results. Returns nil, nil if no more pages.
@@ -60,11 +60,11 @@ func (r *ListWalletsResponse) Next(ctx context.Context) (*ListWalletsResponse, e
 }
 
 // Iterator returns a PageIterator for convenient iteration and FetchAll.
-// The iterator respects the service's PaginationConfig for MaxPages and MaxItems.
+// The iterator respects the service's ServiceConfig for MaxPages and MaxItems.
 func (r *ListWalletsResponse) Iterator() *model.PageIterator[*ListWalletsResponse, *model.Wallet] {
 	return model.NewPageIteratorWithConfig(r, func(resp *ListWalletsResponse) []*model.Wallet {
 		return resp.Wallets
-	}, r.paginationConfig)
+	}, r.serviceConfig)
 }
 
 func (s *walletsServiceImpl) ListWallets(
@@ -75,11 +75,11 @@ func (s *walletsServiceImpl) ListWallets(
 	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId)
 
 	// Apply default limit from config if not specified in request
-	if s.paginationConfig != nil && s.paginationConfig.DefaultLimit > 0 {
+	if s.serviceConfig != nil && s.serviceConfig.DefaultLimit > 0 {
 		if request.Pagination == nil {
-			request.Pagination = &model.PaginationParams{Limit: s.paginationConfig.DefaultLimit}
+			request.Pagination = &model.PaginationParams{Limit: s.serviceConfig.DefaultLimit}
 		} else if request.Pagination.Limit == 0 {
-			request.Pagination.Limit = s.paginationConfig.DefaultLimit
+			request.Pagination.Limit = s.serviceConfig.DefaultLimit
 		}
 	}
 
@@ -96,7 +96,7 @@ func (s *walletsServiceImpl) ListWallets(
 	response := &ListWalletsResponse{
 		Request:          request,
 		service:          s,
-		paginationConfig: s.paginationConfig,
+		serviceConfig: s.serviceConfig,
 	}
 
 	if err := core.HttpGet(

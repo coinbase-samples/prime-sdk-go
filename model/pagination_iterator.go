@@ -18,8 +18,8 @@ package model
 
 import "context"
 
-// PaginationConfig controls pagination behavior for services
-type PaginationConfig struct {
+// ServiceConfig controls pagination behavior for services
+type ServiceConfig struct {
 	// MaxPages is the maximum number of pages to fetch (0 = unlimited)
 	MaxPages int
 	// MaxItems is the maximum number of items to fetch (0 = unlimited)
@@ -28,9 +28,9 @@ type PaginationConfig struct {
 	DefaultLimit int32
 }
 
-// DefaultPaginationConfig returns a config with no limits
-func DefaultPaginationConfig() *PaginationConfig {
-	return &PaginationConfig{
+// DefaultServiceConfig returns a config with no limits
+func DefaultServiceConfig() *ServiceConfig {
+	return &ServiceConfig{
 		MaxPages:     0,
 		MaxItems:     0,
 		DefaultLimit: 25,
@@ -70,7 +70,7 @@ type ItemExtractor[R any, I any] func(R) []I
 type PageIterator[R PaginatedResponse[R], I any] struct {
 	current   R
 	extractor ItemExtractor[R, I]
-	config    *PaginationConfig
+	config    *ServiceConfig
 }
 
 // NewPageIterator creates an iterator from an initial response
@@ -89,7 +89,7 @@ func NewPageIterator[R PaginatedResponse[R], I any](
 func NewPageIteratorWithConfig[R PaginatedResponse[R], I any](
 	initial R,
 	extractor ItemExtractor[R, I],
-	config *PaginationConfig,
+	config *ServiceConfig,
 ) *PageIterator[R, I] {
 	return &PageIterator[R, I]{
 		current:   initial,
@@ -99,7 +99,7 @@ func NewPageIteratorWithConfig[R PaginatedResponse[R], I any](
 }
 
 // WithConfig sets the pagination config and returns the iterator for chaining
-func (it *PageIterator[R, I]) WithConfig(config *PaginationConfig) *PageIterator[R, I] {
+func (it *PageIterator[R, I]) WithConfig(config *ServiceConfig) *PageIterator[R, I] {
 	it.config = config
 	return it
 }
