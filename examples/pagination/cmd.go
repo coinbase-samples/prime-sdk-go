@@ -45,16 +45,19 @@ func main() {
 	// Example 1: Fetch the second page manually
 	fetchSecondPage(ctx, restClient, credentials.PortfolioId)
 
-	// Example 2: FetchAll with MaxItems of 500
+	// Example 2: While loop with max pages (can spawn goroutines per page)
+	whileLoopWithMaxPages(ctx, restClient, credentials.PortfolioId)
+
+	// Example 3: FetchAll with MaxItems of 500
 	fetchAllWithMaxItems(ctx, restClient, credentials.PortfolioId)
 
-	// Example 3: FetchAll with MaxPages of 5
+	// Example 4: FetchAll with MaxPages of 5
 	fetchAllWithMaxPages(ctx, restClient, credentials.PortfolioId)
 
-	// Example 4: Using DefaultLimit of 100
+	// Example 5: Using DefaultLimit of 100
 	fetchWithDefaultLimit(ctx, restClient, credentials.PortfolioId)
 
-	// Example 5: Override pagination config on response iterator
+	// Example 6: Override pagination config on response iterator
 	overrideConfigOnIterator(ctx, restClient, credentials.PortfolioId)
 }
 
@@ -96,9 +99,72 @@ func fetchSecondPage(ctx context.Context, restClient client.RestClient, portfoli
 	}
 }
 
+// whileLoopWithMaxPages demonstrates manual pagination with a while loop.
+// This pattern is useful when you need fine-grained control over each page,
+// such as spawning goroutines to process pages concurrently.
+func whileLoopWithMaxPages(ctx context.Context, restClient client.RestClient, portfolioId string) {
+	fmt.Println("\n=== Example 2: While Loop with Max Pages ===")
+
+	walletsSvc := wallets.NewWalletsService(restClient)
+
+	request := &wallets.ListWalletsRequest{
+		PortfolioId: portfolioId,
+		Pagination: &model.PaginationParams{
+			Limit: 10, // 10 items per page
+		},
+	}
+
+	// Fetch the first page
+	resp, err := walletsSvc.ListWallets(ctx, request)
+	if err != nil {
+		log.Fatalf("error fetching wallets: %v", err)
+	}
+
+	maxPages := 5
+	currentPage := 1
+	totalItems := 0
+
+	// While loop pattern - process pages until done or max reached
+	for resp != nil {
+		fmt.Printf("Processing page %d: %d wallets\n", currentPage, len(resp.Wallets))
+		totalItems += len(resp.Wallets)
+
+		// doWork here - process the current page's results
+		// This is where you can spawn goroutines to process pages concurrently:
+		//
+		//   page := resp  // capture for goroutine
+		//   wg.Add(1)
+		//   go func() {
+		//       defer wg.Done()
+		//       processWallets(page.Wallets)
+		//   }()
+		//
+
+		// Check if we've reached max pages or no more data
+		if currentPage >= maxPages {
+			fmt.Printf("Reached max pages limit (%d)\n", maxPages)
+			break
+		}
+
+		if !resp.HasNext() {
+			fmt.Println("No more pages available")
+			break
+		}
+
+		// Fetch the next page
+		resp, err = resp.Next(ctx)
+		if err != nil {
+			log.Fatalf("error fetching next page: %v", err)
+		}
+		currentPage++
+	}
+
+	fmt.Printf("Total items processed across %d pages: %d\n", currentPage, totalItems)
+}
+
 // fetchAllWithMaxItems demonstrates using FetchAll with a MaxItems limit
 func fetchAllWithMaxItems(ctx context.Context, restClient client.RestClient, portfolioId string) {
-	fmt.Println("\n=== Example 2: FetchAll with MaxItems of 500 ===")
+	fmt.Println("\n=== Example 3: FetchAll with MaxItems of 500 ===")
 
 	// Create service with MaxItems config
 	config := &model.ServiceConfig{
@@ -146,7 +212,7 @@ func fetchAllWithMaxItems(ctx context.Context, restClient client.RestClient, por
 
 // fetchAllWithMaxPages demonstrates using FetchAll with a MaxPages limit
 func fetchAllWithMaxPages(ctx context.Context, restClient client.RestClient, portfolioId string) {
-	fmt.Println("\n=== Example 3: FetchAll with MaxPages of 5 ===")
+	fmt.Println("\n=== Example 4: FetchAll with MaxPages of 5 ===")
 
 	// Create service with MaxPages config
 	config := &model.ServiceConfig{
@@ -198,7 +264,7 @@ func fetchAllWithMaxPages(ctx context.Context, restClient client.RestClient, por
 
 // fetchWithDefaultLimit demonstrates using DefaultLimit to set page size at service level
 func fetchWithDefaultLimit(ctx context.Context, restClient client.RestClient, portfolioId string) {
-	fmt.Println("\n=== Example 4: Using DefaultLimit of 100 ===")
+	fmt.Println("\n=== Example 5: Using DefaultLimit of 100 ===")
 
 	// Create service with DefaultLimit config
 	// This means all requests will use 100 items per page unless overridden
@@ -242,7 +308,7 @@ func fetchWithDefaultLimit(ctx context.Context, restClient client.RestClient, po
 
 // overrideConfigOnIterator demonstrates modifying pagination config on the response iterator
 func overrideConfigOnIterator(ctx context.Context, restClient client.RestClient, portfolioId string) {
-	fmt.Println("\n=== Example 5: Override Pagination Config on Iterator ===")
+	fmt.Println("\n=== Example 6: Override Pagination Config on Iterator ===")
 
 	// Create service with default config (no limits)
 	walletsSvc := wallets.NewWalletsService(restClient)
