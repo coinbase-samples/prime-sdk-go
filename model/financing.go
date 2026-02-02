@@ -509,3 +509,112 @@ type Conversion struct {
 	// Portfolio ID
 	PortfolioId string `json:"portfolio_id,omitempty"`
 }
+
+// TFAsset represents an asset eligible for Trade Finance
+type TFAsset struct {
+	Symbol              string `json:"symbol"`
+	AssetAdjustment     string `json:"asset_adjustment"`
+	LiabilityAdjustment string `json:"liability_adjustment"`
+}
+
+// XMControlStatus represents the control status for Cross Margin trades and withdrawals
+type XMControlStatus string
+
+const (
+	XMControlStatusUnspecified       XMControlStatus = "XM_CONTROL_STATUS_UNSPECIFIED"
+	XMControlStatusTradesWithdrawals XMControlStatus = "TRADES_AND_WITHDRAWALS"
+	XMControlStatusTradesOnly        XMControlStatus = "TRADES_ONLY"
+	XMControlStatusSessionLocked     XMControlStatus = "SESSION_LOCKED"
+)
+
+// XMEntityCallStatus represents the entity call status for Cross Margin
+type XMEntityCallStatus string
+
+const (
+	XMEntityCallStatusUnspecified  XMEntityCallStatus = "XM_ENTITY_CALL_STATUS_UNSPECIFIED"
+	XMEntityCallStatusNoCall       XMEntityCallStatus = "ENTITY_NO_CALL"
+	XMEntityCallStatusStandardCall XMEntityCallStatus = "ENTITY_OPEN_STANDARD_CALL"
+	XMEntityCallStatusUrgentCall   XMEntityCallStatus = "ENTITY_OPEN_URGENT_CALL"
+	XMEntityCallStatusAgedCall     XMEntityCallStatus = "ENTITY_AGED_CALL"
+	XMEntityCallStatusDebitCall    XMEntityCallStatus = "ENTITY_OPEN_DEBIT_CALL"
+)
+
+// XMMarginLevel represents the margin level for Cross Margin
+type XMMarginLevel string
+
+const (
+	XMMarginLevelUnspecified XMMarginLevel = "XM_MARGIN_LEVEL_UNSPECIFIED"
+	XMMarginLevelHealthy     XMMarginLevel = "HEALTHY_THRESHOLD"
+	XMMarginLevelDeficit     XMMarginLevel = "DEFICIT_THRESHOLD"
+	XMMarginLevelWarning     XMMarginLevel = "WARNING_THRESHOLD"
+	XMMarginLevelUrgent      XMMarginLevel = "URGENT_MARGIN_CALL_THRESHOLD"
+	XMMarginLevelLiquidation XMMarginLevel = "LIQUIDATION_THRESHOLD"
+)
+
+// XMParty represents a Cross Margin trading venue
+type XMParty string
+
+const (
+	XMPartyUnspecified XMParty = "XM_PARTY_UNSPECIFIED"
+	XMPartyCBE         XMParty = "CBE"
+	XMPartyFCM         XMParty = "FCM"
+)
+
+// XMCallType represents the type of Cross Margin call
+type XMCallType string
+
+const (
+	XMCallTypeUnspecified XMCallType = "XM_CALL_TYPE_UNSPECIFIED"
+	XMCallTypeStandard    XMCallType = "STANDARD"
+	XMCallTypeUrgent      XMCallType = "URGENT"
+)
+
+// XMCallStatus represents the status of a Cross Margin call
+type XMCallStatus string
+
+const (
+	XMCallStatusUnspecified XMCallStatus = "XM_CALL_STATUS_UNSPECIFIED"
+	XMCallStatusOpen        XMCallStatus = "OPEN"
+	XMCallStatusClosed      XMCallStatus = "CLOSED"
+	XMCallStatusAged        XMCallStatus = "AGED"
+)
+
+// XMSummary represents the Cross Margin margin model summary
+type XMSummary struct {
+	MarginRequirement     string `json:"margin_requirement"`
+	AccountEquity         string `json:"account_equity"`
+	MarginExcessShortfall string `json:"margin_excess_shortfall"`
+	ConsumedCredit        string `json:"consumed_credit"`
+	XMCreditLimit         string `json:"xm_credit_limit"`
+}
+
+// XMMarginCall represents a Cross Margin margin call
+type XMMarginCall struct {
+	MarginCallId              string        `json:"margin_call_id"`
+	Currency                  string        `json:"currency"`
+	InitialNotionalAmount     string        `json:"initial_notional_amount"`
+	OutstandingNotionalAmount string        `json:"outstanding_notional_amount"`
+	MarginCallType            XMCallType    `json:"margin_call_type"`
+	MarginCallStatus          XMCallStatus  `json:"margin_call_status"`
+	CalledWithMarginLevel     XMMarginLevel `json:"called_with_margin_level"`
+}
+
+// XMLoan represents a Cross Margin loan
+type XMLoan struct {
+	LoanId                       string  `json:"loan_id"`
+	LoanParty                    XMParty `json:"loan_party"`
+	PrincipalCurrency            string  `json:"principal_currency"`
+	PrincipalCurrencyMarketPrice string  `json:"principal_currency_market_price"`
+	InitialPrincipalAmount       string  `json:"initial_principal_amount"`
+	OutstandingPrincipalAmount   string  `json:"outstanding_principal_amount"`
+}
+
+// CrossMarginOverview represents the Cross Margin overview for an entity
+type CrossMarginOverview struct {
+	ControlStatus     XMControlStatus    `json:"control_status"`
+	CallStatus        XMEntityCallStatus `json:"call_status"`
+	MarginLevel       XMMarginLevel      `json:"margin_level"`
+	MarginSummary     *XMSummary         `json:"margin_summary"`
+	ActiveMarginCalls []*XMMarginCall    `json:"active_margin_calls"`
+	ActiveLoans       []*XMLoan          `json:"active_loans"`
+}

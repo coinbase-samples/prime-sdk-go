@@ -30,11 +30,13 @@ type FinancingService interface {
 	GetMarginInfo(ctx context.Context, request *GetMarginInfoRequest) (*GetMarginInfoResponse, error)
 	GetPortfolioCreditInfo(ctx context.Context, request *GetPortfolioCreditInfoRequest) (*GetPortfolioCreditInfoResponse, error)
 	GetTieredPricingFees(ctx context.Context, request *GetTieredPricingFeesRequest) (*GetTieredPricingFeesResponse, error)
+	GetCrossMarginOverview(ctx context.Context, request *GetCrossMarginOverviewRequest) (*GetCrossMarginOverviewResponse, error)
 	ListLocates(ctx context.Context, request *ListLocatesRequest) (*ListLocatesResponse, error)
 	ListInterestAccruals(ctx context.Context, request *ListInterestAccrualsRequest) (*ListInterestAccrualsResponse, error)
 	ListPortfolioInterestAccruals(ctx context.Context, request *ListPortfolioInterestAccrualsRequest) (*ListPortfolioInterestAccrualsResponse, error)
 	ListMarginCallSummaries(ctx context.Context, request *ListMarginCallSummariesRequest) (*ListMarginCallSummariesResponse, error)
 	ListMarginConversions(ctx context.Context, request *ListMarginConversionsRequest) (*ListMarginConversionsResponse, error)
+	ListFinancingEligibleAssets(ctx context.Context, request *ListFinancingEligibleAssetsRequest) (*ListFinancingEligibleAssetsResponse, error)
 }
 
 func NewFinancingService(c client.RestClient) FinancingService {
