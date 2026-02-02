@@ -51,13 +51,7 @@ func (r *ListPortfolioTransactionsResponse) Next(ctx context.Context) (*ListPort
 	}
 
 	nextReq := *r.Request
-	if nextReq.Pagination == nil {
-		nextReq.Pagination = &model.PaginationParams{}
-	} else {
-		paginationCopy := *nextReq.Pagination
-		nextReq.Pagination = &paginationCopy
-	}
-	nextReq.Pagination.Cursor = r.Pagination.NextCursor
+	nextReq.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.Pagination.NextCursor)
 
 	return r.service.ListPortfolioTransactions(ctx, &nextReq)
 }

@@ -56,6 +56,17 @@ func (m *PaginationMixin) GetNextCursor() string {
 	return m.Pagination.NextCursor
 }
 
+// PrepareNextPagination creates pagination params for the next page request.
+// It safely copies existing params (if any) and sets the cursor for the next page.
+func PrepareNextPagination(current *PaginationParams, nextCursor string) *PaginationParams {
+	if current == nil {
+		return &PaginationParams{Cursor: nextCursor}
+	}
+	cp := *current
+	cp.Cursor = nextCursor
+	return &cp
+}
+
 // PaginatedResponse is implemented by any response that supports pagination
 type PaginatedResponse[T any] interface {
 	HasNext() bool

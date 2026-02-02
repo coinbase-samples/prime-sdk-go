@@ -27,18 +27,19 @@ import (
 )
 
 type ListWalletsRequest struct {
-	PortfolioId string                  `json:"portfolio_id"`
-	Type        string                  `json:"type"`
-	Symbols     []string                `json:"symbols"`
-	Pagination  *model.PaginationParams `json:"pagination_params"`
+	PortfolioId              string                  `json:"portfolio_id"`
+	Type                     string                  `json:"type"`
+	Symbols                  []string                `json:"symbols"`
+	GetNetworkUnifiedWallets bool                    `json:"get_network_unified_wallets,omitempty"`
+	Pagination               *model.PaginationParams `json:"pagination_params"`
 }
 
 type ListWalletsResponse struct {
-	model.PaginationMixin                         // provides Pagination, HasNext(), GetNextCursor()
-	Wallets               []*model.Wallet         `json:"wallets"`
-	Request               *ListWalletsRequest     `json:"-"`
-	service               WalletsService          // unexported, injected by service
-	serviceConfig      *model.ServiceConfig // unexported, injected by service
+	model.PaginationMixin                      // provides Pagination, HasNext(), GetNextCursor()
+	Wallets               []*model.Wallet      `json:"wallets"`
+	Request               *ListWalletsRequest  `json:"-"`
+	service               WalletsService       // unexported, injected by service
+	serviceConfig         *model.ServiceConfig // unexported, injected by service
 }
 
 // Next fetches the next page of results. Returns nil, nil if no more pages.
@@ -48,13 +49,7 @@ func (r *ListWalletsResponse) Next(ctx context.Context) (*ListWalletsResponse, e
 	}
 
 	nextReq := *r.Request
-	if nextReq.Pagination == nil {
-		nextReq.Pagination = &model.PaginationParams{}
-	} else {
-		paginationCopy := *nextReq.Pagination
-		nextReq.Pagination = &paginationCopy
-	}
-	nextReq.Pagination.Cursor = r.Pagination.NextCursor
+	nextReq.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.Pagination.NextCursor)
 
 	return r.service.ListWallets(ctx, &nextReq)
 }
@@ -90,12 +85,15 @@ func (s *walletsServiceImpl) ListWallets(
 	for _, v := range request.Symbols {
 		queryParams = core.AppendHttpQueryParam(queryParams, "symbols", v)
 	}
+	if request.GetNetworkUnifiedWallets {
+		queryParams = core.AppendHttpQueryParam(queryParams, "get_network_unified_wallets", "true")
+	}
 
 	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
 	response := &ListWalletsResponse{
-		Request:          request,
-		service:          s,
+		Request:       request,
+		service:       s,
 		serviceConfig: s.serviceConfig,
 	}
 
