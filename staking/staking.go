@@ -20,17 +20,45 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type StakingService interface {
+	// Portfolio-level staking
+	PortfolioStakeInitiate(ctx context.Context, request *PortfolioStakeInitiateRequest) (*PortfolioStakeInitiateResponse, error)
+	PortfolioUnstake(ctx context.Context, request *PortfolioUnstakeRequest) (*PortfolioUnstakeResponse, error)
+	QueryTransactionValidators(ctx context.Context, request *QueryTransactionValidatorsRequest) (*QueryTransactionValidatorsResponse, error)
+
+	// Wallet-level staking
 	CreateStake(ctx context.Context, request *CreateStakeRequest) (*CreateStakeResponse, error)
 	CreateUnstake(ctx context.Context, request *CreateUnstakeRequest) (*CreateUnstakeResponse, error)
+	ClaimStakingRewards(ctx context.Context, request *ClaimStakingRewardsRequest) (*ClaimStakingRewardsResponse, error)
+	GetStakingStatus(ctx context.Context, request *GetStakingStatusRequest) (*GetStakingStatusResponse, error)
+	PreviewUnstake(ctx context.Context, request *PreviewUnstakeRequest) (*PreviewUnstakeResponse, error)
+	GetUnstakingStatus(ctx context.Context, request *GetUnstakingStatusRequest) (*GetUnstakingStatusResponse, error)
+
+	ServiceConfig() *model.ServiceConfig
 }
 
 func NewStakingService(c client.RestClient) StakingService {
-	return &stakingServiceImpl{client: c}
+	return &stakingServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+func NewStakingServiceWithConfig(c client.RestClient, config *model.ServiceConfig) StakingService {
+	return &stakingServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type stakingServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *stakingServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }
