@@ -31,13 +31,14 @@ type TransactionsService interface {
 	CreateWalletTransfer(ctx context.Context, request *CreateWalletTransferRequest) (*CreateWalletTransferResponse, error)
 	CreateWalletWithdrawal(ctx context.Context, request *CreateWalletWithdrawalRequest) (*CreateWalletWithdrawalResponse, error)
 	CreateOnchainTransaction(ctx context.Context, request *CreateOnchainTransactionRequest) (*CreateOnchainTransactionResposne, error)
+	SubmitDepositTravelRuleData(ctx context.Context, request *SubmitDepositTravelRuleDataRequest) (*SubmitDepositTravelRuleDataResponse, error)
 	ServiceConfig() *model.ServiceConfig
 }
 
 // NewTransactionsService creates a new TransactionsService with default pagination config
 func NewTransactionsService(c client.RestClient) TransactionsService {
 	return &transactionsServiceImpl{
-		client:           c,
+		client:        c,
 		serviceConfig: model.DefaultServiceConfig(),
 	}
 }
@@ -48,13 +49,13 @@ func NewTransactionsServiceWithConfig(c client.RestClient, config *model.Service
 		config = model.DefaultServiceConfig()
 	}
 	return &transactionsServiceImpl{
-		client:           c,
+		client:        c,
 		serviceConfig: config,
 	}
 }
 
 type transactionsServiceImpl struct {
-	client           client.RestClient
+	client        client.RestClient
 	serviceConfig *model.ServiceConfig
 }
 
