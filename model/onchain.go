@@ -64,6 +64,7 @@ type OnchainAddressGroup struct {
 	Name        string             `json:"name"`
 	NetworkType OnchainNetworkType `json:"network_type"`
 	Addresses   []*OnchainAddress  `json:"addresses"`
+	AddedAt     string             `json:"added_at,omitempty"`
 }
 
 type OnchainAddress struct {
