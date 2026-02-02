@@ -69,14 +69,7 @@ func (s *walletsServiceImpl) ListWallets(
 
 	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId)
 
-	// Apply default limit from config if not specified in request
-	if s.serviceConfig != nil && s.serviceConfig.DefaultLimit > 0 {
-		if request.Pagination == nil {
-			request.Pagination = &model.PaginationParams{Limit: s.serviceConfig.DefaultLimit}
-		} else if request.Pagination.Limit == 0 {
-			request.Pagination.Limit = s.serviceConfig.DefaultLimit
-		}
-	}
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
 
 	queryParams := core.EmptyQueryParams
 	if request.Type != "" {

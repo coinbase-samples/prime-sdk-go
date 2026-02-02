@@ -41,7 +41,7 @@ type ListPortfolioTransactionsResponse struct {
 	Transactions          []*model.Transaction              `json:"transactions"`
 	Request               *ListPortfolioTransactionsRequest `json:"-"`
 	service               TransactionsService               // unexported, injected by service
-	serviceConfig      *model.ServiceConfig           // unexported, injected by service
+	serviceConfig         *model.ServiceConfig              // unexported, injected by service
 }
 
 // Next fetches the next page of results. Returns nil, nil if no more pages.
@@ -71,14 +71,7 @@ func (s *transactionsServiceImpl) ListPortfolioTransactions(
 
 	path := fmt.Sprintf("/portfolios/%s/transactions", request.PortfolioId)
 
-	// Apply default limit from config if not specified in request
-	if s.serviceConfig != nil && s.serviceConfig.DefaultLimit > 0 {
-		if request.Pagination == nil {
-			request.Pagination = &model.PaginationParams{Limit: s.serviceConfig.DefaultLimit}
-		} else if request.Pagination.Limit == 0 {
-			request.Pagination.Limit = s.serviceConfig.DefaultLimit
-		}
-	}
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
 
 	var queryParams string
 
@@ -101,8 +94,8 @@ func (s *transactionsServiceImpl) ListPortfolioTransactions(
 	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
 	response := &ListPortfolioTransactionsResponse{
-		Request:          request,
-		service:          s,
+		Request:       request,
+		service:       s,
 		serviceConfig: s.serviceConfig,
 	}
 
