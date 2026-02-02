@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type OrdersService interface {
@@ -29,16 +30,34 @@ type OrdersService interface {
 	ListOrders(ctx context.Context, request *ListOrdersRequest) (*ListOrdersResponse, error)
 	GetOrder(ctx context.Context, request *GetOrderRequest) (*GetOrderResponse, error)
 	CancelOrder(ctx context.Context, request *CancelOrderRequest) (*CancelOrderResponse, error)
+	EditOrder(ctx context.Context, request *EditOrderRequest) (*EditOrderResponse, error)
+	GetOrderEditHistory(ctx context.Context, request *GetOrderEditHistoryRequest) (*GetOrderEditHistoryResponse, error)
 	ListOrderFills(ctx context.Context, request *ListOrderFillsRequest) (*ListOrderFillsResponse, error)
 	ListPortfolioFills(ctx context.Context, request *ListPortfolioFillsRequest) (*ListPortfolioFillsResponse, error)
 	CreateQuoteRequest(ctx context.Context, request *CreateQuoteRequest) (*CreateQuoteResponse, error)
 	AcceptQuote(ctx context.Context, request *AcceptQuoteRequest) (*AcceptQuoteResponse, error)
+	ServiceConfig() *model.ServiceConfig
 }
 
 func NewOrdersService(c client.RestClient) OrdersService {
-	return &ordersServiceImpl{client: c}
+	return &ordersServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+func NewOrdersServiceWithConfig(c client.RestClient, config *model.ServiceConfig) OrdersService {
+	return &ordersServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type ordersServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *ordersServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }
