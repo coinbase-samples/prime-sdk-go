@@ -80,6 +80,8 @@ type EntityPaymentMethod struct {
 	Name              string `json:"name"`
 	AccountNumber     string `json:"account_number"`
 	BankCode          string `json:"bank_code"`
+	BankName          string `json:"bank_name,omitempty"`
+	BankName2         string `json:"bank_name_2,omitempty"`
 }
 
 type Portfolio struct {
@@ -87,6 +89,10 @@ type Portfolio struct {
 	Name           string `json:"name"`
 	EntityId       string `json:"entity_id"`
 	OrganizationId string `json:"organization_id"`
+}
+
+type Counterparty struct {
+	CounterpartyId string `json:"counterparty_id"`
 }
 
 type Balance struct {

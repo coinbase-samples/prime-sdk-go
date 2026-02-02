@@ -1,5 +1,5 @@
 /**
- * Copyright 2024-present Coinbase Global, Inc.
+ * Copyright 2026-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package paymentmethods
+package portfolios
 
 import (
 	"context"
@@ -25,23 +25,23 @@ import (
 	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type ListEntityPaymentMethodsRequest struct {
-	EntityId string `json:"entity_id"`
+type GetPortfolioCounterpartyRequest struct {
+	PortfolioId string `json:"portfolio_id"`
 }
 
-type ListEntityPaymentMethodsResponse struct {
-	PaymentMethods []*model.EntityPaymentMethod     `json:"payment_methods"`
-	Request        *ListEntityPaymentMethodsRequest `json:"-"`
+type GetPortfolioCounterpartyResponse struct {
+	Counterparty *model.Counterparty              `json:"counterparty"`
+	Request      *GetPortfolioCounterpartyRequest `json:"-"`
 }
 
-func (s *paymentMethodsServiceImpl) ListEntityPaymentMethods(
+func (s *portfoliosServiceImpl) GetPortfolioCounterparty(
 	ctx context.Context,
-	request *ListEntityPaymentMethodsRequest,
-) (*ListEntityPaymentMethodsResponse, error) {
+	request *GetPortfolioCounterpartyRequest,
+) (*GetPortfolioCounterpartyResponse, error) {
 
-	path := fmt.Sprintf("/entities/%s/payment-methods", request.EntityId)
+	path := fmt.Sprintf("/portfolios/%s/counterparty", request.PortfolioId)
 
-	response := &ListEntityPaymentMethodsResponse{Request: request}
+	response := &GetPortfolioCounterpartyResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,
