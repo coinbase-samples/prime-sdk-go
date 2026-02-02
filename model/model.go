@@ -478,26 +478,6 @@ type UserAction struct {
 	TransactionsMetadata *TransactionsMetadata `json:"transactions_metadata,omitempty"`
 }
 
-type AddressBookEntry struct {
-	Id                    string                   `json:"id"`
-	Symbol                string                   `json:"currency_symbol"`
-	Name                  string                   `json:"name"`
-	Address               string                   `json:"address"`
-	AccountIdentifier     string                   `json:"account_identifier"`
-	AccountIdentifierName string                   `json:"account_identifier_name"`
-	State                 string                   `json:"state"`
-	ExplorerLink          string                   `json:"explorer_link"`
-	LastUsed              time.Time                `json:"last_used_at"`
-	Added                 time.Time                `json:"added_at"`
-	AddedBy               *AddressBookEntryAddedBy `json:"added_by"`
-}
-
-type AddressBookEntryAddedBy struct {
-	Id        string `json:"id"`
-	Name      string `json:"name"`
-	AvatarUrl string `json:"avatar_url"`
-}
-
 type Asset struct {
 	Name             string     `json:"name"`
 	Symbol           string     `json:"symbol"`

@@ -25,11 +25,12 @@ import (
 )
 
 type CreateAddressBookEntryRequest struct {
-	PortfolioId       string `json:"portfolio_id"`
-	Address           string `json:"address"`
-	Symbol            string `json:"currency_symbol"`
-	Name              string `json:"name"`
-	AccountIdentifier string `json:"account_identifier,omitempty"`
+	PortfolioId       string   `json:"portfolio_id"`
+	Address           string   `json:"address"`
+	Symbol            string   `json:"currency_symbol"`
+	Name              string   `json:"name"`
+	AccountIdentifier string   `json:"account_identifier,omitempty"`
+	ChainIds          []string `json:"chain_ids,omitempty"`
 }
 
 type CreateAddressBookEntryResponse struct {

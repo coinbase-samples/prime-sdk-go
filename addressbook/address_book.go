@@ -20,17 +20,39 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type AddressBookService interface {
 	GetAddressBook(ctx context.Context, request *GetAddressBookRequest) (*GetAddressBookResponse, error)
 	CreateAddressBookEntry(ctx context.Context, request *CreateAddressBookEntryRequest) (*CreateAddressBookEntryResponse, error)
+	ServiceConfig() *model.ServiceConfig
 }
 
+// NewAddressBookService creates a new AddressBookService with default pagination config
 func NewAddressBookService(c client.RestClient) AddressBookService {
-	return &addressBookServiceImpl{client: c}
+	return &addressBookServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+// NewAddressBookServiceWithConfig creates a new AddressBookService with custom pagination config
+func NewAddressBookServiceWithConfig(c client.RestClient, config *model.ServiceConfig) AddressBookService {
+	if config == nil {
+		config = model.DefaultServiceConfig()
+	}
+	return &addressBookServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type addressBookServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *addressBookServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }
