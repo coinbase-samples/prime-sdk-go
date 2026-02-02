@@ -30,7 +30,7 @@ type ListEntityFuturesSweepsRequest struct {
 }
 
 type ListEntityFuturesSweepsResponse struct {
-	Sweeps    []*model.Sweep                  `json:"sweeps"`
+	Sweeps    []*model.FcmSweep               `json:"sweeps"`
 	AutoSweep bool                            `json:"auto_sweep"`
 	Request   *ListEntityFuturesSweepsRequest `json:"-"`
 }

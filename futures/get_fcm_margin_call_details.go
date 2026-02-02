@@ -1,5 +1,5 @@
 /**
- * Copyright 2025-present Coinbase Global, Inc.
+ * Copyright 2026-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,33 +25,29 @@ import (
 	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type GetEntityPositionsRequest struct {
-	EntityId  string `json:"entity_id"`
-	ProductId string `json:"product_id,omitempty"`
+type GetFcmMarginCallDetailsRequest struct {
+	EntityId string `json:"entity_id"`
 }
 
-type GetEntityPositionsResponse struct {
-	Positions         []*model.FcmPosition       `json:"positions"`
-	ClearingAccountId string                     `json:"clearing_account_id"`
-	Request           *GetEntityPositionsRequest `json:"-"`
+type GetFcmMarginCallDetailsResponse struct {
+	MarginCalls []*model.FcmMarginCall          `json:"margin_calls"`
+	Request     *GetFcmMarginCallDetailsRequest `json:"-"`
 }
 
-func (s *futuresServiceImpl) GetEntityPositions(
+func (s *futuresServiceImpl) GetFcmMarginCallDetails(
 	ctx context.Context,
-	request *GetEntityPositionsRequest,
-) (*GetEntityPositionsResponse, error) {
+	request *GetFcmMarginCallDetailsRequest,
+) (*GetFcmMarginCallDetailsResponse, error) {
 
-	path := fmt.Sprintf("/entities/%s/futures/positions", request.EntityId)
+	path := fmt.Sprintf("/entities/%s/futures/margin_call_details", request.EntityId)
 
-	queryParams := core.AppendHttpQueryParam(core.EmptyQueryParams, "product_id", request.ProductId)
-
-	response := &GetEntityPositionsResponse{Request: request}
+	response := &GetFcmMarginCallDetailsResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,
 		s.client,
 		path,
-		queryParams,
+		core.EmptyQueryParams,
 		client.DefaultSuccessHttpStatusCodes,
 		request,
 		response,

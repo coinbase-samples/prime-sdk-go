@@ -1,5 +1,5 @@
 /**
- * Copyright 2025-present Coinbase Global, Inc.
+ * Copyright 2026-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,36 +22,35 @@ import (
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
-	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type GetEntityPositionsRequest struct {
-	EntityId  string `json:"entity_id"`
-	ProductId string `json:"product_id,omitempty"`
+type GetFcmRiskLimitsRequest struct {
+	EntityId string `json:"entity_id"`
 }
 
-type GetEntityPositionsResponse struct {
-	Positions         []*model.FcmPosition       `json:"positions"`
-	ClearingAccountId string                     `json:"clearing_account_id"`
-	Request           *GetEntityPositionsRequest `json:"-"`
+type GetFcmRiskLimitsResponse struct {
+	CfmRiskLimit            string                   `json:"cfm_risk_limit"`
+	CfmRiskLimitUtilization string                   `json:"cfm_risk_limit_utilization"`
+	CfmTotalMargin          string                   `json:"cfm_total_margin"`
+	CfmDeltaOte             string                   `json:"cfm_delta_ote"`
+	CfmUnsettledRealizedPnl string                   `json:"cfm_unsettled_realized_pnl"`
+	Request                 *GetFcmRiskLimitsRequest `json:"-"`
 }
 
-func (s *futuresServiceImpl) GetEntityPositions(
+func (s *futuresServiceImpl) GetFcmRiskLimits(
 	ctx context.Context,
-	request *GetEntityPositionsRequest,
-) (*GetEntityPositionsResponse, error) {
+	request *GetFcmRiskLimitsRequest,
+) (*GetFcmRiskLimitsResponse, error) {
 
-	path := fmt.Sprintf("/entities/%s/futures/positions", request.EntityId)
+	path := fmt.Sprintf("/entities/%s/futures/risk_limits", request.EntityId)
 
-	queryParams := core.AppendHttpQueryParam(core.EmptyQueryParams, "product_id", request.ProductId)
-
-	response := &GetEntityPositionsResponse{Request: request}
+	response := &GetFcmRiskLimitsResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,
 		s.client,
 		path,
-		queryParams,
+		core.EmptyQueryParams,
 		client.DefaultSuccessHttpStatusCodes,
 		request,
 		response,

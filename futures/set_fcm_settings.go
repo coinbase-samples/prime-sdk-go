@@ -1,5 +1,5 @@
 /**
- * Copyright 2025-present Coinbase Global, Inc.
+ * Copyright 2026-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,36 +22,32 @@ import (
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
-	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
-type GetEntityPositionsRequest struct {
-	EntityId  string `json:"entity_id"`
-	ProductId string `json:"product_id,omitempty"`
+type SetFcmSettingsRequest struct {
+	EntityId                string `json:"-"`
+	TargetDerivativesExcess string `json:"target_derivatives_excess,omitempty"`
 }
 
-type GetEntityPositionsResponse struct {
-	Positions         []*model.FcmPosition       `json:"positions"`
-	ClearingAccountId string                     `json:"clearing_account_id"`
-	Request           *GetEntityPositionsRequest `json:"-"`
+type SetFcmSettingsResponse struct {
+	Success bool                   `json:"success"`
+	Request *SetFcmSettingsRequest `json:"-"`
 }
 
-func (s *futuresServiceImpl) GetEntityPositions(
+func (s *futuresServiceImpl) SetFcmSettings(
 	ctx context.Context,
-	request *GetEntityPositionsRequest,
-) (*GetEntityPositionsResponse, error) {
+	request *SetFcmSettingsRequest,
+) (*SetFcmSettingsResponse, error) {
 
-	path := fmt.Sprintf("/entities/%s/futures/positions", request.EntityId)
+	path := fmt.Sprintf("/entities/%s/futures/settings", request.EntityId)
 
-	queryParams := core.AppendHttpQueryParam(core.EmptyQueryParams, "product_id", request.ProductId)
+	response := &SetFcmSettingsResponse{Request: request}
 
-	response := &GetEntityPositionsResponse{Request: request}
-
-	if err := core.HttpGet(
+	if err := core.HttpPost(
 		ctx,
 		s.client,
 		path,
-		queryParams,
+		core.EmptyQueryParams,
 		client.DefaultSuccessHttpStatusCodes,
 		request,
 		response,
