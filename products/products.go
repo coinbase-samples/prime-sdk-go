@@ -25,6 +25,7 @@ import (
 
 type ProductsService interface {
 	ListProducts(ctx context.Context, request *ListProductsRequest) (*ListProductsResponse, error)
+	GetProductCandles(ctx context.Context, request *GetProductCandlesRequest) (*GetProductCandlesResponse, error)
 	ServiceConfig() *model.ServiceConfig
 }
 
