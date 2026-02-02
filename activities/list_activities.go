@@ -1,5 +1,5 @@
 /**
- * Copyright 2023-present Coinbase Global, Inc.
+ * Copyright 2026-present Coinbase Global, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,19 +28,46 @@ import (
 )
 
 type ListActivitiesRequest struct {
-	PortfolioId string                  `json:"portfolio_id"`
-	Symbols     []string                `json:"symbols"`
-	Categories  []string                `json:"categories"`
-	Statuses    []string                `json:"statuses"`
-	Start       time.Time               `json:"start_time"`
-	End         time.Time               `json:"end_time"`
-	Pagination  *model.PaginationParams `json:"pagination_params"`
+	PortfolioId                 string                  `json:"portfolio_id"`
+	Symbols                     []string                `json:"symbols"`
+	Categories                  []string                `json:"categories"`
+	Statuses                    []string                `json:"statuses"`
+	Start                       time.Time               `json:"start_time"`
+	End                         time.Time               `json:"end_time"`
+	GetNetworkUnifiedActivities bool                    `json:"get_network_unified_activities,omitempty"`
+	Pagination                  *model.PaginationParams `json:"pagination_params"`
 }
 
 type ListActivitiesResponse struct {
-	Activities []*model.Activity      `json:"activities"`
-	Pagination *model.Pagination      `json:"pagination"`
-	Request    *ListActivitiesRequest `json:"-"`
+	model.PaginationMixin
+	Activities    []*model.Activity      `json:"activities"`
+	Request       *ListActivitiesRequest `json:"-"`
+	service       ActivitiesService
+	serviceConfig *model.ServiceConfig
+}
+
+// Next fetches the next page of activities using the pagination cursor.
+// Returns nil if there are no more pages.
+func (r *ListActivitiesResponse) Next(ctx context.Context) (*ListActivitiesResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextRequest := *r.Request
+	nextRequest.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.GetNextCursor())
+
+	return r.service.ListActivities(ctx, &nextRequest)
+}
+
+// Iterator returns a PageIterator for iterating through all pages of activities.
+func (r *ListActivitiesResponse) Iterator() *model.PageIterator[*ListActivitiesResponse, *model.Activity] {
+	return model.NewPageIteratorWithConfig(
+		r,
+		func(resp *ListActivitiesResponse) []*model.Activity {
+			return resp.Activities
+		},
+		r.serviceConfig,
+	)
 }
 
 func (s *activitiesServiceImpl) ListActivities(
@@ -50,7 +77,10 @@ func (s *activitiesServiceImpl) ListActivities(
 
 	path := fmt.Sprintf("/portfolios/%s/activities", request.PortfolioId)
 
-	var queryParams string
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
+
+	queryParams := utils.AppendPaginationParams(core.EmptyQueryParams, request.Pagination)
+
 	if !request.Start.IsZero() {
 		queryParams = core.AppendHttpQueryParam(queryParams, "start_time", utils.TimeToStr(request.Start))
 	}
@@ -71,9 +101,15 @@ func (s *activitiesServiceImpl) ListActivities(
 		queryParams = core.AppendHttpQueryParam(queryParams, "statuses", v)
 	}
 
-	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
+	if request.GetNetworkUnifiedActivities {
+		queryParams = core.AppendHttpQueryParam(queryParams, "get_network_unified_activities", "true")
+	}
 
-	response := &ListActivitiesResponse{Request: request}
+	response := &ListActivitiesResponse{
+		Request:       request,
+		service:       s,
+		serviceConfig: s.serviceConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,

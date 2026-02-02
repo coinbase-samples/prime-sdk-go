@@ -42,10 +42,6 @@ const (
 	WalletDepositTypeSwift  = "SWIFT"
 	WalletDepositTypeCrypto = "CRYPTO"
 
-	BalanceTypeTrading = "TRADING_BALANCES"
-	BalanceTypeVault   = "VAULT_BALANCES"
-	BalanceTypeTotal   = "TOTAL_BALANCES"
-
 	OrderTypeMarket = "MARKET"
 	OrderTypeLimit  = "LIMIT"
 	OrderTypeTwap   = "TWAP"
@@ -93,41 +89,6 @@ type Portfolio struct {
 
 type Counterparty struct {
 	CounterpartyId string `json:"counterparty_id"`
-}
-
-type Balance struct {
-	Symbol               string `json:"symbol"`
-	Amount               string `json:"amount"`
-	Holds                string `json:"holds"`
-	BondedAmount         string `json:"bonded_amount"`
-	ReservedAmount       string `json:"reserved_amount"`
-	UnbondingAmount      string `json:"unbonding_amount"`
-	UnvestedAmount       string `json:"unvested_amount"`
-	PendingRewardsAmount string `json:"pending_rewards_amount"`
-	PastRewardsAmount    string `json:"past_rewards_amount"`
-	BondableAmount       string `json:"bondable_amount"`
-	WithdrawableAmount   string `json:"withdrawable_amount"`
-}
-
-func (b Balance) AmountNum() (amount decimal.Decimal, err error) {
-	amount, err = core.StrToNum(b.Amount)
-	if err != nil {
-		err = fmt.Errorf("Invalid asset amount: %s - symbol: %s - msg: %v", b.Amount, b.Symbol, err)
-	}
-	return
-}
-
-func (b Balance) HoldsNum() (holds decimal.Decimal, err error) {
-	holds, err = core.StrToNum(b.Holds)
-	if err != nil {
-		err = fmt.Errorf("Invalid asset holds: %s - symbol: %s - msg: %v", b.Holds, b.Symbol, err)
-	}
-	return
-}
-
-type BalanceWithHolds struct {
-	Total string `json:"total"`
-	Holds string `json:"holds"`
 }
 
 type PaginationParams struct {
@@ -342,48 +303,6 @@ func (tr Transfer) ValueNum() (amount decimal.Decimal, err error) {
 		err = fmt.Errorf("invalid transfer value: %s - type: %s - msg: %v", tr.Value, tr.Type, err)
 	}
 	return
-}
-
-type Activity struct {
-	Id                  string                `json:"id"`
-	ReferenceId         string                `json:"reference_id"`
-	Category            string                `json:"category"`
-	PrimaryType         string                `json:"type"`
-	SecondaryType       string                `json:"secondary_type"`
-	Status              string                `json:"status"`
-	CreatedBy           string                `json:"created_by"`
-	Title               string                `json:"title"`
-	Description         string                `json:"description"`
-	UserActions         []*UserAction         `json:"user_actions,omitempty"`
-	AccountMetadata     *AccountMetadata      `json:"account_metadata,omitempty"`
-	OrdersMetadata      *OrdersMetadata       `json:"orders_metadata,omitempty"`
-	TransactionMetadata *TransactionsMetadata `json:"transaction_metadata,omitempty"`
-	Symbols             []string              `json:"symbols,omitempty"`
-	Created             string                `json:"created_at"`
-	Updated             string                `json:"updated_at"`
-}
-
-type TransactionsMetadata struct {
-	Consensus *Consensus `json:"consensus"`
-}
-
-type AccountMetadata struct {
-	Consensus *Consensus `json:"consensus"`
-}
-
-// An empty/unimplemented/placeholder object in Prime
-type OrdersMetadata struct{}
-
-type Consensus struct {
-	ApprovalDeadline string `json:"approval_deadline"`
-	PassedConsensus  bool   `json:"has_passed_consensus"`
-}
-
-type UserAction struct {
-	Action               string                `json:"action"`
-	UserId               string                `json:"user_id"`
-	Timestamp            string                `json:"timestamp"`
-	TransactionsMetadata *TransactionsMetadata `json:"transactions_metadata,omitempty"`
 }
 
 type Asset struct {

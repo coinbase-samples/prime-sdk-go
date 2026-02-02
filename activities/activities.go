@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type ActivitiesService interface {
@@ -27,12 +28,28 @@ type ActivitiesService interface {
 	GetActivity(ctx context.Context, request *GetActivityRequest) (*GetActivityResponse, error)
 	ListEntityActivities(ctx context.Context, request *ListEntityActivitiesRequest) (*ListEntityActivitiesResponse, error)
 	GetEntityActivity(ctx context.Context, request *GetEntityActivityRequest) (*GetEntityActivityResponse, error)
+	ServiceConfig() *model.ServiceConfig
 }
 
 func NewActivitiesService(c client.RestClient) ActivitiesService {
-	return &activitiesServiceImpl{client: c}
+	return &activitiesServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+func NewActivitiesServiceWithConfig(c client.RestClient, config *model.ServiceConfig) ActivitiesService {
+	return &activitiesServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type activitiesServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *activitiesServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }

@@ -28,20 +28,47 @@ import (
 )
 
 type ListEntityActivitiesRequest struct {
-	EntityId      string                  `json:"entity_id"`
-	ActivityLevel string                  `json:"activity_level"`
-	Symbols       []string                `json:"symbols"`
-	Categories    []string                `json:"categories"`
-	Statuses      []string                `json:"statuses"`
-	StartTime     time.Time               `json:"start_time"`
-	EndTime       time.Time               `json:"end_time"`
-	Pagination    *model.PaginationParams `json:"pagination_params"`
+	EntityId                    string                  `json:"entity_id"`
+	ActivityLevel               string                  `json:"activity_level"`
+	Symbols                     []string                `json:"symbols"`
+	Categories                  []string                `json:"categories"`
+	Statuses                    []string                `json:"statuses"`
+	StartTime                   time.Time               `json:"start_time"`
+	EndTime                     time.Time               `json:"end_time"`
+	GetNetworkUnifiedActivities bool                    `json:"get_network_unified_activities,omitempty"`
+	Pagination                  *model.PaginationParams `json:"pagination_params"`
 }
 
 type ListEntityActivitiesResponse struct {
-	Activities []*model.Activity            `json:"activities"`
-	Pagination *model.Pagination            `json:"pagination"`
-	Request    *ListEntityActivitiesRequest `json:"-"`
+	model.PaginationMixin
+	Activities    []*model.Activity            `json:"activities"`
+	Request       *ListEntityActivitiesRequest `json:"-"`
+	service       ActivitiesService
+	serviceConfig *model.ServiceConfig
+}
+
+// Next fetches the next page of entity activities using the pagination cursor.
+// Returns nil if there are no more pages.
+func (r *ListEntityActivitiesResponse) Next(ctx context.Context) (*ListEntityActivitiesResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextRequest := *r.Request
+	nextRequest.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.GetNextCursor())
+
+	return r.service.ListEntityActivities(ctx, &nextRequest)
+}
+
+// Iterator returns a PageIterator for iterating through all pages of entity activities.
+func (r *ListEntityActivitiesResponse) Iterator() *model.PageIterator[*ListEntityActivitiesResponse, *model.Activity] {
+	return model.NewPageIteratorWithConfig(
+		r,
+		func(resp *ListEntityActivitiesResponse) []*model.Activity {
+			return resp.Activities
+		},
+		r.serviceConfig,
+	)
 }
 
 func (s *activitiesServiceImpl) ListEntityActivities(
@@ -51,7 +78,9 @@ func (s *activitiesServiceImpl) ListEntityActivities(
 
 	path := fmt.Sprintf("/entities/%s/activities", request.EntityId)
 
-	var queryParams string
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
+
+	queryParams := utils.AppendPaginationParams(core.EmptyQueryParams, request.Pagination)
 
 	if request.ActivityLevel != "" {
 		queryParams = core.AppendHttpQueryParam(queryParams, "activity_level", request.ActivityLevel)
@@ -77,9 +106,15 @@ func (s *activitiesServiceImpl) ListEntityActivities(
 		queryParams = core.AppendHttpQueryParam(queryParams, "statuses", v)
 	}
 
-	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
+	if request.GetNetworkUnifiedActivities {
+		queryParams = core.AppendHttpQueryParam(queryParams, "get_network_unified_activities", "true")
+	}
 
-	response := &ListEntityActivitiesResponse{Request: request}
+	response := &ListEntityActivitiesResponse{
+		Request:       request,
+		service:       s,
+		serviceConfig: s.serviceConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,
