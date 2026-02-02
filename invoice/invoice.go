@@ -20,16 +20,33 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type InvoiceService interface {
 	ListInvoices(ctx context.Context, request *ListInvoicesRequest) (*ListInvoicesResponse, error)
+	ServiceConfig() *model.ServiceConfig
 }
 
 func NewInvoiceService(c client.RestClient) InvoiceService {
-	return &invoiceServiceImpl{client: c}
+	return &invoiceServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+func NewInvoiceServiceWithConfig(c client.RestClient, config *model.ServiceConfig) InvoiceService {
+	return &invoiceServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type invoiceServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *invoiceServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }
