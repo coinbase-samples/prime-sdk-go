@@ -31,7 +31,7 @@ type GetActivityRequest struct {
 }
 
 type GetActivityResponse struct {
-	Activity *model.Activity `json:"activity"`
+	Activity *model.Activity     `json:"activity"`
 	Request  *GetActivityRequest `json:"-"`
 }
 
