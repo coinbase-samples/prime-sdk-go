@@ -29,6 +29,10 @@ type FuturesService interface {
 	ListEntityFuturesSweeps(ctx context.Context, request *ListEntityFuturesSweepsRequest) (*ListEntityFuturesSweepsResponse, error)
 	CancelEntityFuturesSweep(ctx context.Context, request *CancelEntityFuturesSweepRequest) (*CancelEntityFuturesSweepResponse, error)
 	ScheduleEntityFuturesSweep(ctx context.Context, request *ScheduleEntityFuturesSweepRequest) (*ScheduleEntityFuturesSweepResponse, error)
+	GetFcmMarginCallDetails(ctx context.Context, request *GetFcmMarginCallDetailsRequest) (*GetFcmMarginCallDetailsResponse, error)
+	GetFcmRiskLimits(ctx context.Context, request *GetFcmRiskLimitsRequest) (*GetFcmRiskLimitsResponse, error)
+	GetFcmSettings(ctx context.Context, request *GetFcmSettingsRequest) (*GetFcmSettingsResponse, error)
+	SetFcmSettings(ctx context.Context, request *SetFcmSettingsRequest) (*SetFcmSettingsResponse, error)
 }
 
 func NewFuturesService(c client.RestClient) FuturesService {

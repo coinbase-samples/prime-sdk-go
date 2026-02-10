@@ -27,6 +27,7 @@ import (
 
 type GetPortfolioCommissionRequest struct {
 	PortfolioId string `json:"portfolio_id"`
+	ProductId   string `json:"product_id,omitempty"`
 }
 
 type GetPortfolioCommissionResponse struct {
@@ -41,13 +42,18 @@ func (s *commissionServiceImpl) GetPortfolioCommission(
 
 	path := fmt.Sprintf("/portfolios/%s/commission", request.PortfolioId)
 
+	queryParams := core.EmptyQueryParams
+	if request.ProductId != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "product_id", request.ProductId)
+	}
+
 	response := &GetPortfolioCommissionResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,
 		s.client,
 		path,
-		core.EmptyQueryParams,
+		queryParams,
 		client.DefaultSuccessHttpStatusCodes,
 		request,
 		response,

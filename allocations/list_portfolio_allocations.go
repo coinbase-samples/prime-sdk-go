@@ -37,9 +37,35 @@ type ListPortfolioAllocationsRequest struct {
 }
 
 type ListPortfolioAllocationsResponse struct {
-	Allocations []*model.Allocation              `json:"allocations"`
-	Pagination  *model.Pagination                `json:"pagination"`
-	Request     *ListPortfolioAllocationsRequest `json:"-"`
+	model.PaginationMixin
+	Allocations   []*model.Allocation              `json:"allocations"`
+	Request       *ListPortfolioAllocationsRequest `json:"-"`
+	service       AllocationsService
+	serviceConfig *model.ServiceConfig
+}
+
+// Next fetches the next page of allocations using the pagination cursor.
+// Returns nil if there are no more pages.
+func (r *ListPortfolioAllocationsResponse) Next(ctx context.Context) (*ListPortfolioAllocationsResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextRequest := *r.Request
+	nextRequest.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.GetNextCursor())
+
+	return r.service.ListPortfolioAllocations(ctx, &nextRequest)
+}
+
+// Iterator returns a PageIterator for iterating through all pages of allocations.
+func (r *ListPortfolioAllocationsResponse) Iterator() *model.PageIterator[*ListPortfolioAllocationsResponse, *model.Allocation] {
+	return model.NewPageIteratorWithConfig(
+		r,
+		func(resp *ListPortfolioAllocationsResponse) []*model.Allocation {
+			return resp.Allocations
+		},
+		r.serviceConfig,
+	)
 }
 
 func (s *allocationsServiceImpl) ListPortfolioAllocations(
@@ -49,6 +75,8 @@ func (s *allocationsServiceImpl) ListPortfolioAllocations(
 
 	path := fmt.Sprintf("/portfolios/%s/allocations", request.PortfolioId)
 
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
+
 	queryParams := utils.AppendPaginationParams(core.EmptyQueryParams, request.Pagination)
 
 	if !request.Start.IsZero() {
@@ -56,7 +84,7 @@ func (s *allocationsServiceImpl) ListPortfolioAllocations(
 	}
 
 	if !request.End.IsZero() {
-		queryParams = core.AppendHttpQueryParam(queryParams, "end_datae", utils.TimeToStr(request.End))
+		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", utils.TimeToStr(request.End))
 	}
 
 	if len(request.Side) > 0 {
@@ -67,7 +95,11 @@ func (s *allocationsServiceImpl) ListPortfolioAllocations(
 		queryParams = core.AppendHttpQueryParam(queryParams, "product_ids", v)
 	}
 
-	response := &ListPortfolioAllocationsResponse{Request: request}
+	response := &ListPortfolioAllocationsResponse{
+		Request:       request,
+		service:       s,
+		serviceConfig: s.serviceConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,

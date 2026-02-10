@@ -35,9 +35,30 @@ type ListPortfolioFillsRequest struct {
 }
 
 type ListPortfolioFillsResponse struct {
-	Fills      []*model.OrderFill         `json:"fills"`
-	Pagination *model.Pagination          `json:"pagination"`
-	Request    *ListPortfolioFillsRequest `json:"-"`
+	model.PaginationMixin
+	Fills         []*model.OrderFill         `json:"fills"`
+	Request       *ListPortfolioFillsRequest `json:"-"`
+	service       OrdersService
+	serviceConfig *model.ServiceConfig
+}
+
+// Next fetches the next page of results. Returns nil, nil if no more pages.
+func (r *ListPortfolioFillsResponse) Next(ctx context.Context) (*ListPortfolioFillsResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextReq := *r.Request
+	nextReq.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.GetNextCursor())
+
+	return r.service.ListPortfolioFills(ctx, &nextReq)
+}
+
+// Iterator returns a PageIterator for convenient iteration and FetchAll.
+func (r *ListPortfolioFillsResponse) Iterator() *model.PageIterator[*ListPortfolioFillsResponse, *model.OrderFill] {
+	return model.NewPageIteratorWithConfig(r, func(resp *ListPortfolioFillsResponse) []*model.OrderFill {
+		return resp.Fills
+	}, r.serviceConfig)
 }
 
 func (s *ordersServiceImpl) ListPortfolioFills(
@@ -47,6 +68,8 @@ func (s *ordersServiceImpl) ListPortfolioFills(
 
 	path := fmt.Sprintf("/portfolios/%s/fills", request.PortfolioId)
 
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
+
 	queryParams := utils.AppendPaginationParams(core.EmptyQueryParams, request.Pagination)
 
 	queryParams = core.AppendHttpQueryParam(queryParams, "start_date", utils.TimeToStr(request.Start))
@@ -55,7 +78,11 @@ func (s *ordersServiceImpl) ListPortfolioFills(
 		queryParams = core.AppendHttpQueryParam(queryParams, "end_date", utils.TimeToStr(request.End))
 	}
 
-	response := &ListPortfolioFillsResponse{Request: request}
+	response := &ListPortfolioFillsResponse{
+		Request:       request,
+		service:       s,
+		serviceConfig: s.serviceConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,

@@ -26,9 +26,10 @@ import (
 )
 
 type GetWalletDepositInstructionsRequest struct {
-	PortfolioId string `json:"portfolio_id"`
-	Id          string `json:"wallet_id"`
-	Type        string `json:"deposit_type"`
+	PortfolioId string                `json:"portfolio_id"`
+	Id          string                `json:"wallet_id"`
+	Type        string                `json:"deposit_type"`
+	Network     *model.NetworkDetails `json:"network,omitempty"`
 }
 
 type GetWalletDepositInstructionsResponse struct {
@@ -45,6 +46,14 @@ func (s *walletsServiceImpl) GetWalletDepositInstructions(
 	path := fmt.Sprintf("/portfolios/%s/wallets/%s/deposit_instructions", request.PortfolioId, request.Id)
 
 	queryParams := core.AppendHttpQueryParam(core.EmptyQueryParams, "deposit_type", request.Type)
+	if request.Network != nil {
+		if request.Network.Id != "" {
+			queryParams = core.AppendHttpQueryParam(queryParams, "network.id", request.Network.Id)
+		}
+		if request.Network.Type != "" {
+			queryParams = core.AppendHttpQueryParam(queryParams, "network.type", request.Network.Type)
+		}
+	}
 
 	response := &GetWalletDepositInstructionsResponse{Request: request}
 

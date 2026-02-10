@@ -29,16 +29,39 @@ import (
 
 type ListInvoicesRequest struct {
 	EntityId     string                  `json:"entity_id"`
-	States       []string                `json:"states"`
+	States       []model.InvoiceState    `json:"states"`
 	BillingYear  int32                   `json:"billing_year"`
 	BillingMonth int32                   `json:"billing_month"`
 	Pagination   *model.PaginationParams `json:"pagination_params"`
 }
 
 type ListInvoicesResponse struct {
-	Invoices   []*model.Invoice     `json:"invoices"`
-	Pagination *model.Pagination    `json:"pagination"`
-	Request    *ListInvoicesRequest `json:"-"`
+	model.PaginationMixin
+	Invoices      []*model.Invoice     `json:"invoices"`
+	Request       *ListInvoicesRequest `json:"-"`
+	service       InvoiceService
+	serviceConfig *model.ServiceConfig
+}
+
+func (r *ListInvoicesResponse) Next(ctx context.Context) (*ListInvoicesResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextReq := *r.Request
+	nextReq.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.GetNextCursor())
+
+	return r.service.ListInvoices(ctx, &nextReq)
+}
+
+func (r *ListInvoicesResponse) Iterator() *model.PageIterator[*ListInvoicesResponse, *model.Invoice] {
+	return model.NewPageIteratorWithConfig(
+		r,
+		func(resp *ListInvoicesResponse) []*model.Invoice {
+			return resp.Invoices
+		},
+		r.serviceConfig,
+	)
 }
 
 func (s *invoiceServiceImpl) ListInvoices(
@@ -47,6 +70,8 @@ func (s *invoiceServiceImpl) ListInvoices(
 ) (*ListInvoicesResponse, error) {
 
 	path := fmt.Sprintf("/entities/%s/invoices", request.EntityId)
+
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
 
 	var queryParams string
 	if request.BillingYear > 0 {
@@ -58,12 +83,16 @@ func (s *invoiceServiceImpl) ListInvoices(
 	}
 
 	for _, v := range request.States {
-		queryParams = core.AppendHttpQueryParam(queryParams, "states", v)
+		queryParams = core.AppendHttpQueryParam(queryParams, "states", string(v))
 	}
 
 	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
-	response := &ListInvoicesResponse{Request: request}
+	response := &ListInvoicesResponse{
+		Request:       request,
+		service:       s,
+		serviceConfig: s.serviceConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,

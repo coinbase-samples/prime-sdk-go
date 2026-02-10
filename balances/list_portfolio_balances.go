@@ -36,6 +36,7 @@ type ListPortfolioBalancesResponse struct {
 	Type                  string                        `json:"type"`
 	TradingWalletBalances *model.BalanceWithHolds       `json:"trading_balances"`
 	VaultWalletBalances   *model.BalanceWithHolds       `json:"vault_balances"`
+	PrimeCustodyBalances  *model.BalanceWithHolds       `json:"prime_custody_balances"`
 	Request               *ListPortfolioBalancesRequest `json:"-"`
 }
 

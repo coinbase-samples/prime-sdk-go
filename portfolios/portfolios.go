@@ -26,6 +26,7 @@ type PortfoliosService interface {
 	ListPortfolios(ctx context.Context, request *ListPortfoliosRequest) (*ListPortfoliosResponse, error)
 	GetPortfolio(ctx context.Context, request *GetPortfolioRequest) (*GetPortfolioResponse, error)
 	GetPortfolioCredit(ctx context.Context, request *GetPortfolioCreditRequest) (*GetPortfolioCreditResponse, error)
+	GetPortfolioCounterparty(ctx context.Context, request *GetPortfolioCounterpartyRequest) (*GetPortfolioCounterpartyResponse, error)
 }
 
 func NewPortfoliosService(c client.RestClient) PortfoliosService {

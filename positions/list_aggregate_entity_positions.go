@@ -32,9 +32,35 @@ type ListAggregateEntityPositionsRequest struct {
 }
 
 type ListAggregateEntityPositionsResponse struct {
-	Positions  []*model.EntityPosition              `json:"positions"`
-	Pagination *model.Pagination                    `json:"pagination"`
-	Request    *ListAggregateEntityPositionsRequest `json:"request"`
+	model.PaginationMixin
+	Positions     []*model.EntityPosition              `json:"positions"`
+	Request       *ListAggregateEntityPositionsRequest `json:"-"`
+	service       PositionsService
+	serviceConfig *model.ServiceConfig
+}
+
+// Next fetches the next page of aggregate positions using the pagination cursor.
+// Returns nil if there are no more pages.
+func (r *ListAggregateEntityPositionsResponse) Next(ctx context.Context) (*ListAggregateEntityPositionsResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextRequest := *r.Request
+	nextRequest.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.GetNextCursor())
+
+	return r.service.ListAggregateEntityPositions(ctx, &nextRequest)
+}
+
+// Iterator returns a PageIterator for iterating through all pages of aggregate positions.
+func (r *ListAggregateEntityPositionsResponse) Iterator() *model.PageIterator[*ListAggregateEntityPositionsResponse, *model.EntityPosition] {
+	return model.NewPageIteratorWithConfig(
+		r,
+		func(resp *ListAggregateEntityPositionsResponse) []*model.EntityPosition {
+			return resp.Positions
+		},
+		r.serviceConfig,
+	)
 }
 
 func (s *positionsServiceImpl) ListAggregateEntityPositions(
@@ -44,11 +70,15 @@ func (s *positionsServiceImpl) ListAggregateEntityPositions(
 
 	path := fmt.Sprintf("/entities/%s/aggregate_positions", request.EntityId)
 
-	var queryParams string
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
 
-	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
+	queryParams := utils.AppendPaginationParams(core.EmptyQueryParams, request.Pagination)
 
-	response := &ListAggregateEntityPositionsResponse{Request: request}
+	response := &ListAggregateEntityPositionsResponse{
+		Request:       request,
+		service:       s,
+		serviceConfig: s.serviceConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,

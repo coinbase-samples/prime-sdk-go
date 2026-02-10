@@ -37,11 +37,12 @@ type CreateWalletRequest struct {
 }
 
 type CreateWalletResponse struct {
-	ActivityId string               `json:"activity_id"`
-	Name       string               `json:"name"`
-	Symbol     string               `json:"symbol"`
-	Type       string               `json:"wallet_type"`
-	Request    *CreateWalletRequest `json:"-"`
+	ActivityId    string               `json:"activity_id"`
+	Name          string               `json:"name"`
+	Symbol        string               `json:"symbol"`
+	Type          string               `json:"wallet_type"`
+	NetworkFamily string               `json:"network_family,omitempty"`
+	Request       *CreateWalletRequest `json:"-"`
 }
 
 func (s *walletsServiceImpl) CreateWallet(ctx context.Context, request *CreateWalletRequest) (*CreateWalletResponse, error) {

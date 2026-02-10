@@ -39,9 +39,30 @@ type ListOrdersRequest struct {
 }
 
 type ListOrdersResponse struct {
-	Orders     []*model.Order     `json:"orders"`
-	Pagination *model.Pagination  `json:"pagination"`
-	Request    *ListOrdersRequest `json:"-"`
+	model.PaginationMixin
+	Orders        []*model.Order     `json:"orders"`
+	Request       *ListOrdersRequest `json:"-"`
+	service       OrdersService
+	serviceConfig *model.ServiceConfig
+}
+
+// Next fetches the next page of results. Returns nil, nil if no more pages.
+func (r *ListOrdersResponse) Next(ctx context.Context) (*ListOrdersResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextReq := *r.Request
+	nextReq.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.GetNextCursor())
+
+	return r.service.ListOrders(ctx, &nextReq)
+}
+
+// Iterator returns a PageIterator for convenient iteration and FetchAll.
+func (r *ListOrdersResponse) Iterator() *model.PageIterator[*ListOrdersResponse, *model.Order] {
+	return model.NewPageIteratorWithConfig(r, func(resp *ListOrdersResponse) []*model.Order {
+		return resp.Orders
+	}, r.serviceConfig)
 }
 
 // ListOrders returns orders based on query params. Start time is required.
@@ -54,6 +75,8 @@ func (s *ordersServiceImpl) ListOrders(
 ) (*ListOrdersResponse, error) {
 
 	path := fmt.Sprintf("/portfolios/%s/orders", request.PortfolioId)
+
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
 
 	var queryParams string
 
@@ -73,8 +96,8 @@ func (s *ordersServiceImpl) ListOrders(
 		queryParams = core.AppendHttpQueryParam(queryParams, "order_side", request.OrderSide)
 	}
 
-	for _, s := range request.Statuses {
-		queryParams = core.AppendHttpQueryParam(queryParams, "order_statuses", s)
+	for _, st := range request.Statuses {
+		queryParams = core.AppendHttpQueryParam(queryParams, "order_statuses", st)
 	}
 
 	for _, p := range request.ProductIds {
@@ -83,7 +106,11 @@ func (s *ordersServiceImpl) ListOrders(
 
 	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
-	response := &ListOrdersResponse{Request: request}
+	response := &ListOrdersResponse{
+		Request:       request,
+		service:       s,
+		serviceConfig: s.serviceConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,

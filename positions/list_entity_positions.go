@@ -32,9 +32,35 @@ type ListEntityPositionsRequest struct {
 }
 
 type ListEntityPositionsResponse struct {
-	Positions  []*model.EntityPosition     `json:"positions"`
-	Pagination *model.Pagination           `json:"pagination"`
-	Request    *ListEntityPositionsRequest `json:"request"`
+	model.PaginationMixin
+	Positions     []*model.EntityPosition     `json:"positions"`
+	Request       *ListEntityPositionsRequest `json:"-"`
+	service       PositionsService
+	serviceConfig *model.ServiceConfig
+}
+
+// Next fetches the next page of positions using the pagination cursor.
+// Returns nil if there are no more pages.
+func (r *ListEntityPositionsResponse) Next(ctx context.Context) (*ListEntityPositionsResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextRequest := *r.Request
+	nextRequest.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.GetNextCursor())
+
+	return r.service.ListEntityPositions(ctx, &nextRequest)
+}
+
+// Iterator returns a PageIterator for iterating through all pages of positions.
+func (r *ListEntityPositionsResponse) Iterator() *model.PageIterator[*ListEntityPositionsResponse, *model.EntityPosition] {
+	return model.NewPageIteratorWithConfig(
+		r,
+		func(resp *ListEntityPositionsResponse) []*model.EntityPosition {
+			return resp.Positions
+		},
+		r.serviceConfig,
+	)
 }
 
 func (s *positionsServiceImpl) ListEntityPositions(
@@ -44,11 +70,15 @@ func (s *positionsServiceImpl) ListEntityPositions(
 
 	path := fmt.Sprintf("/entities/%s/positions", request.EntityId)
 
-	var queryParams string
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
 
-	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
+	queryParams := utils.AppendPaginationParams(core.EmptyQueryParams, request.Pagination)
 
-	response := &ListEntityPositionsResponse{Request: request}
+	response := &ListEntityPositionsResponse{
+		Request:       request,
+		service:       s,
+		serviceConfig: s.serviceConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,

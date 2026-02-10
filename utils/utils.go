@@ -52,3 +52,21 @@ func AppendPaginationParams(v string, p *model.PaginationParams) string {
 
 	return v
 }
+
+// ApplyDefaultLimit applies the default limit from config if not specified in pagination params.
+// Returns the pagination params (creates new one if nil) with default limit applied.
+func ApplyDefaultLimit(pagination *model.PaginationParams, config *model.ServiceConfig) *model.PaginationParams {
+	if config == nil || config.DefaultLimit <= 0 {
+		return pagination
+	}
+
+	if pagination == nil {
+		return &model.PaginationParams{Limit: config.DefaultLimit}
+	}
+
+	if pagination.Limit == 0 {
+		pagination.Limit = config.DefaultLimit
+	}
+
+	return pagination
+}

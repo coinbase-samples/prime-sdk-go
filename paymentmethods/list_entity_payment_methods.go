@@ -26,8 +26,7 @@ import (
 )
 
 type ListEntityPaymentMethodsRequest struct {
-	EntityId   string                  `json:"entity_id"`
-	Pagination *model.PaginationParams `json:"pagination_params"`
+	EntityId string `json:"entity_id"`
 }
 
 type ListEntityPaymentMethodsResponse struct {

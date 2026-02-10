@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type TransactionsService interface {
@@ -30,12 +31,34 @@ type TransactionsService interface {
 	CreateWalletTransfer(ctx context.Context, request *CreateWalletTransferRequest) (*CreateWalletTransferResponse, error)
 	CreateWalletWithdrawal(ctx context.Context, request *CreateWalletWithdrawalRequest) (*CreateWalletWithdrawalResponse, error)
 	CreateOnchainTransaction(ctx context.Context, request *CreateOnchainTransactionRequest) (*CreateOnchainTransactionResposne, error)
+	SubmitDepositTravelRuleData(ctx context.Context, request *SubmitDepositTravelRuleDataRequest) (*SubmitDepositTravelRuleDataResponse, error)
+	ServiceConfig() *model.ServiceConfig
 }
 
+// NewTransactionsService creates a new TransactionsService with default pagination config
 func NewTransactionsService(c client.RestClient) TransactionsService {
-	return &transactionsServiceImpl{client: c}
+	return &transactionsServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+// NewTransactionsServiceWithConfig creates a new TransactionsService with custom pagination config
+func NewTransactionsServiceWithConfig(c client.RestClient, config *model.ServiceConfig) TransactionsService {
+	if config == nil {
+		config = model.DefaultServiceConfig()
+	}
+	return &transactionsServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type transactionsServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *transactionsServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }

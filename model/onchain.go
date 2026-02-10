@@ -64,6 +64,7 @@ type OnchainAddressGroup struct {
 	Name        string             `json:"name"`
 	NetworkType OnchainNetworkType `json:"network_type"`
 	Addresses   []*OnchainAddress  `json:"addresses"`
+	AddedAt     string             `json:"added_at,omitempty"`
 }
 
 type OnchainAddress struct {
@@ -88,4 +89,32 @@ type OnchainEvmParams struct {
 	DisableDynamicNonce   bool   `json:"disable_dynamic_nonce,omitempty"`
 	ReplacedTransactionId string `json:"replaced_transaction_id,omitempty"`
 	ChainId               string `json:"chain_id"`
+}
+
+type VisibilityStatus string
+
+const (
+	VisibilityStatusVisible VisibilityStatus = "VISIBLE"
+	VisibilityStatusHidden  VisibilityStatus = "HIDDEN"
+	VisibilityStatusSpam    VisibilityStatus = "SPAM"
+)
+
+type Web3Asset struct {
+	Network         string `json:"network"`
+	ContractAddress string `json:"contract_address"`
+	Symbol          string `json:"symbol"`
+	TokenId         string `json:"token_id"`
+	Name            string `json:"name"`
+}
+
+type Web3Balance struct {
+	Asset            *Web3Asset       `json:"asset"`
+	Amount           string           `json:"amount"`
+	VisibilityStatus VisibilityStatus `json:"visibility_status"`
+}
+
+type DefiBalance struct {
+	Network     string `json:"network"`
+	Protocol    string `json:"protocol"`
+	NetUsdValue string `json:"net_usd_value"`
 }

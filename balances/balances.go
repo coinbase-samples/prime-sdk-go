@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type BalancesService interface {
@@ -27,12 +28,33 @@ type BalancesService interface {
 	GetWalletBalance(ctx context.Context, request *GetWalletBalanceRequest) (*GetWalletBalanceResponse, error)
 	ListOnchainWalletBalances(ctx context.Context, request *ListOnchainWalletBalancesRequest) (*ListOnchainWalletBalancesResponse, error)
 	ListEntityBalances(ctx context.Context, request *ListEntityBalancesRequest) (*ListEntityBalancesResponse, error)
+	ServiceConfig() *model.ServiceConfig
 }
 
+// NewBalancesService creates a new BalancesService with default pagination config
 func NewBalancesService(c client.RestClient) BalancesService {
-	return &balancesServiceImpl{client: c}
+	return &balancesServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+// NewBalancesServiceWithConfig creates a new BalancesService with custom pagination config
+func NewBalancesServiceWithConfig(c client.RestClient, config *model.ServiceConfig) BalancesService {
+	if config == nil {
+		config = model.DefaultServiceConfig()
+	}
+	return &balancesServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type balancesServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *balancesServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }

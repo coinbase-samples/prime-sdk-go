@@ -20,16 +20,34 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type ProductsService interface {
 	ListProducts(ctx context.Context, request *ListProductsRequest) (*ListProductsResponse, error)
+	GetProductCandles(ctx context.Context, request *GetProductCandlesRequest) (*GetProductCandlesResponse, error)
+	ServiceConfig() *model.ServiceConfig
 }
 
 func NewProductsService(c client.RestClient) ProductsService {
-	return &productsServiceImpl{client: c}
+	return &productsServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+func NewProductsServiceWithConfig(c client.RestClient, config *model.ServiceConfig) ProductsService {
+	return &productsServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type productsServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *productsServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }

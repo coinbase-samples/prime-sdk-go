@@ -20,17 +20,34 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type PositionsService interface {
 	ListAggregateEntityPositions(ctx context.Context, request *ListAggregateEntityPositionsRequest) (*ListAggregateEntityPositionsResponse, error)
 	ListEntityPositions(ctx context.Context, request *ListEntityPositionsRequest) (*ListEntityPositionsResponse, error)
+	ServiceConfig() *model.ServiceConfig
 }
 
 func NewPositionsService(c client.RestClient) PositionsService {
-	return &positionsServiceImpl{client: c}
+	return &positionsServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+func NewPositionsServiceWithConfig(c client.RestClient, config *model.ServiceConfig) PositionsService {
+	return &positionsServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type positionsServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *positionsServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }

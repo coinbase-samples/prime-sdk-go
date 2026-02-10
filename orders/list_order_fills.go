@@ -33,9 +33,30 @@ type ListOrderFillsRequest struct {
 }
 
 type ListOrderFillsResponse struct {
-	Fills      []*model.OrderFill     `json:"fills"`
-	Pagination *model.Pagination      `json:"pagination"`
-	Request    *ListOrderFillsRequest `json:"-"`
+	model.PaginationMixin
+	Fills         []*model.OrderFill     `json:"fills"`
+	Request       *ListOrderFillsRequest `json:"-"`
+	service       OrdersService
+	serviceConfig *model.ServiceConfig
+}
+
+// Next fetches the next page of results. Returns nil, nil if no more pages.
+func (r *ListOrderFillsResponse) Next(ctx context.Context) (*ListOrderFillsResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextReq := *r.Request
+	nextReq.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.GetNextCursor())
+
+	return r.service.ListOrderFills(ctx, &nextReq)
+}
+
+// Iterator returns a PageIterator for convenient iteration and FetchAll.
+func (r *ListOrderFillsResponse) Iterator() *model.PageIterator[*ListOrderFillsResponse, *model.OrderFill] {
+	return model.NewPageIteratorWithConfig(r, func(resp *ListOrderFillsResponse) []*model.OrderFill {
+		return resp.Fills
+	}, r.serviceConfig)
 }
 
 func (s *ordersServiceImpl) ListOrderFills(
@@ -45,9 +66,15 @@ func (s *ordersServiceImpl) ListOrderFills(
 
 	path := fmt.Sprintf("/portfolios/%s/orders/%s/fills", request.PortfolioId, request.OrderId)
 
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
+
 	queryParams := utils.AppendPaginationParams(core.EmptyQueryParams, request.Pagination)
 
-	response := &ListOrderFillsResponse{Request: request}
+	response := &ListOrderFillsResponse{
+		Request:       request,
+		service:       s,
+		serviceConfig: s.serviceConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,
@@ -56,7 +83,8 @@ func (s *ordersServiceImpl) ListOrderFills(
 		queryParams,
 		client.DefaultSuccessHttpStatusCodes,
 		request,
-		response, s.client.HeadersFunc(),
+		response,
+		s.client.HeadersFunc(),
 	); err != nil {
 		return nil, err
 	}

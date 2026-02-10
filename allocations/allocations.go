@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type AllocationsService interface {
@@ -28,12 +29,28 @@ type AllocationsService interface {
 	ListPortfolioAllocations(ctx context.Context, request *ListPortfolioAllocationsRequest) (*ListPortfolioAllocationsResponse, error)
 	GetPortfolioAllocation(ctx context.Context, request *GetPortfolioAllocationRequest) (*GetPortfolioAllocationResponse, error)
 	GetPortfolioNetAllocation(ctx context.Context, request *GetPortfolioNetAllocationRequest) (*GetPortfolioNetAllocationResponse, error)
+	ServiceConfig() *model.ServiceConfig
 }
 
 func NewAllocationsService(c client.RestClient) AllocationsService {
-	return &allocationsServiceImpl{client: c}
+	return &allocationsServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+func NewAllocationsServiceWithConfig(c client.RestClient, config *model.ServiceConfig) AllocationsService {
+	return &allocationsServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type allocationsServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *allocationsServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }

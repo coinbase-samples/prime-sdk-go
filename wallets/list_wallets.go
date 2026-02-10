@@ -27,20 +27,39 @@ import (
 )
 
 type ListWalletsRequest struct {
-	PortfolioId string                  `json:"portfolio_id"`
-	Type        string                  `json:"type"`
-	Symbols     []string                `json:"symbols"`
-	Pagination  *model.PaginationParams `json:"pagination_params"`
+	PortfolioId              string                  `json:"portfolio_id"`
+	Type                     string                  `json:"type"`
+	Symbols                  []string                `json:"symbols"`
+	GetNetworkUnifiedWallets bool                    `json:"get_network_unified_wallets,omitempty"`
+	Pagination               *model.PaginationParams `json:"pagination_params"`
 }
 
 type ListWalletsResponse struct {
-	Wallets    []*model.Wallet     `json:"wallets"`
-	Pagination *model.Pagination   `json:"pagination"`
-	Request    *ListWalletsRequest `json:"-"`
+	model.PaginationMixin                      // provides Pagination, HasNext(), GetNextCursor()
+	Wallets               []*model.Wallet      `json:"wallets"`
+	Request               *ListWalletsRequest  `json:"-"`
+	service               WalletsService       // unexported, injected by service
+	serviceConfig         *model.ServiceConfig // unexported, injected by service
 }
 
-func (r ListWalletsResponse) HasNext() bool {
-	return r.Pagination != nil && r.Pagination.HasNext
+// Next fetches the next page of results. Returns nil, nil if no more pages.
+func (r *ListWalletsResponse) Next(ctx context.Context) (*ListWalletsResponse, error) {
+	if !r.HasNext() {
+		return nil, nil
+	}
+
+	nextReq := *r.Request
+	nextReq.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.Pagination.NextCursor)
+
+	return r.service.ListWallets(ctx, &nextReq)
+}
+
+// Iterator returns a PageIterator for convenient iteration and FetchAll.
+// The iterator respects the service's ServiceConfig for MaxPages and MaxItems.
+func (r *ListWalletsResponse) Iterator() *model.PageIterator[*ListWalletsResponse, *model.Wallet] {
+	return model.NewPageIteratorWithConfig(r, func(resp *ListWalletsResponse) []*model.Wallet {
+		return resp.Wallets
+	}, r.serviceConfig)
 }
 
 func (s *walletsServiceImpl) ListWallets(
@@ -50,6 +69,8 @@ func (s *walletsServiceImpl) ListWallets(
 
 	path := fmt.Sprintf("/portfolios/%s/wallets", request.PortfolioId)
 
+	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
+
 	queryParams := core.EmptyQueryParams
 	if request.Type != "" {
 		queryParams = core.AppendHttpQueryParam(queryParams, "type", request.Type)
@@ -57,10 +78,17 @@ func (s *walletsServiceImpl) ListWallets(
 	for _, v := range request.Symbols {
 		queryParams = core.AppendHttpQueryParam(queryParams, "symbols", v)
 	}
+	if request.GetNetworkUnifiedWallets {
+		queryParams = core.AppendHttpQueryParam(queryParams, "get_network_unified_wallets", "true")
+	}
 
 	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
-	response := &ListWalletsResponse{Request: request}
+	response := &ListWalletsResponse{
+		Request:       request,
+		service:       s,
+		serviceConfig: s.serviceConfig,
+	}
 
 	if err := core.HttpGet(
 		ctx,
