@@ -82,14 +82,62 @@ type MatchMetadata struct {
 	SettlementDate string `json:"settlement_date,omitempty"`
 }
 
+// RewardSubtype represents the reward subtype
+type RewardSubtype string
+
+const (
+	RewardSubtypeUnknown   RewardSubtype = "REWARD_SUBTYPE_UNKNOWN"
+	RewardSubtypeMEV       RewardSubtype = "MEV_REWARD"
+	RewardSubtypeInflation RewardSubtype = "INFLATION_REWARD"
+	RewardSubtypeBlock     RewardSubtype = "BLOCK_REWARD"
+)
+
+// RewardMetadata represents metadata for reward transactions
+type RewardMetadata struct {
+	Subtype RewardSubtype `json:"subtype,omitempty"`
+}
+
+// Web3TransactionMetadata represents metadata for web3 transactions
+type Web3TransactionMetadata struct {
+	Label                 string        `json:"label,omitempty"`
+	ConfirmedAssetChanges []AssetChange `json:"confirmed_asset_changes,omitempty"`
+}
+
 // TransactionMetadata represents additional metadata for a transaction
 type TransactionMetadata struct {
-	MatchMetadata *MatchMetadata `json:"match_metadata,omitempty"`
+	MatchMetadata           *MatchMetadata           `json:"match_metadata,omitempty"`
+	Web3TransactionMetadata *Web3TransactionMetadata `json:"web3_transaction_metadata,omitempty"`
+	RewardMetadata          *RewardMetadata          `json:"reward_metadata,omitempty"`
+}
+
+// AssetChangeType represents the type of asset change
+type AssetChangeType string
+
+const (
+	AssetChangeTypeBalanceTransfer AssetChangeType = "BALANCE_TRANSFER"
+	AssetChangeTypeBalanceApproval AssetChangeType = "BALANCE_APPROVAL"
+	AssetChangeTypeItemTransfer    AssetChangeType = "ITEM_TRANSFER"
+	AssetChangeTypeItemApproval    AssetChangeType = "ITEM_APPROVAL"
+	AssetChangeTypeItemApprovalAll AssetChangeType = "ITEM_APPROVAL_ALL"
+)
+
+// NFTCollection represents an NFT collection
+type NFTCollection struct {
+	Name string `json:"name,omitempty"`
+}
+
+// NFTItem represents an NFT item
+type NFTItem struct {
+	Name string `json:"name,omitempty"`
 }
 
 // AssetChange represents a change in asset for a transaction
 type AssetChange struct {
-	Symbol string `json:"symbol,omitempty"`
+	Type       AssetChangeType `json:"type,omitempty"`
+	Symbol     string          `json:"symbol,omitempty"`
+	Amount     string          `json:"amount,omitempty"`
+	Collection *NFTCollection  `json:"collection,omitempty"`
+	Item       *NFTItem        `json:"item,omitempty"`
 }
 
 // RiskAssessment represents risk assessment results for a transaction

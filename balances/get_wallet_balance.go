@@ -31,7 +31,7 @@ type GetWalletBalanceRequest struct {
 }
 
 type GetWalletBalanceResponse struct {
-	Balance *model.Balance `json:"balance"`
+	Balance *model.Balance           `json:"balance"`
 	Request *GetWalletBalanceRequest `json:"-"`
 }
 

@@ -30,7 +30,7 @@ type GetEntityActivityRequest struct {
 }
 
 type GetEntityActivityResponse struct {
-	Activity *model.Activity `json:"activity"`
+	Activity *model.Activity           `json:"activity"`
 	Request  *GetEntityActivityRequest `json:"-"`
 }
 
