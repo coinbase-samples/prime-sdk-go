@@ -406,6 +406,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/coinbase.public_rest_api.GetFcmBalanceResponse'
+  /v1/entities/{entity_id}/futures/equity:
+    get:
+      tags:
+      - Futures
+      summary: Get FCM Equity
+      description: Retrieve the equity data for a given entity.
+      operationId: PrimeRESTAPI_GetFcmEquity
+      parameters:
+      - name: entity_id
+        in: path
+        description: Entity ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.GetFcmEquityResponse'
   /v1/entities/{entity_id}/futures/margin_call_details:
     get:
       tags:
@@ -5784,6 +5805,27 @@ components:
           type: string
           description: Unsettled accrued funding PNL from the last settlement
           example: "10.12"
+    coinbase.public_rest_api.GetFcmEquityResponse:
+      type: object
+      properties:
+        eod_account_equity:
+          type: string
+          description: Prior EOD account equity (ending balance + realized P&L + commissions/fees)
+          example: "10000.00"
+        eod_unrealized_pnl:
+          type: string
+          description: Prior EOD unrealized P&L on open futures positions
+          example: "100.00"
+        current_excess_deficit:
+          type: string
+          description: Current Derivatives Account Balance minus prior EOD margin
+            requirement. (Positive = excess; negative = deficit)
+          example: "1000.00"
+        available_to_sweep:
+          type: string
+          description: Excess funds in the Derivatives account available to transfer
+            ("sweep") to the designated funding portfolio
+          example: "500.00"
     coinbase.public_rest_api.GetFcmMarginCallDetailsResponse:
       type: object
       properties:
