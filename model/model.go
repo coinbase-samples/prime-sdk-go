@@ -370,8 +370,35 @@ type MatchMetadata struct {
 	SettlementDate string `json:"settlement_date,omitempty"`
 }
 
+type RewardMetadata struct {
+	Subtype string `json:"subtype,omitempty"`
+}
+
+type CollectionInfo struct {
+	Name string `json:"name,omitempty"`
+}
+
+type ItemInfo struct {
+	Name string `json:"name,omitempty"`
+}
+
+type ConfirmedAssetChange struct {
+	Type       string          `json:"type,omitempty"`
+	Symbol     string          `json:"symbol,omitempty"`
+	Amount     string          `json:"amount,omitempty"`
+	Collection *CollectionInfo `json:"collection,omitempty"`
+	Item       *ItemInfo       `json:"item,omitempty"`
+}
+
+type Web3TransactionMetadata struct {
+	Label                 string                  `json:"label,omitempty"`
+	ConfirmedAssetChanges []*ConfirmedAssetChange `json:"confirmed_asset_changes,omitempty"`
+}
+
 type TransactionMetadata struct {
-	MatchMetadata *MatchMetadata `json:"match_metadata,omitempty"`
+	MatchMetadata           *MatchMetadata           `json:"match_metadata,omitempty"`
+	Web3TransactionMetadata *Web3TransactionMetadata `json:"web3_transaction_metadata,omitempty"`
+	RewardMetadata          *RewardMetadata          `json:"reward_metadata,omitempty"`
 }
 
 type AssetChange struct {
