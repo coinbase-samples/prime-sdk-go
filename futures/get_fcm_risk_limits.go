@@ -22,6 +22,7 @@ import (
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type GetFcmRiskLimitsRequest struct {
@@ -29,12 +30,15 @@ type GetFcmRiskLimitsRequest struct {
 }
 
 type GetFcmRiskLimitsResponse struct {
-	CfmRiskLimit            string                   `json:"cfm_risk_limit"`
-	CfmRiskLimitUtilization string                   `json:"cfm_risk_limit_utilization"`
-	CfmTotalMargin          string                   `json:"cfm_total_margin"`
-	CfmDeltaOte             string                   `json:"cfm_delta_ote"`
-	CfmUnsettledRealizedPnl string                   `json:"cfm_unsettled_realized_pnl"`
-	Request                 *GetFcmRiskLimitsRequest `json:"-"`
+	CfmRiskLimit                  string                      `json:"cfm_risk_limit"`
+	CfmRiskLimitUtilization       string                      `json:"cfm_risk_limit_utilization"`
+	CfmTotalMargin                string                      `json:"cfm_total_margin"`
+	CfmDeltaOte                   string                      `json:"cfm_delta_ote"`
+	CfmUnsettledRealizedPnl       string                      `json:"cfm_unsettled_realized_pnl"`
+	CfmUnsettledAccruedFundingPnl string                      `json:"cfm_unsettled_accrued_funding_pnl"`
+	MarginUtilizationPercent      string                      `json:"margin_utilization_percent"`
+	MarginHealthState             model.FcmMarginHealthState  `json:"margin_health_state"`
+	Request                       *GetFcmRiskLimitsRequest    `json:"-"`
 }
 
 func (s *futuresServiceImpl) GetFcmRiskLimits(

@@ -27,8 +27,11 @@ import (
 )
 
 type ListProductsRequest struct {
-	PortfolioId string                  `json:"portfolio_id"`
-	Pagination  *model.PaginationParams `json:"pagination_params"`
+	PortfolioId           string                        `json:"portfolio_id"`
+	Pagination            *model.PaginationParams       `json:"pagination_params"`
+	ProductType           model.ProductType             `json:"product_type,omitempty"`
+	ContractExpiryType    model.ContractExpiryType      `json:"contract_expiry_type,omitempty"`
+	ExpiringContractStatus model.ExpiringContractStatus `json:"expiring_contract_status,omitempty"`
 }
 
 type ListProductsResponse struct {
@@ -72,7 +75,19 @@ func (s *productsServiceImpl) ListProducts(
 
 	request.Pagination = utils.ApplyDefaultLimit(request.Pagination, s.serviceConfig)
 
-	queryParams := utils.AppendPaginationParams(core.EmptyQueryParams, request.Pagination)
+	queryParams := core.EmptyQueryParams
+
+	if request.ProductType != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "product_type", string(request.ProductType))
+	}
+	if request.ContractExpiryType != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "contract_expiry_type", string(request.ContractExpiryType))
+	}
+	if request.ExpiringContractStatus != "" {
+		queryParams = core.AppendHttpQueryParam(queryParams, "expiring_contract_status", string(request.ExpiringContractStatus))
+	}
+
+	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
 	response := &ListProductsResponse{
 		Request:       request,

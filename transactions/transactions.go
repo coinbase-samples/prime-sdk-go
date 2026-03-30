@@ -32,6 +32,7 @@ type TransactionsService interface {
 	CreateWalletWithdrawal(ctx context.Context, request *CreateWalletWithdrawalRequest) (*CreateWalletWithdrawalResponse, error)
 	CreateOnchainTransaction(ctx context.Context, request *CreateOnchainTransactionRequest) (*CreateOnchainTransactionResposne, error)
 	SubmitDepositTravelRuleData(ctx context.Context, request *SubmitDepositTravelRuleDataRequest) (*SubmitDepositTravelRuleDataResponse, error)
+	GetTransactionTravelRuleData(ctx context.Context, request *GetTransactionTravelRuleDataRequest) (*GetTransactionTravelRuleDataResponse, error)
 	ServiceConfig() *model.ServiceConfig
 }
 
