@@ -108,26 +108,41 @@ type Order struct {
 	OrderEditHistory []*OrderEditHistory `json:"order_edit_history,omitempty"`
 	DisplaySize      string              `json:"display_size,omitempty"`
 	EditHistory      []*EditHistory      `json:"edit_history,omitempty"`
-	PegOffsetType    string              `json:"peg_offset_type,omitempty"`
-	Offset           string              `json:"offset,omitempty"`
-	WigLevel         string              `json:"wig_level,omitempty"`
+	PegOffsetType         string                 `json:"peg_offset_type,omitempty"`
+	Offset                string                 `json:"offset,omitempty"`
+	WigLevel              string                 `json:"wig_level,omitempty"`
+	ProductType           ProductType            `json:"product_type,omitempty"`
+	CommissionDetailTotal *CommissionDetailTotal `json:"commission_detail_total,omitempty"`
+}
+
+// CommissionDetailTotal contains a breakdown of all commission charges for an order or fill.
+type CommissionDetailTotal struct {
+	TotalCommission      string `json:"total_commission,omitempty"`
+	ClientCommission     string `json:"client_commission,omitempty"`
+	VenueCommission      string `json:"venue_commission,omitempty"`
+	CesCommission        string `json:"ces_commission,omitempty"`
+	FinancingCommission  string `json:"financing_commission,omitempty"`
+	RegulatoryCommission string `json:"regulatory_commission,omitempty"`
+	ClearingCommission   string `json:"clearing_commission,omitempty"`
 }
 
 // OrderFill represents a fill on an order
 type OrderFill struct {
-	Id              string    `json:"id"`
-	OrderId         string    `json:"order_id"`
-	Side            string    `json:"side"`
-	ProductId       string    `json:"product_id"`
-	ClientProductId string    `json:"client_product_id"`
-	FilledQuantity  string    `json:"filled_quantity"`
-	FilledValue     string    `json:"filled_value"`
-	Price           string    `json:"price"`
-	Time            time.Time `json:"time"`
-	Commission      string    `json:"commission"`
-	Venue           string    `json:"venue"`
-	VenueFees       string    `json:"venue_fees"`
-	CesCommission   string    `json:"ces_commission"`
+	Id                    string                 `json:"id"`
+	OrderId               string                 `json:"order_id"`
+	Side                  string                 `json:"side"`
+	ProductId             string                 `json:"product_id"`
+	ClientProductId       string                 `json:"client_product_id"`
+	FilledQuantity        string                 `json:"filled_quantity"`
+	FilledValue           string                 `json:"filled_value"`
+	Price                 string                 `json:"price"`
+	Time                  time.Time              `json:"time"`
+	Commission            string                 `json:"commission"`
+	Venue                 string                 `json:"venue"`
+	VenueFees             string                 `json:"venue_fees"`
+	CesCommission         string                 `json:"ces_commission"`
+	ProductType           ProductType            `json:"product_type,omitempty"`
+	CommissionDetailTotal *CommissionDetailTotal `json:"commission_detail_total,omitempty"`
 }
 
 // EditHistory represents an order edit entry (new format)

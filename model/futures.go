@@ -16,6 +16,17 @@
 
 package model
 
+// FcmMarginHealthState represents the margin health state of an FCM account.
+type FcmMarginHealthState string
+
+const (
+	FcmMarginHealthStateUnspecified    FcmMarginHealthState = "FCM_MARGIN_HEALTH_STATE_UNSPECIFIED"
+	FcmMarginHealthStateHealthy        FcmMarginHealthState = "FCM_MARGIN_HEALTH_STATE_HEALTHY"
+	FcmMarginHealthStateRestricted     FcmMarginHealthState = "FCM_MARGIN_HEALTH_STATE_RESTRICTED"
+	FcmMarginHealthStatePreLiquidation FcmMarginHealthState = "FCM_MARGIN_HEALTH_STATE_PRE_LIQUIDATION"
+	FcmMarginHealthStateLiquidation    FcmMarginHealthState = "FCM_MARGIN_HEALTH_STATE_LIQUIDATION"
+)
+
 // FcmMarginCallType represents the type of margin call
 type FcmMarginCallType string
 

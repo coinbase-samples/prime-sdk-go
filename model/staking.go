@@ -16,6 +16,25 @@
 
 package model
 
+// StakingRewardType represents the type of staking reward.
+type StakingRewardType string
+
+const (
+	StakingRewardTypeMevReward            StakingRewardType = "MEV_REWARD"
+	StakingRewardTypeInflationReward      StakingRewardType = "INFLATION_REWARD"
+	StakingRewardTypeBlockReward          StakingRewardType = "BLOCK_REWARD"
+	StakingRewardTypeValidatorReward      StakingRewardType = "VALIDATOR_REWARD"
+	StakingRewardTypeTransactionReward    StakingRewardType = "TRANSACTION_REWARD"
+	StakingRewardTypeStakingFeeRebate     StakingRewardType = "STAKING_FEE_REBATE_REWARD"
+	StakingRewardTypeBuildlDividend       StakingRewardType = "BUIDL_DIVIDEND"
+)
+
+// ValidatorAllocation specifies the validator and amount for staking or unstaking.
+type ValidatorAllocation struct {
+	ValidatorAddress string `json:"validator_address"`
+	Amount           string `json:"amount"`
+}
+
 // StakeType represents the type of staking operation
 type StakeType string
 

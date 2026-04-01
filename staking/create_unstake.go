@@ -22,11 +22,14 @@ import (
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type CreateUnstakeInputs struct {
 	// Optional amount to stake or unstake. If omitted, the wallet will stake or unstake the maximum amount available
 	Amount string `json:"amount"`
+	// Optional validator-level allocations for ETH V2 unstaking (Alpha feature)
+	ValidatorAllocations []*model.ValidatorAllocation `json:"validator_allocations,omitempty"`
 }
 
 type CreateUnstakeRequest struct {

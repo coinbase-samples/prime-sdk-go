@@ -16,12 +16,40 @@
 
 package model
 
+// UserRole indicates the user's primary role.
+type UserRole string
+
+const (
+	UserRoleUnknown     UserRole = "USER_ROLE_UNKNOWN"
+	UserRoleAuditor     UserRole = "AUDITOR"
+	UserRoleSignatory   UserRole = "SIGNATORY"
+	UserRoleAdmin       UserRole = "ADMIN"
+	UserRoleInitiator   UserRole = "INITIATOR"
+	UserRoleReviewer    UserRole = "REVIEWER"
+	UserRoleTrader      UserRole = "TRADER"
+	UserRoleFullTrader  UserRole = "FULL_TRADER"
+	UserRoleTeamManager UserRole = "TEAM_MANAGER"
+	UserRoleApprover    UserRole = "APPROVER"
+	UserRoleTaxManager  UserRole = "TAX_MANAGER"
+)
+
+// SecondaryPermission indicates the user's secondary permission.
+type SecondaryPermission string
+
+const (
+	SecondaryPermissionVideoApprover SecondaryPermission = "VIDEO_APPROVER"
+	SecondaryPermissionTeamApprover  SecondaryPermission = "TEAM_APPROVER"
+	SecondaryPermissionWeb3Signer    SecondaryPermission = "WEB3_SIGNER"
+)
+
 // User represents a Prime user
 type User struct {
-	Id          string `json:"id"`
-	Name        string `json:"name"`
-	Email       string `json:"email"`
-	EntityId    string `json:"entity_id"`
-	PortfolioId string `json:"portfolio_id,omitempty"`
-	Role        string `json:"role"`
+	Id                   string                `json:"id"`
+	Name                 string                `json:"name"`
+	Email                string                `json:"email"`
+	EntityId             string                `json:"entity_id"`
+	PortfolioId          string                `json:"portfolio_id,omitempty"`
+	Role                 string                `json:"role"`
+	Roles                []UserRole            `json:"roles,omitempty"`
+	SecondaryPermissions []SecondaryPermission `json:"secondary_permissions,omitempty"`
 }

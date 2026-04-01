@@ -1312,6 +1312,190 @@ paths:
               schema:
                 $ref: '#/components/schemas/coinbase.public_rest_api.CreatePortfolioAddressBookEntryResponse'
       x-codegen-request-body-name: body
+  /v1/portfolios/{portfolio_id}/advanced_transfers:
+    get:
+      tags:
+      - Advanced Transfer
+      summary: List Advanced Transfers
+      description: List advanced transfers for a given portfolio. This API is currently
+        not available to all clients. Please reach out to Prime Operations with any
+        questions.
+      operationId: PrimeRESTAPI_ListAdvancedTransfers
+      parameters:
+      - name: portfolio_id
+        in: path
+        description: The portfolio ID
+        required: true
+        schema:
+          type: string
+      - name: state
+        in: query
+        description: The state of the Advanced Transfer to filter by
+        schema:
+          type: string
+          enum:
+          - ADVANCED_TRANSFER_STATE_CREATED
+          - ADVANCED_TRANSFER_STATE_PROCESSING
+          - ADVANCED_TRANSFER_STATE_DONE
+          - ADVANCED_TRANSFER_STATE_CANCELLED
+          - ADVANCED_TRANSFER_STATE_FAILED
+          - ADVANCED_TRANSFER_STATE_EXPIRED
+      - name: type
+        in: query
+        description: The type of the Advanced Transfer to filter by
+        schema:
+          type: string
+          enum:
+          - ADVANCED_TRANSFER_TYPE_BLIND_MATCH
+      - name: cursor
+        in: query
+        description: The cursor to use for pagination
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The maximum number of Advanced Transfers to return
+        schema:
+          type: integer
+          format: int32
+      - name: sort_direction
+        in: query
+        description: Page sorting direction
+        schema:
+          type: string
+          default: DESC
+          enum:
+          - DESC
+          - ASC
+      - name: start_time
+        in: query
+        description: "UTC timestamp of creation from which to filter the response\
+          \ (inclusive, ISO-8601 format)"
+        schema:
+          type: string
+          format: date-time
+      - name: end_time
+        in: query
+        description: "UTC timestamp of creation until which to filter the response\
+          \ (exclusive, ISO-8601 format)"
+        schema:
+          type: string
+          format: date-time
+      - name: reference_id
+        in: query
+        description: The reference ID of the Advanced Transfer to filter by
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.ListAdvancedTransfersResponse'
+    post:
+      tags:
+      - Advanced Transfer
+      summary: Create Advanced Transfer
+      description: Create advanced transfer for a given portfolio. This API is currently
+        not available to all clients. Please reach out to Prime Operations with any
+        questions.
+      operationId: PrimeRESTAPI_CreateAdvancedTransfer
+      parameters:
+      - name: portfolio_id
+        in: path
+        description: The portfolio ID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - advanced_transfer
+              type: object
+              properties:
+                advanced_transfer:
+                  $ref: '#/components/schemas/coinbase.public_rest_api.AdvancedTransfer'
+              description: CreateAdvancedTransferRequest is the request to create
+                an advanced transfer.
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.CreateAdvancedTransferResponse'
+      x-codegen-request-body-name: body
+  /v1/portfolios/{portfolio_id}/advanced_transfers/{advanced_transfer_id}/cancel:
+    post:
+      tags:
+      - Advanced Transfer
+      summary: Cancel Advanced Transfer
+      description: Cancel advanced transfer for a given portfolio. This API is currently
+        not available to all clients. Please reach out to Prime Operations with any
+        questions.
+      operationId: PrimeRESTAPI_CancelAdvancedTransfer
+      parameters:
+      - name: portfolio_id
+        in: path
+        description: The portfolio ID
+        required: true
+        schema:
+          type: string
+      - name: advanced_transfer_id
+        in: path
+        description: The ID of the canceled Advanced Transfer
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: CancelAdvancedTransferRequest is the request to cancel
+                an advanced transfer.
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.CancelAdvancedTransferResponse'
+      x-codegen-request-body-name: body
+  /v1/portfolios/{portfolio_id}/advanced_transfers/{advanced_transfer_id}/transactions:
+    get:
+      tags:
+      - Transactions
+      summary: List transactions associated with an Advanced Transfer
+      description: List transactions associated with an Advanced Transfer. This API
+        is currently not available to all clients. Please reach out to Prime Operations
+        with any questions.
+      operationId: PrimeRESTAPI_ListAdvancedTransferTransactions
+      parameters:
+      - name: portfolio_id
+        in: path
+        description: The portfolio ID
+        required: true
+        schema:
+          type: string
+      - name: advanced_transfer_id
+        in: path
+        description: The ID of the Advanced Transfer
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.ListAdvancedTransferTransactionsResponse'
   /v1/portfolios/{portfolio_id}/allocations:
     get:
       tags:
@@ -2642,6 +2826,49 @@ paths:
           enum:
           - DESC
           - ASC
+      - name: product_type
+        in: query
+        description: |-
+          Filter by product type (SPOT, FUTURE). If unset, returns all types available for your portfolio. Futures products require additional entitlements.
+
+           - UNKNOWN_PRODUCT_TYPE: Unknown product type
+           - SPOT: Spot product
+           - FUTURE: Future product
+        schema:
+          type: string
+          enum:
+          - SPOT
+          - FUTURE
+      - name: contract_expiry_type
+        in: query
+        description: |-
+          Filter by contract expiry type (EXPIRING or PERPETUAL). Only applicable when product_type = FUTURE. If unset, returns all futures kinds.
+
+           - CONTRACT_EXPIRY_TYPE_UNSPECIFIED: Unspecified contract expiry type
+           - CONTRACT_EXPIRY_TYPE_EXPIRING: Expiring futures contract
+           - CONTRACT_EXPIRY_TYPE_PERPETUAL: Perpetual futures contract (no expiry)
+        schema:
+          type: string
+          default: CONTRACT_EXPIRY_TYPE_UNSPECIFIED
+          enum:
+          - CONTRACT_EXPIRY_TYPE_UNSPECIFIED
+          - CONTRACT_EXPIRY_TYPE_EXPIRING
+          - CONTRACT_EXPIRY_TYPE_PERPETUAL
+      - name: expiring_contract_status
+        in: query
+        description: |-
+          Filter by expiry status for expiring futures. If unset, returns all expiring futures.
+
+           - EXPIRING_CONTRACT_STATUS_UNKNOWN: Unknown/unset — returns all expiring contracts (backward compatible default)
+           - EXPIRING_CONTRACT_STATUS_UNEXPIRED: Only unexpired contracts (contract_expiry is in the future)
+           - EXPIRING_CONTRACT_STATUS_EXPIRED: Only expired contracts (contract_expiry is in the past)
+           - EXPIRING_CONTRACT_STATUS_ALL: All contracts regardless of expiry status
+        schema:
+          type: string
+          enum:
+          - EXPIRING_CONTRACT_STATUS_UNEXPIRED
+          - EXPIRING_CONTRACT_STATUS_EXPIRED
+          - EXPIRING_CONTRACT_STATUS_ALL
       responses:
         "200":
           description: A successful response.
@@ -3054,6 +3281,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/coinbase.public_rest_api.GetTransactionResponse'
+  /v1/portfolios/{portfolio_id}/transactions/{transaction_id}/travel_rule:
+    get:
+      tags:
+      - Travel Rule
+      summary: Get Transaction Travel Rule Data
+      description: (Beta) Get fulfilled travel rule data for a transaction.
+      operationId: PrimeRESTAPI_GetTransactionTravelRuleData
+      parameters:
+      - name: portfolio_id
+        in: path
+        description: The portfolio ID that owns the transaction
+        required: true
+        schema:
+          type: string
+      - name: transaction_id
+        in: path
+        description: The transaction ID to look up travel rule data for
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.GetTransactionTravelRuleDataResponse'
   /v1/portfolios/{portfolio_id}/transactions/{transaction_id}/travel_rule/deposit:
     post:
       tags:
@@ -4578,6 +4832,39 @@ components:
         added_at:
           type: string
           format: date-time
+    coinbase.public_rest_api.AdvancedTransfer:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/coinbase.public_rest_api.AdvancedTransferType'
+        state:
+          $ref: '#/components/schemas/coinbase.public_rest_api.AdvancedTransferState'
+        fund_movements:
+          type: array
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.FundMovement'
+        blind_match_metadata:
+          $ref: '#/components/schemas/coinbase.public_rest_api.BlindMatchMetadata'
+      description: AdvancedTransfer represents a complex transfer operation such as
+        a blind match settlement.
+    coinbase.public_rest_api.AdvancedTransferState:
+      type: string
+      description: AdvancedTransferState represents the lifecycle state of an advanced
+        transfer.
+      enum:
+      - ADVANCED_TRANSFER_STATE_CREATED
+      - ADVANCED_TRANSFER_STATE_PROCESSING
+      - ADVANCED_TRANSFER_STATE_DONE
+      - ADVANCED_TRANSFER_STATE_CANCELLED
+      - ADVANCED_TRANSFER_STATE_FAILED
+      - ADVANCED_TRANSFER_STATE_EXPIRED
+    coinbase.public_rest_api.AdvancedTransferType:
+      type: string
+      description: AdvancedTransferType specifies the type of advanced transfer.
+      enum:
+      - ADVANCED_TRANSFER_TYPE_BLIND_MATCH
     coinbase.public_rest_api.AggregatedFiatBalance:
       type: object
       properties:
@@ -4846,6 +5133,23 @@ components:
       - SOFR_360
       - SOFR_365
       - CRYPTO_RFR
+    coinbase.public_rest_api.BlindMatchMetadata:
+      type: object
+      properties:
+        reference_id:
+          type: string
+        settlement_date:
+          type: string
+          description: The intended time of Transfer settlement in YYYYMMDD format
+        trade_date:
+          type: string
+          description: Optional date of the original Trade in YYYYMMMDD format
+        settlement_time:
+          type: string
+          description: "Optional time of transfer settlement in HHMM format in UTC.\
+            \ If not provided, it defaults to 09:30 Eastern Time."
+      description: BlindMatchMetadata contains metadata specific to blind match advanced
+        transfers.
     coinbase.public_rest_api.BlockchainAddress:
       type: object
       properties:
@@ -4885,6 +5189,14 @@ components:
           type: string
           description: The buying power for the quote currency
           example: "2051207.48454132"
+    coinbase.public_rest_api.CancelAdvancedTransferResponse:
+      type: object
+      properties:
+        advanced_transfer_id:
+          type: string
+          description: The ID of the canceled Advanced Transfer
+      description: CancelAdvancedTransferResponse is the response after canceling
+        an advanced transfer.
     coinbase.public_rest_api.CancelFuturesSweepResponse:
       type: object
       properties:
@@ -4963,6 +5275,48 @@ components:
           type: string
           description: Average 30 days over past 3 months (e.g. 90 days divided by
             3)
+    coinbase.public_rest_api.CommissionDetailTotal:
+      type: object
+      properties:
+        total_commission:
+          title: |-
+            Total commission amount charged for the order
+            This is the sum of all commission charged on the order
+          type: string
+        client_commission:
+          title: Client commission on the trade
+          type: string
+          description: CB fee
+        venue_commission:
+          title: Venue Commission
+          type: string
+          description: Exchange fees
+        ces_commission:
+          title: CES Commission
+          type: string
+        financing_commission:
+          title: Financing Commission
+          type: string
+        regulatory_commission:
+          title: Regulatory Commission
+          type: string
+          description: NFA fees
+        clearing_commission:
+          title: Clearing Commission
+          type: string
+          description: Clearing fees
+    coinbase.public_rest_api.ContractExpiryType:
+      title: ContractExpiryType represents the expiry type of a futures contract
+      type: string
+      description: |-
+        - CONTRACT_EXPIRY_TYPE_UNSPECIFIED: Unspecified contract expiry type
+         - CONTRACT_EXPIRY_TYPE_EXPIRING: Expiring futures contract
+         - CONTRACT_EXPIRY_TYPE_PERPETUAL: Perpetual futures contract (no expiry)
+      default: CONTRACT_EXPIRY_TYPE_UNSPECIFIED
+      enum:
+      - CONTRACT_EXPIRY_TYPE_UNSPECIFIED
+      - CONTRACT_EXPIRY_TYPE_EXPIRING
+      - CONTRACT_EXPIRY_TYPE_PERPETUAL
     coinbase.public_rest_api.Conversion:
       type: object
       properties:
@@ -5025,6 +5379,15 @@ components:
         counterparty_id:
           title: The counterparty ID to pay out
           type: string
+    coinbase.public_rest_api.CreateAdvancedTransferResponse:
+      required:
+      - advanced_transfer
+      type: object
+      properties:
+        advanced_transfer:
+          $ref: '#/components/schemas/coinbase.public_rest_api.AdvancedTransfer'
+      description: CreateAdvancedTransferResponse is the response after creating an
+        advanced transfer.
     coinbase.public_rest_api.CreateAllocationRequest:
       type: object
       properties:
@@ -5433,6 +5796,16 @@ components:
           example: 2c521d6c-1cfb-4371-bf9c-5a42938d3e75
         role:
           $ref: '#/components/schemas/coinbase.public_rest_api.UserRole'
+        roles:
+          type: array
+          description: All primary roles assigned to the user.
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.UserRole'
+        secondary_permissions:
+          type: array
+          description: All secondary permissions assigned to the user.
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.SecondaryPermission'
     coinbase.public_rest_api.EstimateType:
       type: string
       default: UNSPECIFIED
@@ -5499,6 +5872,18 @@ components:
           description: The locate date from the CreateNewLocatesRequest in RFC3339
             format
           example: 2023-01-01T00:00:00Z
+    coinbase.public_rest_api.ExpiringContractStatus:
+      title: ExpiringContractStatus filters expiring futures by their expiry status
+      type: string
+      description: |-
+        - EXPIRING_CONTRACT_STATUS_UNKNOWN: Unknown/unset — returns all expiring contracts (backward compatible default)
+         - EXPIRING_CONTRACT_STATUS_UNEXPIRED: Only unexpired contracts (contract_expiry is in the future)
+         - EXPIRING_CONTRACT_STATUS_EXPIRED: Only expired contracts (contract_expiry is in the past)
+         - EXPIRING_CONTRACT_STATUS_ALL: All contracts regardless of expiry status
+      enum:
+      - EXPIRING_CONTRACT_STATUS_UNEXPIRED
+      - EXPIRING_CONTRACT_STATUS_EXPIRED
+      - EXPIRING_CONTRACT_STATUS_ALL
     coinbase.public_rest_api.FCMMarginCall:
       type: object
       properties:
@@ -5580,6 +5965,23 @@ components:
       - FCM_MARGIN_CALL_TYPE_UNSPECIFIED
       - FCM_MARGIN_CALL_TYPE_URGENT
       - FCM_MARGIN_CALL_TYPE_REGULAR
+    coinbase.public_rest_api.FcmMarginHealthState:
+      type: string
+      description: |-
+        The margin health state of an FCM account.
+
+         - FCM_MARGIN_HEALTH_STATE_UNSPECIFIED: Unspecified margin health state.
+         - FCM_MARGIN_HEALTH_STATE_HEALTHY: Account margin is healthy.
+         - FCM_MARGIN_HEALTH_STATE_RESTRICTED: Account margin is restricted.
+         - FCM_MARGIN_HEALTH_STATE_PRE_LIQUIDATION: Account is approaching liquidation.
+         - FCM_MARGIN_HEALTH_STATE_LIQUIDATION: Account is in liquidation.
+      default: FCM_MARGIN_HEALTH_STATE_UNSPECIFIED
+      enum:
+      - FCM_MARGIN_HEALTH_STATE_UNSPECIFIED
+      - FCM_MARGIN_HEALTH_STATE_HEALTHY
+      - FCM_MARGIN_HEALTH_STATE_RESTRICTED
+      - FCM_MARGIN_HEALTH_STATE_PRE_LIQUIDATION
+      - FCM_MARGIN_HEALTH_STATE_LIQUIDATION
     coinbase.public_rest_api.FcmPosition:
       type: object
       properties:
@@ -5621,6 +6023,91 @@ components:
       - FCM_POSITION_SIDE_UNSPECIFIED
       - LONG
       - SHORT
+    coinbase.public_rest_api.FcmScheduledMaintenance:
+      title: FcmScheduledMaintenance contains scheduled maintenance window information
+      type: object
+      properties:
+        start_time:
+          title: Maintenance window start time
+          type: string
+          description: Maintenance window start time
+          format: date-time
+        end_time:
+          title: Maintenance window end time
+          type: string
+          description: Maintenance window end time
+          format: date-time
+    coinbase.public_rest_api.FcmTradingSessionClosedReason:
+      title: FcmTradingSessionClosedReason represents the reason for FCM trading session
+        closure
+      type: string
+      description: |-
+        - FCM_TRADING_SESSION_CLOSED_REASON_UNDEFINED: Undefined closed reason
+         - FCM_TRADING_SESSION_CLOSED_REASON_REGULAR_MARKET_CLOSE: Regular market close
+         - FCM_TRADING_SESSION_CLOSED_REASON_EXCHANGE_MAINTENANCE: Exchange maintenance
+         - FCM_TRADING_SESSION_CLOSED_REASON_VENDOR_MAINTENANCE: Vendor maintenance
+      default: FCM_TRADING_SESSION_CLOSED_REASON_UNDEFINED
+      enum:
+      - FCM_TRADING_SESSION_CLOSED_REASON_UNDEFINED
+      - FCM_TRADING_SESSION_CLOSED_REASON_REGULAR_MARKET_CLOSE
+      - FCM_TRADING_SESSION_CLOSED_REASON_EXCHANGE_MAINTENANCE
+      - FCM_TRADING_SESSION_CLOSED_REASON_VENDOR_MAINTENANCE
+    coinbase.public_rest_api.FcmTradingSessionDetails:
+      title: FcmTradingSessionDetails contains trading session details for FCM products
+      type: object
+      properties:
+        session_open:
+          title: Whether the trading session is currently open
+          type: boolean
+          description: Whether the trading session is currently open
+        open_time:
+          title: Trading session open time
+          type: string
+          description: Trading session open time
+          format: date-time
+        close_time:
+          title: Trading session close time
+          type: string
+          description: Trading session close time
+          format: date-time
+        session_state:
+          $ref: '#/components/schemas/coinbase.public_rest_api.FcmTradingSessionState'
+        after_hours_order_entry_disabled:
+          title: Whether after-hours order entry is disabled
+          type: boolean
+          description: Whether after-hours order entry is disabled
+        closed_reason:
+          $ref: '#/components/schemas/coinbase.public_rest_api.FcmTradingSessionClosedReason'
+        maintenance:
+          $ref: '#/components/schemas/coinbase.public_rest_api.FcmScheduledMaintenance'
+        settlement_timestamp:
+          title: Settlement timestamp from previous trading day
+          type: string
+          description: Settlement timestamp from previous trading day
+          format: date-time
+        settlement_price:
+          title: Settlement price from previous trading day
+          type: string
+          description: Settlement price from previous trading day
+    coinbase.public_rest_api.FcmTradingSessionState:
+      title: FcmTradingSessionState represents the current state of an FCM trading
+        session
+      type: string
+      description: |-
+        - FCM_TRADING_SESSION_STATE_UNDEFINED: Undefined session state
+         - FCM_TRADING_SESSION_STATE_PRE_OPEN: Pre-open state, orders can be placed and cancelled
+         - FCM_TRADING_SESSION_STATE_PRE_OPEN_NO_CANCEL: Pre-open state, orders cannot be cancelled
+         - FCM_TRADING_SESSION_STATE_OPEN: Trading session is open
+         - FCM_TRADING_SESSION_STATE_CLOSE: Trading session is closed
+         - FCM_TRADING_SESSION_STATE_HALTED: Trading session is halted
+      default: FCM_TRADING_SESSION_STATE_UNDEFINED
+      enum:
+      - FCM_TRADING_SESSION_STATE_UNDEFINED
+      - FCM_TRADING_SESSION_STATE_PRE_OPEN
+      - FCM_TRADING_SESSION_STATE_PRE_OPEN_NO_CANCEL
+      - FCM_TRADING_SESSION_STATE_OPEN
+      - FCM_TRADING_SESSION_STATE_CLOSE
+      - FCM_TRADING_SESSION_STATE_HALTED
     coinbase.public_rest_api.Fill:
       type: object
       properties:
@@ -5676,6 +6163,75 @@ components:
           type: string
           description: The CES commission incurred for the fill
           example: "1.25"
+        product_type:
+          $ref: '#/components/schemas/coinbase.public_rest_api.ProductType'
+        commission_detail_total:
+          $ref: '#/components/schemas/coinbase.public_rest_api.CommissionDetailTotal'
+    coinbase.public_rest_api.FundMovement:
+      type: object
+      properties:
+        id:
+          type: string
+        source:
+          $ref: '#/components/schemas/coinbase.public_rest_api.TransferLocation'
+        target:
+          $ref: '#/components/schemas/coinbase.public_rest_api.TransferLocation'
+        currency:
+          type: string
+        amount:
+          type: string
+      description: FundMovement represents a single movement of funds between two
+        counterparties.
+    coinbase.public_rest_api.FutureProductDetails:
+      title: FutureProductDetails contains details specific to futures products
+      type: object
+      properties:
+        contract_code:
+          title: Contract code identifier
+          type: string
+          description: Contract code identifier
+          example: BTCH25
+        contract_size:
+          title: Contract size
+          type: string
+          description: Contract size
+          example: "1"
+        contract_expiry:
+          title: Contract expiry timestamp
+          type: string
+          description: Contract expiry timestamp
+          format: date-time
+        contract_root_unit:
+          title: Contract root unit (underlying asset)
+          type: string
+          description: Contract root unit (underlying asset)
+          example: BTC
+        contract_expiry_type:
+          $ref: '#/components/schemas/coinbase.public_rest_api.ContractExpiryType'
+        risk_managed_by:
+          $ref: '#/components/schemas/coinbase.public_rest_api.RiskManagementType'
+        venue:
+          title: "The venue this product trades on (e.g., cme, cde)"
+          type: string
+          description: The venue this product trades on
+          example: cde
+        group_description:
+          title: Descriptive name for the product group
+          type: string
+          description: Descriptive name for the product group
+          example: Nano Bitcoin
+        contract_expiry_timezone:
+          title: IANA time zone for contract expiration
+          type: string
+          description: IANA time zone for contract expiration
+          example: Europe/London
+        group_short_description:
+          title: Short version of the group description
+          type: string
+          description: Short version of the group description
+          example: Nano BTC
+        perpetual_details:
+          $ref: '#/components/schemas/coinbase.public_rest_api.PerpetualProductDetails'
     coinbase.public_rest_api.GetActivityResponse:
       required:
       - activity
@@ -5861,6 +6417,13 @@ components:
           type: string
           description: Unsettled accrued funding PNL from the last settlement
           example: "10.12"
+        margin_utilization_percent:
+          type: string
+          description: Margin utilization as a decimal percentage between 0 and 1
+            (e.g. 0.5 means 50%)
+          example: "0.50"
+        margin_health_state:
+          $ref: '#/components/schemas/coinbase.public_rest_api.FcmMarginHealthState'
     coinbase.public_rest_api.GetFcmSettingsResponse:
       type: object
       properties:
@@ -6171,6 +6734,37 @@ components:
       properties:
         transaction:
           $ref: '#/components/schemas/coinbase.public_rest_api.Transaction'
+    coinbase.public_rest_api.GetTransactionTravelRuleDataResponse:
+      title: Response containing fulfilled travel rule data for a transaction
+      required:
+      - fulfilled
+      type: object
+      properties:
+        fulfilled:
+          title: Whether data requirements are fulfilled
+          type: boolean
+        is_self:
+          title: Whether the transfer is to/from a self-owned wallet
+          type: boolean
+        originator:
+          $ref: '#/components/schemas/coinbase.public_rest_api.TravelRuleParty'
+        beneficiary:
+          $ref: '#/components/schemas/coinbase.public_rest_api.TravelRuleParty'
+        amount:
+          title: The crypto amount of the transaction (e.g. "1.23 BTC")
+          type: string
+        amount_currency:
+          title: The currency of the crypto amount
+          type: string
+        fiat_amount:
+          title: The fiat amount of the transaction (e.g. "123.45 USD")
+          type: string
+        fiat_amount_currency:
+          title: The currency of the fiat amount
+          type: string
+        blockchain_network:
+          title: The blockchain network for the transaction
+          type: string
     coinbase.public_rest_api.GetUnstakingStatusResponse:
       required:
       - current_timestamp
@@ -6322,6 +6916,31 @@ components:
       - INVOICE_TYPE_WITHDRAWAL_FEE
       - INVOICE_TYPE_NEW_WALLET_FEE
       - INVOICE_TYPE_STAKING_FEE
+    coinbase.public_rest_api.ListAdvancedTransferTransactionsResponse:
+      required:
+      - transactions
+      type: object
+      properties:
+        transactions:
+          type: array
+          description: The transactions associated with an Advanced Transfer
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.Transaction'
+      description: ListAdvancedTransferTransactionsResponse contains the transactions
+        associated with an advanced transfer.
+    coinbase.public_rest_api.ListAdvancedTransfersResponse:
+      required:
+      - advanced_transfers
+      type: object
+      properties:
+        advanced_transfers:
+          type: array
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.AdvancedTransfer'
+        pagination:
+          $ref: '#/components/schemas/coinbase.public_rest_api.PaginatedResponse'
+      description: ListAdvancedTransfersResponse contains the list of advanced transfers
+        and pagination info.
     coinbase.public_rest_api.ListAggregateEntityPositionsResponse:
       required:
       - pagination
@@ -7011,6 +7630,10 @@ components:
           description: The wig (would if good) level for PEG orders - best price opposite
             to limit_price
           example: "100000"
+        product_type:
+          $ref: '#/components/schemas/coinbase.public_rest_api.ProductType'
+        commission_detail_total:
+          $ref: '#/components/schemas/coinbase.public_rest_api.CommissionDetailTotal'
     coinbase.public_rest_api.OrderEdit:
       type: object
       properties:
@@ -7228,6 +7851,36 @@ components:
       - PEG_OFFSET_TYPE_PRICE
       - PEG_OFFSET_TYPE_BPS
       - PEG_OFFSET_TYPE_DEPTH
+    coinbase.public_rest_api.PerpetualProductDetails:
+      title: PerpetualProductDetails contains details specific to perpetual futures
+        products
+      type: object
+      properties:
+        open_interest:
+          title: Open interest for the perpetual product
+          type: string
+          description: Open interest
+          example: "1000000"
+        funding_rate:
+          title: Current funding rate
+          type: string
+          description: Current funding rate
+          example: "0.0001"
+        funding_time:
+          title: Next funding time
+          type: string
+          description: Next funding time
+          format: date-time
+        max_leverage:
+          title: Maximum leverage allowed
+          type: string
+          description: Maximum leverage allowed
+          example: "5"
+        underlying_type:
+          title: "Underlying type (e.g. SPOT, INDEX)"
+          type: string
+          description: The type of underlying for the perpetual product
+          example: SPOT
     coinbase.public_rest_api.Portfolio:
       type: object
       properties:
@@ -7313,6 +7966,16 @@ components:
             identified.
         role:
           $ref: '#/components/schemas/coinbase.public_rest_api.UserRole'
+        roles:
+          type: array
+          description: All primary roles assigned to the user.
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.UserRole'
+        secondary_permissions:
+          type: array
+          description: All secondary permissions assigned to the user.
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.SecondaryPermission'
     coinbase.public_rest_api.Position:
       type: object
       properties:
@@ -7560,12 +8223,28 @@ components:
           example: "0.01"
         rfq_product_details:
           $ref: '#/components/schemas/coinbase.public_rest_api.RFQProductDetails'
+        product_type:
+          $ref: '#/components/schemas/coinbase.public_rest_api.ProductType'
+        fcm_trading_session_details:
+          $ref: '#/components/schemas/coinbase.public_rest_api.FcmTradingSessionDetails'
+        future_product_details:
+          $ref: '#/components/schemas/coinbase.public_rest_api.FutureProductDetails'
     coinbase.public_rest_api.ProductPermissions:
       type: string
       enum:
       - PRODUCT_PERMISSION_READ
       - PRODUCT_PERMISSION_TRADE
       - PRODUCT_PERMISSION_LENDING
+    coinbase.public_rest_api.ProductType:
+      title: ProductType represents the general type of product
+      type: string
+      description: |-
+        - UNKNOWN_PRODUCT_TYPE: Unknown product type
+         - SPOT: Spot product
+         - FUTURE: Future product
+      enum:
+      - SPOT
+      - FUTURE
     coinbase.public_rest_api.QuoteResponse:
       title: Copied from https://github.cbhq.net/institutional/trading/blob/3e6da61aceb64c7cbe6f0c0f8fbdb98fd3e868dc/proxy/trading/protos/coinbase/brokerage/proxy/trading/api/orderentry.proto#L366-L370
       type: object
@@ -7637,6 +8316,8 @@ components:
         i.e. ethereum transaction (execution layer) rewards
          - STAKING_FEE_REBATE_REWARD: A staking fee rebate reward
         i.e. coinbase pays rebates for staking fees to eligible delegators
+         - BUIDL_DIVIDEND: A BUIDL dividend reward
+        i.e. dividends from BUIDL fund holdings
       enum:
       - MEV_REWARD
       - INFLATION_REWARD
@@ -7644,6 +8325,7 @@ components:
       - VALIDATOR_REWARD
       - TRANSACTION_REWARD
       - STAKING_FEE_REBATE_REWARD
+      - BUIDL_DIVIDEND
     coinbase.public_rest_api.RiskAssessment:
       title: New message for risk assessment details
       type: object
@@ -7658,6 +8340,18 @@ components:
           description: Indicates if the transaction has been flagged for security
             concerns
           example: false
+    coinbase.public_rest_api.RiskManagementType:
+      title: RiskManagementType represents how risk is managed for a product
+      type: string
+      description: |-
+        - RISK_MANAGEMENT_TYPE_UNSPECIFIED: Unspecified risk management type
+         - RISK_MANAGEMENT_TYPE_MANAGED_BY_FCM: Risk is managed by FCM (Futures Commission Merchant)
+         - RISK_MANAGEMENT_TYPE_MANAGED_BY_VENUE: Risk is managed by the venue
+      default: RISK_MANAGEMENT_TYPE_UNSPECIFIED
+      enum:
+      - RISK_MANAGEMENT_TYPE_UNSPECIFIED
+      - RISK_MANAGEMENT_TYPE_MANAGED_BY_FCM
+      - RISK_MANAGEMENT_TYPE_MANAGED_BY_VENUE
     coinbase.public_rest_api.RpcConfig:
       type: object
       properties:
@@ -7680,6 +8374,18 @@ components:
           type: string
           description: Request ID
           example: 00000000-0000-0000-0000-000000000000
+    coinbase.public_rest_api.SecondaryPermission:
+      title: Indicates the user's secondary permission
+      type: string
+      description: |-
+        - SECONDARY_PERMISSION_UNKNOWN: nil value
+         - VIDEO_APPROVER: A video approver
+         - TEAM_APPROVER: A team approver
+         - WEB3_SIGNER: A web3 signer
+      enum:
+      - VIDEO_APPROVER
+      - TEAM_APPROVER
+      - WEB3_SIGNER
     coinbase.public_rest_api.SetAutoSweepResponse:
       type: object
       properties:
@@ -8351,6 +9057,21 @@ components:
       - TEAM_MANAGER
       - APPROVER
       - TAX_MANAGER
+    coinbase.public_rest_api.ValidatorAllocation:
+      required:
+      - amount
+      - validator_address
+      type: object
+      properties:
+        validator_address:
+          type: string
+          description: The validator address for performing staking operations
+        amount:
+          type: string
+          description: Amount for performing staking operations with this validator
+      description: |-
+        ValidatorAllocation specifies the validator and amount for staking or unstaking.
+        Used for granular ETH V2 validator-level staking or unstaking operations.
     coinbase.public_rest_api.ValidatorStakingInfo:
       required:
       - statuses
@@ -8537,6 +9258,14 @@ components:
           type: string
           description: "Optional amount to unstake (ETH only). If omitted, the wallet\
             \ will unstake the maximum amount available"
+        validator_allocations:
+          type: array
+          description: (Alpha) Optional validator-level allocations for ETH V2 unstaking.
+            Allows specifying which validators to unstake from and how much. This
+            feature is in alpha. Please reach out to your Coinbase Prime account manager
+            for more information
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.ValidatorAllocation'
       description: |-
         WalletUnstakeInputs contains the custom inputs for unstaking operations on a wallet.
         Requirements and supported fields vary by asset type.
@@ -8861,8 +9590,9 @@ components:
       properties:
         nodal_margin_requirement:
           type: string
-          description: "Nodal Margin Requirement (NMR) is the margin requirement for\
-            \ all futures positions, derived from the Nodal model"
+          description: "Derivatives Clearing Organization Margin Requirement (DMR)\
+            \ is the margin requirement for all futures positions, derived from the\
+            \ Derivatives Clearing Organization model"
           example: "9243.25"
         portfolio_margin_requirement:
           type: string

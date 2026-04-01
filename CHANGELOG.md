@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.6.0] - 2026-MAR-30
+
+### Added
+
+- New `advancedtransfers` package with four endpoints
+  - ListAdvancedTransfers
+  - CreateAdvancedTransfer
+  - CancelAdvancedTransfer
+  - ListAdvancedTransferTransactions
+- New Transaction endpoint: GetTransactionTravelRuleData
+- New examples: listAdvancedTransfers, createAdvancedTransfer, cancelAdvancedTransfer, getTransactionTravelRuleData
+- New models: `AdvancedTransfer`, `AdvancedTransferState`, `AdvancedTransferType`, `BlindMatchMetadata`, `FundMovement`, `TransferLocation`
+- New product types: `ProductType`, `ContractExpiryType`, `ExpiringContractStatus`, `FutureProductDetails`, `PerpetualProductDetails`, `FcmTradingSessionDetails`
+- New model types: `CommissionDetailTotal`, `UserRole`, `SecondaryPermission`, `FcmMarginHealthState`, `StakingRewardType`, `ValidatorAllocation`
+
+### Updated
+
+- ListProducts supports three new optional query params: `product_type`, `contract_expiry_type`, `expiring_contract_status`
+- `Product` model has new fields: `product_type`, `fcm_trading_session_details`, `future_product_details`
+- `Order` and `OrderFill` models have new fields: `product_type`, `commission_detail_total`
+- `GetFcmRiskLimitsResponse` has new fields: `cfm_unsettled_accrued_funding_pnl`, `margin_utilization_percent`, `margin_health_state`
+- `User` model has new fields: `roles`, `secondary_permissions`
+- `CreateUnstakeInputs` has new field: `validator_allocations` (Alpha — ETH V2 validator-level unstaking)
+- `StakingRewardType` has new enum value: `BUIDL_DIVIDEND`
+
 ## [0.5.2] - 2025-JUN-17
 
 ### Added
