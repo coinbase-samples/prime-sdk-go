@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.6.1] - 2026-APR-20
+
+### Added
+- New attributes on List Assets
+
 ## [0.6.0] - 2026-MAR-30
 
 ### Added

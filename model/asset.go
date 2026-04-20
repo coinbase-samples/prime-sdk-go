@@ -44,6 +44,9 @@ type Network struct {
 	DestinationTagRequired bool            `json:"destination_tag_required"`
 	NetworkLink            string          `json:"network_link"`
 	NetworkScopedSymbol    string          `json:"network_scoped_symbol"`
+	MinWithdrawalAmount    string          `json:"min_withdrawal_amount"`
+	MaxWithdrawalAmount    string          `json:"max_withdrawal_amount"`
+	MinDepositAmount       string          `json:"min_deposit_amount"`
 }
 
 // NetworkDetails represents detailed network information
