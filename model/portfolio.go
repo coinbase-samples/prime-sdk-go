@@ -23,6 +23,7 @@ type Portfolio struct {
 	Id             string `json:"id"`
 	Name           string `json:"name"`
 	EntityId       string `json:"entity_id"`
+	EntityName     string `json:"entity_name"`
 	OrganizationId string `json:"organization_id"`
 }
 
