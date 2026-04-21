@@ -1,5 +1,12 @@
 # Changelog
 
+
+## [0.6.2] - 2026-APR-21
+
+### Added
+- Add entity name to portfolio struct
+
+
 ## [0.6.1] - 2026-APR-20
 
 ### Added
