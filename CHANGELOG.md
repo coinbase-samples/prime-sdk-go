@@ -1,6 +1,12 @@
 # Changelog
 
 
+## [0.6.3] - 2026-APR-30
+
+### Added
+- Add RFQ information to products
+
+
 ## [0.6.2] - 2026-APR-21
 
 ### Added

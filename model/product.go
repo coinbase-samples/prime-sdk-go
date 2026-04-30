@@ -63,21 +63,21 @@ type FcmTradingSessionClosedReason string
 
 const (
 	FcmTradingSessionClosedReasonUndefined           FcmTradingSessionClosedReason = "FCM_TRADING_SESSION_CLOSED_REASON_UNDEFINED"
-	FcmTradingSessionClosedReasonRegularMarketClose   FcmTradingSessionClosedReason = "FCM_TRADING_SESSION_CLOSED_REASON_REGULAR_MARKET_CLOSE"
-	FcmTradingSessionClosedReasonExchangeMaintenance  FcmTradingSessionClosedReason = "FCM_TRADING_SESSION_CLOSED_REASON_EXCHANGE_MAINTENANCE"
-	FcmTradingSessionClosedReasonVendorMaintenance    FcmTradingSessionClosedReason = "FCM_TRADING_SESSION_CLOSED_REASON_VENDOR_MAINTENANCE"
+	FcmTradingSessionClosedReasonRegularMarketClose  FcmTradingSessionClosedReason = "FCM_TRADING_SESSION_CLOSED_REASON_REGULAR_MARKET_CLOSE"
+	FcmTradingSessionClosedReasonExchangeMaintenance FcmTradingSessionClosedReason = "FCM_TRADING_SESSION_CLOSED_REASON_EXCHANGE_MAINTENANCE"
+	FcmTradingSessionClosedReasonVendorMaintenance   FcmTradingSessionClosedReason = "FCM_TRADING_SESSION_CLOSED_REASON_VENDOR_MAINTENANCE"
 )
 
 // FcmTradingSessionState represents the current state of an FCM trading session.
 type FcmTradingSessionState string
 
 const (
-	FcmTradingSessionStateUndefined        FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_UNDEFINED"
-	FcmTradingSessionStatePreOpen          FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_PRE_OPEN"
-	FcmTradingSessionStatePreOpenNoCancel  FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_PRE_OPEN_NO_CANCEL"
-	FcmTradingSessionStateOpen             FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_OPEN"
-	FcmTradingSessionStateClose            FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_CLOSE"
-	FcmTradingSessionStateHalted           FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_HALTED"
+	FcmTradingSessionStateUndefined       FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_UNDEFINED"
+	FcmTradingSessionStatePreOpen         FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_PRE_OPEN"
+	FcmTradingSessionStatePreOpenNoCancel FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_PRE_OPEN_NO_CANCEL"
+	FcmTradingSessionStateOpen            FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_OPEN"
+	FcmTradingSessionStateClose           FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_CLOSE"
+	FcmTradingSessionStateHalted          FcmTradingSessionState = "FCM_TRADING_SESSION_STATE_HALTED"
 )
 
 // FcmScheduledMaintenance contains scheduled maintenance window information.
@@ -101,10 +101,10 @@ type FcmTradingSessionDetails struct {
 
 // PerpetualProductDetails contains details specific to perpetual futures products.
 type PerpetualProductDetails struct {
-	OpenInterest  string `json:"open_interest,omitempty"`
-	FundingRate   string `json:"funding_rate,omitempty"`
-	FundingTime   string `json:"funding_time,omitempty"`
-	MaxLeverage   string `json:"max_leverage,omitempty"`
+	OpenInterest   string `json:"open_interest,omitempty"`
+	FundingRate    string `json:"funding_rate,omitempty"`
+	FundingTime    string `json:"funding_time,omitempty"`
+	MaxLeverage    string `json:"max_leverage,omitempty"`
 	UnderlyingType string `json:"underlying_type,omitempty"`
 }
 
@@ -124,8 +124,14 @@ type FutureProductDetails struct {
 }
 
 type RfqProductDetails struct {
-	Tradable        bool   `json:"tradable"`
+	Tradable     bool   `json:"tradable"`
+	MinBaseSize  string `json:"min_base_size"`
+	MaxBaseSize  string `json:"max_base_size"`
+	MinQuoteSize string `json:"min_quote_size"`
+	MaxQuoteSize string `json:"max_quote_size"`
+	// Deprecated: Value will be an empty string. Use Min/Max Base/Quote Size instead.
 	MinNotionalSize string `json:"min_notional_size"`
+	// Deprecated: Value will be an empty string. Use Min/Max Base/Quote Size instead.
 	MaxNotionalSize string `json:"max_notional_size"`
 }
 
