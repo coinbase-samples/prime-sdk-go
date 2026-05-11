@@ -581,11 +581,15 @@ const (
 
 // XMSummary represents the Cross Margin margin model summary
 type XMSummary struct {
-	MarginRequirement     string `json:"margin_requirement"`
-	AccountEquity         string `json:"account_equity"`
-	MarginExcessShortfall string `json:"margin_excess_shortfall"`
-	ConsumedCredit        string `json:"consumed_credit"`
-	XMCreditLimit         string `json:"xm_credit_limit"`
+	MarginRequirement     string             `json:"margin_requirement"`
+	AccountEquity         string             `json:"account_equity"`
+	MarginExcessShortfall string             `json:"margin_excess_shortfall"`
+	ConsumedCredit        string             `json:"consumed_credit"`
+	XMCreditLimit         string             `json:"xm_credit_limit"`
+	XMMarginLimit         string             `json:"xm_margin_limit,omitempty"`
+	SpotEquity            string             `json:"spot_equity,omitempty"`
+	FuturesEquity         string             `json:"futures_equity,omitempty"`
+	RiskNettingInfo       *XMRiskNettingInfo `json:"risk_netting_info,omitempty"`
 }
 
 // XMMarginCall represents a Cross Margin margin call
@@ -609,12 +613,302 @@ type XMLoan struct {
 	OutstandingPrincipalAmount   string  `json:"outstanding_principal_amount"`
 }
 
+// XMLiquidationStatus is the current status of an XM liquidation.
+type XMLiquidationStatus string
+
+const (
+	XMLiquidationStatusUnset          XMLiquidationStatus = "XM_LIQUIDATION_STATUS_UNSET"
+	XMLiquidationStatusPreLiquidation XMLiquidationStatus = "XM_LIQUIDATION_STATUS_PRE_LIQUIDATION"
+	XMLiquidationStatusLiquidating    XMLiquidationStatus = "XM_LIQUIDATION_STATUS_LIQUIDATING"
+	XMLiquidationStatusLiquidated     XMLiquidationStatus = "XM_LIQUIDATION_STATUS_LIQUIDATED"
+	XMLiquidationStatusCanceled       XMLiquidationStatus = "XM_LIQUIDATION_STATUS_CANCELED"
+	XMLiquidationStatusFailed         XMLiquidationStatus = "XM_LIQUIDATION_STATUS_FAILED"
+)
+
+// ActiveLiquidationSummary provides a summary of the active or most recent XM liquidation.
+type ActiveLiquidationSummary struct {
+	LiquidationId  string              `json:"liquidation_id"`
+	Status         XMLiquidationStatus `json:"status"`
+	ShortfallAmount string             `json:"shortfall_amount"`
+}
+
 // CrossMarginOverview represents the Cross Margin overview for an entity
 type CrossMarginOverview struct {
-	ControlStatus     XMControlStatus    `json:"control_status"`
-	CallStatus        XMEntityCallStatus `json:"call_status"`
-	MarginLevel       XMMarginLevel      `json:"margin_level"`
-	MarginSummary     *XMSummary         `json:"margin_summary"`
-	ActiveMarginCalls []*XMMarginCall    `json:"active_margin_calls"`
-	ActiveLoans       []*XMLoan          `json:"active_loans"`
+	ControlStatus     XMControlStatus           `json:"control_status"`
+	CallStatus        XMEntityCallStatus        `json:"call_status"`
+	MarginLevel       XMMarginLevel             `json:"margin_level"`
+	MarginSummary     *XMSummary                `json:"margin_summary"`
+	ActiveMarginCalls []*XMMarginCall           `json:"active_margin_calls"`
+	ActiveLoans       []*XMLoan                 `json:"active_loans"`
+	ActiveLiquidation *ActiveLiquidationSummary `json:"active_liquidation,omitempty"`
+}
+
+// MarginAddOn represents a scenario-based margin add-on amount.
+type MarginAddOn struct {
+	Amount     string          `json:"amount,omitempty"`
+	AddOnType  MarginAddOnType `json:"add_on_type,omitempty"`
+}
+
+// XMPosition is a per-asset netted position row used in the XM model calculation.
+type XMPosition struct {
+	Currency                     string `json:"currency,omitempty"`
+	MarketPrice                  string `json:"market_price,omitempty"`
+	MarginEligible               bool   `json:"margin_eligible,omitempty"`
+	MarketCap                    string `json:"market_cap,omitempty"`
+	Adv30Days                    string `json:"adv30_days,omitempty"`
+	Hist5dVol                    string `json:"hist5d_vol,omitempty"`
+	Hist30dVol                   string `json:"hist30d_vol,omitempty"`
+	Hist90dVol                   string `json:"hist90d_vol,omitempty"`
+	MarginRequirement            string `json:"margin_requirement,omitempty"`
+	SpotBalance                  string `json:"spot_balance,omitempty"`
+	SpotBalanceNotional          string `json:"spot_balance_notional,omitempty"`
+	SpotTotalPositionMargin      string `json:"spot_total_position_margin,omitempty"`
+	FuturesBalance               string `json:"futures_balance,omitempty"`
+	FuturesBalanceNotional       string `json:"futures_balance_notional,omitempty"`
+	FuturesTotalPositionMargin   string `json:"futures_total_position_margin,omitempty"`
+	GmvBasis                     string `json:"gmv_basis,omitempty"`
+	BaseRequirement              string `json:"base_requirement,omitempty"`
+	LiqShortsAddOn               string `json:"liq_shorts_add_on,omitempty"`
+	LiqLongsAddOn                string `json:"liq_longs_add_on,omitempty"`
+	VolShortsAddOn               string `json:"vol_shorts_add_on,omitempty"`
+	VolLongsAddOn                string `json:"vol_longs_add_on,omitempty"`
+	Vol5daysAddOn                string `json:"vol5days_add_on,omitempty"`
+	Vol30daysAddOn               string `json:"vol30days_add_on,omitempty"`
+	Vol90daysAddOn               string `json:"vol90days_add_on,omitempty"`
+	TotalPositionMargin          string `json:"total_position_margin,omitempty"`
+}
+
+// XMRiskNettingInfo groups the XM margin requirement components and per-asset positions.
+type XMRiskNettingInfo struct {
+	// DcoMarginRequirement (DMR) is the margin requirement for all futures positions
+	// derived from the Derivatives Clearing Organization model.
+	DcoMarginRequirement                 string         `json:"dco_margin_requirement,omitempty"`
+	PortfolioMarginRequirement           string         `json:"portfolio_margin_requirement,omitempty"`
+	IntegratedPortfolioMarginRequirement string         `json:"integrated_portfolio_margin_requirement,omitempty"`
+	IneligibleFuturesMarginRequirement   string         `json:"ineligible_futures_margin_requirement,omitempty"`
+	PositionMarginRequirement            string         `json:"position_margin_requirement,omitempty"`
+	PortfolioMarginAddon                 string         `json:"portfolio_margin_addon,omitempty"`
+	IntegratedPositionMarginRequirement  string         `json:"integrated_position_margin_requirement,omitempty"`
+	IntegratedPortfolioMarginAddon       string         `json:"integrated_portfolio_margin_addon,omitempty"`
+	NettedFuturesNotional                string         `json:"netted_futures_notional,omitempty"`
+	TotalGmvBasis                        string         `json:"total_gmv_basis,omitempty"`
+	IpmCashBalance                       string         `json:"ipm_cash_balance,omitempty"`
+	IntegratedScenarioAddon              *MarginAddOn   `json:"integrated_scenario_addon,omitempty"`
+	AllIntegratedScenarioAddons          []*MarginAddOn `json:"all_integrated_scenario_addons,omitempty"`
+	XmPositions                          []*XMPosition  `json:"xm_positions,omitempty"`
+}
+
+// ---------------------------------------------------------------------------
+// Beta cross-margin types (coinbase.public_rest_api.beta.*)
+// These back the Beta endpoints: GetCrossMarginRiskParameters,
+// GetCrossMarginPrimeOverview, and GetMarketData.
+// ---------------------------------------------------------------------------
+
+// PrimeXMControlStatus is the Beta control status for Prime Cross Margin trades
+// and withdrawals.
+type PrimeXMControlStatus string
+
+const (
+	PrimeXMControlStatusUnspecified       PrimeXMControlStatus = "XM_CONTROL_STATUS_UNSPECIFIED"
+	PrimeXMControlStatusTradesWithdrawals PrimeXMControlStatus = "TRADES_AND_WITHDRAWALS"
+	PrimeXMControlStatusTradesOnly        PrimeXMControlStatus = "TRADES_ONLY"
+	PrimeXMControlStatusSessionLocked     PrimeXMControlStatus = "SESSION_LOCKED"
+)
+
+// PrimeXMMarginLevel is the Beta margin level for Prime Cross Margin.
+type PrimeXMMarginLevel string
+
+const (
+	PrimeXMMarginLevelUnspecified PrimeXMMarginLevel = "XM_MARGIN_LEVEL_UNSPECIFIED"
+	PrimeXMMarginLevelHealthy     PrimeXMMarginLevel = "HEALTHY_THRESHOLD"
+	PrimeXMMarginLevelWarning     PrimeXMMarginLevel = "WARNING_THRESHOLD"
+	PrimeXMMarginLevelUrgent      PrimeXMMarginLevel = "URGENT_MARGIN_CALL_THRESHOLD"
+	PrimeXMMarginLevelLiquidation PrimeXMMarginLevel = "LIQUIDATION_THRESHOLD"
+	PrimeXMMarginLevelDeficit     PrimeXMMarginLevel = "DEFICIT_THRESHOLD"
+)
+
+// PrimeXMHealthStatus is the Beta health status for Prime Cross Margin.
+type PrimeXMHealthStatus string
+
+const (
+	PrimeXMHealthStatusHealthy        PrimeXMHealthStatus = "HEALTH_STATUS_HEALTHY"
+	PrimeXMHealthStatusWarning        PrimeXMHealthStatus = "HEALTH_STATUS_WARNING"
+	PrimeXMHealthStatusCritical       PrimeXMHealthStatus = "HEALTH_STATUS_CRITICAL"
+	PrimeXMHealthStatusSuspended      PrimeXMHealthStatus = "HEALTH_STATUS_SUSPENDED"
+	PrimeXMHealthStatusRestricted     PrimeXMHealthStatus = "HEALTH_STATUS_RESTRICTED"
+	PrimeXMHealthStatusPreLiquidation PrimeXMHealthStatus = "HEALTH_STATUS_PRE_LIQUIDATION"
+	PrimeXMHealthStatusLiquidating    PrimeXMHealthStatus = "HEALTH_STATUS_LIQUIDATING"
+	PrimeXMHealthStatusInDeficit      PrimeXMHealthStatus = "HEALTH_STATUS_IN_DEFICIT"
+)
+
+// PrimeXMMarginRequirementType distinguishes the methodology used for the
+// margin requirement in GetCrossMarginPrimeOverview.
+type PrimeXMMarginRequirementType string
+
+const (
+	PrimeXMMarginRequirementTypeUnspecified  PrimeXMMarginRequirementType = "MARGIN_REQUIREMENT_TYPE_UNSPECIFIED"
+	PrimeXMMarginRequirementTypeDmrPlusPmr   PrimeXMMarginRequirementType = "MARGIN_REQUIREMENT_TYPE_DMR_PLUS_PMR"
+	PrimeXMMarginRequirementTypeIpmrPlusIfmr PrimeXMMarginRequirementType = "MARGIN_REQUIREMENT_TYPE_IPMR_PLUS_IFMR"
+)
+
+// PrimeXMMarginThresholdType identifies whether a threshold is equity-ratio or
+// deficit-ratio based.
+type PrimeXMMarginThresholdType string
+
+const (
+	PrimeXMMarginThresholdTypeUnspecified   PrimeXMMarginThresholdType = "MARGIN_THRESHOLD_TYPE_UNSPECIFIED"
+	PrimeXMMarginThresholdTypeEquityRatio   PrimeXMMarginThresholdType = "MARGIN_THRESHOLD_EQUITY_RATIO"
+	PrimeXMMarginThresholdTypeDeficitRatio  PrimeXMMarginThresholdType = "MARGIN_THRESHOLD_DEFICIT_RATIO"
+	PrimeXMMarginThresholdTypeNone          PrimeXMMarginThresholdType = "MARGIN_THRESHOLD_NONE"
+)
+
+// CrossMarginRiskParameters holds XM 2.0 risk parameters for a single asset tier.
+type CrossMarginRiskParameters struct {
+	AssetTier             string `json:"asset_tier,omitempty"`
+	BaseRatioLong         string `json:"base_ratio_long,omitempty"`
+	BaseRatioShort        string `json:"base_ratio_short,omitempty"`
+	VolatilityRateLong    string `json:"volatility_rate_long,omitempty"`
+	VolatilityRateShort   string `json:"volatility_rate_short,omitempty"`
+	VolatilityLowThreshold  string `json:"volatility_low_threshold,omitempty"`
+	VolatilityHighThreshold string `json:"volatility_high_threshold,omitempty"`
+	LiquidityALong        string `json:"liquidity_a_long,omitempty"`
+	LiquidityAShort       string `json:"liquidity_a_short,omitempty"`
+	LiquidityBShort       string `json:"liquidity_b_short,omitempty"`
+	LiquidityThreshold    string `json:"liquidity_threshold,omitempty"`
+	BasisOffsetCreditRate string `json:"basis_offset_credit_rate,omitempty"`
+}
+
+// TierPairRateEntry represents a single (tier_a, tier_b) → rate entry in an
+// offset credit matrix.
+type TierPairRateEntry struct {
+	TierA string `json:"tier_a,omitempty"`
+	TierB string `json:"tier_b,omitempty"`
+	Rate  string `json:"rate,omitempty"`
+}
+
+// CrossMarginPrimeMarginSummary is the cross-margin account summary returned by
+// GetCrossMarginPrimeOverview.
+type CrossMarginPrimeMarginSummary struct {
+	MarginRequirement         string                                 `json:"margin_requirement,omitempty"`
+	MarginRequirementType     PrimeXMMarginRequirementType           `json:"margin_requirement_type,omitempty"`
+	AccountEquity             string                                 `json:"account_equity,omitempty"`
+	MarginExcessShortfall     string                                 `json:"margin_excess_shortfall,omitempty"`
+	ConsumedCredit            string                                 `json:"consumed_credit,omitempty"`
+	XmCreditLimit             string                                 `json:"xm_credit_limit,omitempty"`
+	XmMarginLimit             string                                 `json:"xm_margin_limit,omitempty"`
+	ConsumedMarginLimit       string                                 `json:"consumed_margin_limit,omitempty"`
+	SpotEquity                string                                 `json:"spot_equity,omitempty"`
+	FuturesEquity             string                                 `json:"futures_equity,omitempty"`
+	GrossMarketValue          string                                 `json:"gross_market_value,omitempty"`
+	NetMarketValue            string                                 `json:"net_market_value,omitempty"`
+	NetExposure               string                                 `json:"net_exposure,omitempty"`
+	GrossLeverage             string                                 `json:"gross_leverage,omitempty"`
+	SpotEquityBreakdown       *CrossMarginPrimeSpotEquityBreakdown   `json:"spot_equity_breakdown,omitempty"`
+	DerivativesEquityBreakdown *CrossMarginPrimeDerivativesEquityBreakdown `json:"derivatives_equity_breakdown,omitempty"`
+	RiskNettingInfo           *CrossMarginPrimeRiskNettingInfo       `json:"risk_netting_info,omitempty"`
+	HealthStatus              PrimeXMHealthStatus                    `json:"health_status,omitempty"`
+	EquityRatio               string                                 `json:"equity_ratio,omitempty"`
+	DeficitRatio              string                                 `json:"deficit_ratio,omitempty"`
+	MarginThresholds          *PrimeXMMarginCallThresholds           `json:"margin_thresholds,omitempty"`
+	FcmExcessAvailableToReturn string                                `json:"fcm_excess_available_to_return,omitempty"`
+}
+
+// CrossMarginPrimeSpotEquityBreakdown breaks down the components of spot equity.
+type CrossMarginPrimeSpotEquityBreakdown struct {
+	CashBalance      string `json:"cash_balance,omitempty"`
+	LongMarketValue  string `json:"long_market_value,omitempty"`
+	ShortMarketValue string `json:"short_market_value,omitempty"`
+	ShortCollateral  string `json:"short_collateral,omitempty"`
+	PendingTransfers string `json:"pending_transfers,omitempty"`
+}
+
+// CrossMarginPrimeDerivativesEquityBreakdown breaks down the components of
+// derivatives equity.
+type CrossMarginPrimeDerivativesEquityBreakdown struct {
+	CashBalance       string `json:"cash_balance,omitempty"`
+	UnrealizedPnl     string `json:"unrealized_pnl,omitempty"`
+	RealizedPnl       string `json:"realized_pnl,omitempty"`
+	AccruedFundingPnl string `json:"accrued_funding_pnl,omitempty"`
+}
+
+// CrossMarginPrimeRiskNettingInfo groups XM 2.0 margin requirement components,
+// offset credits, and per-asset rows for the Beta Prime overview.
+type CrossMarginPrimeRiskNettingInfo struct {
+	DcoMarginRequirement                        string                              `json:"dco_margin_requirement,omitempty"`
+	PortfolioMarginRequirement                  string                              `json:"portfolio_margin_requirement,omitempty"`
+	IntegratedPortfolioMarginRequirement        string                              `json:"integrated_portfolio_margin_requirement,omitempty"`
+	IneligibleFuturesMarginRequirement          string                              `json:"ineligible_futures_margin_requirement,omitempty"`
+	PmrBreakdown                                *PrimeXMMarginRequirementBreakdown  `json:"pmr_breakdown,omitempty"`
+	IpmrBreakdown                               *PrimeXMMarginRequirementBreakdown  `json:"ipmr_breakdown,omitempty"`
+	PortfolioMarginOffsetCreditBreakdown        *PrimeXMOffsetCreditBreakdown       `json:"portfolio_margin_offset_credit_breakdown,omitempty"`
+	IntegratedPortfolioMarginOffsetCreditBreakdown *PrimeXMOffsetCreditBreakdown    `json:"integrated_portfolio_margin_offset_credit_breakdown,omitempty"`
+	XmPositions                                 []*CrossMarginPrimeXMPosition       `json:"xm_positions,omitempty"`
+}
+
+// PrimeXMMarginRequirementBreakdown contains the component breakdown of a
+// Prime XM margin requirement.
+type PrimeXMMarginRequirementBreakdown struct {
+	BaseMargin     string `json:"base_margin,omitempty"`
+	VolatilityAddon string `json:"volatility_addon,omitempty"`
+	LiquidityAddon string `json:"liquidity_addon,omitempty"`
+	OffsetCredit   string `json:"offset_credit,omitempty"`
+	FuturesMargin  string `json:"futures_margin,omitempty"`
+}
+
+// PrimeXMOffsetCreditBreakdown breaks down offset credits in the Prime XM model.
+type PrimeXMOffsetCreditBreakdown struct {
+	BasisCredit     string `json:"basis_credit,omitempty"`
+	LongShortCredit string `json:"long_short_credit,omitempty"`
+	LongLongCredit  string `json:"long_long_credit,omitempty"`
+	ShortShortCredit string `json:"short_short_credit,omitempty"`
+	SameTierCredit  string `json:"same_tier_credit,omitempty"`
+	TotalCredit     string `json:"total_credit,omitempty"`
+}
+
+// CrossMarginPrimeXMPosition is a single per-asset XM row in the Prime Beta
+// cross-margin model.
+type CrossMarginPrimeXMPosition struct {
+	Currency               string `json:"currency,omitempty"`
+	MarketPrice            string `json:"market_price,omitempty"`
+	SpotBalance            string `json:"spot_balance,omitempty"`
+	SpotBalanceNotional    string `json:"spot_balance_notional,omitempty"`
+	FuturesBalance         string `json:"futures_balance,omitempty"`
+	FuturesBalanceNotional string `json:"futures_balance_notional,omitempty"`
+	BaseRequirement        string `json:"base_requirement,omitempty"`
+	TotalPositionMargin    string `json:"total_position_margin,omitempty"`
+	BasisCredit            string `json:"basis_credit,omitempty"`
+	FuturesNettedNotional  string `json:"futures_netted_notional,omitempty"`
+	FuturesNettingMargin   string `json:"futures_netting_margin,omitempty"`
+	LongAmount             string `json:"long_amount,omitempty"`
+	ShortAmount            string `json:"short_amount,omitempty"`
+	VolatilityAddon        string `json:"volatility_addon,omitempty"`
+	LiquidityAddon         string `json:"liquidity_addon,omitempty"`
+}
+
+// PrimeXMMarginCallThresholds holds the threshold values that define each
+// margin level boundary.
+type PrimeXMMarginCallThresholds struct {
+	DeficitThreshold     string                  `json:"deficit_threshold,omitempty"`
+	WarningThreshold     string                  `json:"warning_threshold,omitempty"`
+	CriticalThreshold    string                  `json:"critical_threshold,omitempty"`
+	LiquidationThreshold string                  `json:"liquidation_threshold,omitempty"`
+	MarginThresholds     []*PrimeXMMarginThreshold `json:"margin_thresholds,omitempty"`
+}
+
+// PrimeXMMarginThreshold pairs a margin level with a specific threshold type
+// and value.
+type PrimeXMMarginThreshold struct {
+	MarginLevel    PrimeXMMarginLevel         `json:"margin_level,omitempty"`
+	ThresholdType  PrimeXMMarginThresholdType `json:"threshold_type,omitempty"`
+	ThresholdValue string                     `json:"threshold_value,omitempty"`
+}
+
+// MarketData contains volatility and average daily volume data for a single product.
+type MarketData struct {
+	Symbol      string `json:"symbol,omitempty"`
+	Vol5d       string `json:"vol_5d,omitempty"`
+	Vol30d      string `json:"vol_30d,omitempty"`
+	Vol90d      string `json:"vol_90d,omitempty"`
+	Adv30d      string `json:"adv_30d,omitempty"`
+	WeightedVol string `json:"weighted_vol,omitempty"`
 }

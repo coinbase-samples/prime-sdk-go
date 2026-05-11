@@ -34,6 +34,7 @@ type CreateQuoteRequest struct {
 	QuoteValue     string          `json:"quote_value,omitempty"`
 	LimitPrice     string          `json:"limit_price"`
 	SettleCurrency string          `json:"settl_currency,omitempty"`
+	QuoteDurationMs string `json:"quote_duration_ms,omitempty"`
 }
 
 type CreateQuoteResponse struct {
@@ -42,7 +43,8 @@ type CreateQuoteResponse struct {
 	BestPrice            string              `json:"best_price"`
 	OrderTotal           string              `json:"order_total"`
 	PriceInclusiveOfFees string              `json:"price_inclusive_of_fees"`
-	Request              *CreateQuoteRequest `json:"-"`
+	QuoteDurationMs string              `json:"quote_duration_ms,omitempty"`
+	Request         *CreateQuoteRequest `json:"-"`
 }
 
 func (s *ordersServiceImpl) CreateQuoteRequest(ctx context.Context, request *CreateQuoteRequest) (*CreateQuoteResponse, error) {

@@ -22,7 +22,9 @@ import (
 	"encoding/base64"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/coinbase-samples/core-go"
@@ -82,6 +84,42 @@ func (c *restClientImpl) SetHeadersFunc(hf core.HttpHeaderFunc) RestClient {
 
 func (c *restClientImpl) HeadersFunc() core.HttpHeaderFunc {
 	return c.headersFunc
+}
+
+// versionSuffix matches a trailing /v<digits> segment (with optional trailing slash).
+var versionSuffix = regexp.MustCompile(`/v\d+/?$`)
+
+// VersionedBaseUrl returns base with its trailing /v<digits> segment replaced by
+// /<version> (e.g. "v2"). If base has no version suffix, /<version> is appended.
+// Any trailing slash is stripped from the result.
+func VersionedBaseUrl(base, version string) string {
+	trimmed := strings.TrimRight(base, "/")
+	if versionSuffix.MatchString(trimmed) {
+		result := versionSuffix.ReplaceAllString(trimmed, "/"+version)
+		return strings.TrimRight(result, "/")
+	}
+	return trimmed + "/" + version
+}
+
+// baseUrlOverrideClient delegates all RestClient behavior to the wrapped client
+// but reports a different base URL. Used to direct individual calls to a different
+// API version (e.g. /v2) without mutating the underlying client.
+type baseUrlOverrideClient struct {
+	RestClient
+	overrideUrl string
+}
+
+func (c *baseUrlOverrideClient) HttpBaseUrl() string { return c.overrideUrl }
+
+func (c *baseUrlOverrideClient) SetBaseUrl(u string) RestClient {
+	return &baseUrlOverrideClient{RestClient: c.RestClient, overrideUrl: u}
+}
+
+// WithBaseUrl returns a RestClient that reports the given baseUrl while delegating
+// credentials, HTTP client, and header signing to the underlying client.
+// Use this for one-off calls that target a different API version or host.
+func WithBaseUrl(c RestClient, baseUrl string) RestClient {
+	return &baseUrlOverrideClient{RestClient: c, overrideUrl: baseUrl}
 }
 
 func NewRestClient(credentials *credentials.Credentials, httpClient http.Client) RestClient {
