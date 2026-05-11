@@ -22,6 +22,7 @@ import (
 
 	"github.com/coinbase-samples/core-go"
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type PreviewUnstakeRequest struct {
@@ -31,8 +32,12 @@ type PreviewUnstakeRequest struct {
 }
 
 type PreviewUnstakeResponse struct {
-	EstimatedAmount string                 `json:"estimated_amount"`
-	Request         *PreviewUnstakeRequest `json:"-"`
+	EstimatedAmount  string                          `json:"estimated_amount"`
+	WalletId         string                          `json:"wallet_id,omitempty"`
+	WalletAddress    string                          `json:"wallet_address,omitempty"`
+	CurrentTimestamp string                          `json:"current_timestamp,omitempty"`
+	Validators       []*model.ValidatorUnstakePreview `json:"validators,omitempty"`
+	Request          *PreviewUnstakeRequest           `json:"-"`
 }
 
 func (s *stakingServiceImpl) PreviewUnstake(

@@ -28,9 +28,10 @@ const (
 	UserRoleReviewer    UserRole = "REVIEWER"
 	UserRoleTrader      UserRole = "TRADER"
 	UserRoleFullTrader  UserRole = "FULL_TRADER"
-	UserRoleTeamManager UserRole = "TEAM_MANAGER"
-	UserRoleApprover    UserRole = "APPROVER"
-	UserRoleTaxManager  UserRole = "TAX_MANAGER"
+	UserRoleTeamManager     UserRole = "TEAM_MANAGER"
+	UserRoleApprover        UserRole = "APPROVER"
+	UserRoleTaxManager      UserRole = "TAX_MANAGER"
+	UserRoleBusinessManager UserRole = "BUSINESS_MANAGER"
 )
 
 // SecondaryPermission indicates the user's secondary permission.

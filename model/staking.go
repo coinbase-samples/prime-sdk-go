@@ -134,3 +134,11 @@ type TransactionValidator struct {
 type PortfolioStakingMetadata struct {
 	ExternalId string `json:"external_id,omitempty"`
 }
+
+// ValidatorUnstakePreview contains the per-validator breakdown for an unstake preview.
+type ValidatorUnstakePreview struct {
+	ValidatorAddress           string  `json:"validator_address,omitempty"`
+	EstimatedUnstakingAmount   string  `json:"estimated_unstaking_amount,omitempty"`
+	UnstakeTimeEstimateInHours float64 `json:"unstake_time_estimate_in_hours,omitempty"`
+	EstimatedUnstakeDate       string  `json:"estimated_unstake_date,omitempty"`
+}

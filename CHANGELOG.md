@@ -1,6 +1,25 @@
 # Changelog
 
 
+## [0.7.0] - 2026-MAY-11
+
+### Added
+
+- New Beta Financing endpoints
+  - `GetCrossMarginRiskParameters` — retrieves XM 2.0 tier risk parameters and offset credit matrices for an entity
+  - `GetCrossMarginPrimeOverview` — returns full live Prime cross-margin information (served from `/v2`)
+  - `SetFundingSettings` — sets FCM funding configuration for an entity (creates a PCS proposal)
+  - `GetMarketData` — retrieves paginated volatility and ADV market data for an entity
+- `client.VersionedBaseUrl` and `client.WithBaseUrl` helpers for per-call API version overrides (used internally by `GetCrossMarginPrimeOverview` for the `/v2` path, without affecting other calls)
+- `NewFinancingServiceWithConfig` constructor for pagination control on `GetMarketData`
+- Financing models: `XMLiquidationStatus`, `ActiveLiquidationSummary`; `ActiveLiquidation` field on `CrossMarginOverview`
+- Financing models: `MarginAddOn`, `XMPosition`, `XMRiskNettingInfo`; `XMMarginLimit`, `SpotEquity`, `FuturesEquity`, `RiskNettingInfo` fields on `XMSummary`
+- Beta financing models: `PrimeXMControlStatus`, `PrimeXMMarginLevel`, `PrimeXMHealthStatus`, `PrimeXMMarginRequirementType`, `PrimeXMMarginThresholdType`, `CrossMarginRiskParameters`, `TierPairRateEntry`, `CrossMarginPrimeMarginSummary`, `CrossMarginPrimeSpotEquityBreakdown`, `CrossMarginPrimeDerivativesEquityBreakdown`, `CrossMarginPrimeRiskNettingInfo`, `PrimeXMMarginRequirementBreakdown`, `PrimeXMOffsetCreditBreakdown`, `CrossMarginPrimeXMPosition`, `PrimeXMMarginCallThresholds`, `PrimeXMMarginThreshold`, `MarketData`
+- Staking model: `ValidatorUnstakePreview`; `WalletId`, `WalletAddress`, `CurrentTimestamp`, `Validators` fields on `PreviewUnstakeResponse`
+- User model: `BUSINESS_MANAGER` user role
+- RFQ: `QuoteDurationMs` optional field on `CreateQuoteRequest` and `CreateQuoteResponse`
+
+
 ## [0.6.3] - 2026-APR-30
 
 ### Added

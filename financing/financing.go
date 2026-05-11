@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase-samples/prime-sdk-go/model"
 )
 
 type FinancingService interface {
@@ -31,18 +32,38 @@ type FinancingService interface {
 	GetPortfolioCreditInfo(ctx context.Context, request *GetPortfolioCreditInfoRequest) (*GetPortfolioCreditInfoResponse, error)
 	GetTieredPricingFees(ctx context.Context, request *GetTieredPricingFeesRequest) (*GetTieredPricingFeesResponse, error)
 	GetCrossMarginOverview(ctx context.Context, request *GetCrossMarginOverviewRequest) (*GetCrossMarginOverviewResponse, error)
+	GetCrossMarginRiskParameters(ctx context.Context, request *GetCrossMarginRiskParametersRequest) (*GetCrossMarginRiskParametersResponse, error)
+	GetCrossMarginPrimeOverview(ctx context.Context, request *GetCrossMarginPrimeOverviewRequest) (*GetCrossMarginPrimeOverviewResponse, error)
+	SetFundingSettings(ctx context.Context, request *SetFundingSettingsRequest) (*SetFundingSettingsResponse, error)
+	GetMarketData(ctx context.Context, request *GetMarketDataRequest) (*GetMarketDataResponse, error)
 	ListLocates(ctx context.Context, request *ListLocatesRequest) (*ListLocatesResponse, error)
 	ListInterestAccruals(ctx context.Context, request *ListInterestAccrualsRequest) (*ListInterestAccrualsResponse, error)
 	ListPortfolioInterestAccruals(ctx context.Context, request *ListPortfolioInterestAccrualsRequest) (*ListPortfolioInterestAccrualsResponse, error)
 	ListMarginCallSummaries(ctx context.Context, request *ListMarginCallSummariesRequest) (*ListMarginCallSummariesResponse, error)
 	ListMarginConversions(ctx context.Context, request *ListMarginConversionsRequest) (*ListMarginConversionsResponse, error)
 	ListFinancingEligibleAssets(ctx context.Context, request *ListFinancingEligibleAssetsRequest) (*ListFinancingEligibleAssetsResponse, error)
+	ServiceConfig() *model.ServiceConfig
 }
 
 func NewFinancingService(c client.RestClient) FinancingService {
-	return &financingServiceImpl{client: c}
+	return &financingServiceImpl{
+		client:        c,
+		serviceConfig: model.DefaultServiceConfig(),
+	}
+}
+
+func NewFinancingServiceWithConfig(c client.RestClient, config *model.ServiceConfig) FinancingService {
+	return &financingServiceImpl{
+		client:        c,
+		serviceConfig: config,
+	}
 }
 
 type financingServiceImpl struct {
-	client client.RestClient
+	client        client.RestClient
+	serviceConfig *model.ServiceConfig
+}
+
+func (s *financingServiceImpl) ServiceConfig() *model.ServiceConfig {
+	return s.serviceConfig
 }
